@@ -122,3 +122,5 @@ Wl_Pay_Ccr.startup=function()
   else
     window.attachEvent('onmessage',Wl_Pay_Ccr.messageGet);
 };
+
+Wl_Pay_Ccr.startup();
