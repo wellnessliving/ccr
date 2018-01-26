@@ -28,7 +28,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
   {
     if(message!=null&&message.length()>0)
     {
-      if(message[0]=='0')
+      if(message.charAt(0)=='0')
         callbackContext.error(message+"-mul-error");
       else
         callbackContext.success(message+"-mul-ok");
