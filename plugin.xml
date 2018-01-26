@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Plugin specification:
+  https://cordova.apache.org/docs/en/latest/plugin_ref/spec.html
+
+  May be useful:
+  https://cordova.apache.org/docs/en/latest/plugin_ref/spec.html#asset
+  https://cordova.apache.org/docs/en/latest/plugin_ref/spec.html#dependency
+
+  How to handle permissions:
+  https://cordova.apache.org/docs/en/latest/guide/platforms/android/plugin.html#runtime-permissions-cordova-android-500
+-->
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" id="wl-pay-ccr" version="0.0.0">
+  <name>Credit card reader (WellnessLiving, NMI, DirectConnect)</name>
+  <description>Interface for Android and iOS SDKs of NMI and Direct Connect.</description>
+  <license>WellnessLiving</license>
+  <keywords>NMI, Direct Connect, CardReader, CreditCard, Debit Card</keywords>
+
+  <!--
+    See
+    https://cordova.apache.org/docs/en/latest/plugin_ref/spec.html#js-module
+    https://cordova.apache.org/docs/en/latest/plugin_ref/spec.html#clobbers
+    https://cordova.apache.org/docs/en/latest/plugin_ref/spec.html#merges
+    https://cordova.apache.org/docs/en/latest/plugin_ref/spec.html#runs
+  -->
+  <js-module src="www/Wl_Pay_Ccr.js" name="Wl_Pay_Ccr">
+    <clobbers target="Wl_Pay_Ccr" />
+  </js-module>
+
+  <!--
+    Allowed values for platform.name:
+    ios, android, blackberry10, amazon-fireos, wp8, windows.
+
+    See
+    https://cordova.apache.org/docs/en/latest/plugin_ref/spec.html#platform
+  -->
+  <platform name="android">
+    <config-file target="config.xml" parent="/*">
+      <feature name="Wl_Pay_Ccr">
+        <param name="android-package" value="org.apache.cordova.plugin.Wl_Pay_Ccr"/>
+      </feature>
+    </config-file>
+
+    <source-file src="src/android/Wl_Pay_Ccr.java" target-dir="src/org/apache/cordova/plugin" />
+  </platform>
+
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <feature name="Device">
+        <param name="ios-package" value="CDVDevice"/>
+      </feature>
+    </config-file>
+    <header-file src="src/ios/CDVDevice.h" />
+    <source-file src="src/ios/CDVDevice.m" />
+  </platform>
+</plugin>
