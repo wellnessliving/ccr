@@ -28,9 +28,10 @@ Wl_Pay_Ccr.log=function(s_message)
  */
 Wl_Pay_Ccr.messageGet=function(o_event)
 {
-  if(o_event.origin !== 'file://')
+  // No trailing slash!
+  if(o_event.origin !== 'http://demo.wellnessliving.com')
   {
-    console.log('Wl_Pay_Ccr.messageGet origin='+o_event.origin);
+    Wl_Pay_Ccr.log('[error] Wl_Pay_Ccr.messageGet got a message from an invalid origin: '+o_event.origin);
     return;
   }
 
