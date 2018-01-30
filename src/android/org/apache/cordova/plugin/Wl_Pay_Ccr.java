@@ -9,6 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * Interface for Android SDKs of NMI and Direct Connect.
  *
@@ -16,6 +18,11 @@ import org.json.JSONObject;
  */
 public class Wl_Pay_Ccr extends CordovaPlugin
 {
+  /**
+   * Whether plugin was initialized successfully.
+   */
+  private ArrayList<String> a_log=new ArrayList<String>();
+
   /**
    * Whether plugin was initialized successfully.
    */
@@ -52,6 +59,12 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     for (String s_permission : a_permission)
       a_result_permission.put(s_permission,cordova.hasPermission(s_permission));
     a_result.put("a_permission",a_result_permission);
+
+    JSONArray a_result_log=new JSONArray();
+    for (String s_log : this.a_log)
+      a_result_log.put(s_log);
+    a_result.put("a_log",a_result_log);
+    this.a_log=new ArrayList<String>();
 
     callbackContext.success(a_result);
   }
@@ -158,27 +171,52 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     return false;
   }
 
+  /**
+   * Writes a message to debug log.
+   *
+   * @param s_message Message to write to log.
+   */
+  private void log(String s_message)
+  {
+    this.a_log.add(s_message);
+  }
+
   @Override
   public void onRequestPermissionResult(int requestCode, String[] permissions,
                                         int[] grantResults) throws JSONException
   {
     // Plugin was deactivated during request of permissions.
-    if(!this.is_active)
+    if(!this.is_active||this.o_context_permission==null)
     {
       this.o_context_permission=null;
       return;
     }
 
+    JSONObject a_result=new JSONObject();
+    a_result.put("requestCode",requestCode);
+
+    JSONArray a_result_permission=new JSONArray();
+    for (String s_permission : permissions)
+      a_result_permission.put(s_permission);
+    a_result.put("a_permission",a_result_permission);
+
+    JSONArray a_result_grant=new JSONArray();
+    for (int i_result : grantResults)
+      a_result_grant.put(i_result);
+    a_result.put("a_grant",a_result_grant);
+
     for(int r:grantResults)
     {
       if(r == PackageManager.PERMISSION_DENIED)
       {
-        this.o_context_permission.error("Permission denied.");
+        a_result.put("s_message","Permission denied.");
+        this.o_context_permission.error(a_result);
         this.o_context_permission=null;
         return;
       }
     }
-    this.o_context_permission.success("Permission denied.");
+    a_result.put("s_message","Permissions allowed.");
+    this.o_context_permission.success(a_result);
     this.o_context_permission=null;
   }
 
