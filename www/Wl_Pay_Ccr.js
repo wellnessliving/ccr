@@ -8,14 +8,14 @@ function Wl_Pay_Ccr()
 }
 
 /**
- * Writes a message to error log.
+ * Writes messages to error log.
  *
- * @param {String} s_message Text of the message to write.
+ * @param {*[]} a_log A list of messages to write.
  */
-Wl_Pay_Ccr.log=function(s_message)
+Wl_Pay_Ccr.log=function(a_log)
 {
   Communication.postMessage({
-    'log': s_message,
+    'a_log': a_log,
     's_source': 'Wl_Pay_Ccr.top'
   });
 };
@@ -30,19 +30,19 @@ Wl_Pay_Ccr.messageGet=function(a_data)
 {
   if(!a_data.hasOwnProperty('i_call'))
   {
-    Wl_Pay_Ccr.log({
+    Wl_Pay_Ccr.log([{
       'a_data': a_data,
       's_message': 'Could not process request. i_call not passed.'
-    });
+    }]);
     return;
   }
 
   if(!a_data.hasOwnProperty('a_argument')||(typeof a_data['a_argument']!=='object')||!(a_data['a_argument'] instanceof Array)||!a_data.hasOwnProperty('s_command'))
   {
-    Wl_Pay_Ccr.log({
+    Wl_Pay_Ccr.log([{
       'a_data': a_data,
       's_message': 'Can not initiate request. Argument of method is not passed.'
-    });
+    }]);
 
     Communication.postMessage({
       'i_call': a_data.i_call,
@@ -58,20 +58,21 @@ Wl_Pay_Ccr.messageGet=function(a_data)
   cordova.exec(
     function(x_result)
     {
-      Wl_Pay_Ccr.log({
-        's_message': 'Test writing log on success.',
-        'x_result': x_result
-      });
+      if(typeof x_result==='object'&&x_result.hasOwnProperty('a_log'))
+      {
+        Wl_Pay_Ccr.log(x_result.a_log);
+        delete x_result.a_log;
+      }
 
       if(has_result)
       {
         if(typeof x_result!=='object'||!x_result.hasOwnProperty('event'))
         {
-          Wl_Pay_Ccr.log({
+          Wl_Pay_Ccr.log([{
             'a_data': a_data,
             's_message': 'Unexpected duplicate result returned. Ignored.',
             'x_result': x_result
-          });
+          }]);
           return;
         }
 
@@ -95,12 +96,13 @@ Wl_Pay_Ccr.messageGet=function(a_data)
     },
     function(x_result)
     {
-      has_result=true;
+      if(typeof x_result==='object'&&x_result.hasOwnProperty('a_log'))
+      {
+        Wl_Pay_Ccr.log(x_result.a_log);
+        delete x_result.a_log;
+      }
 
-      Wl_Pay_Ccr.log({
-        's_message': 'Test writing log on error.',
-        'x_result': x_result
-      });
+      has_result=true;
 
       Communication.postMessage({
         'i_call': a_data.i_call,

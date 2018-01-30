@@ -51,6 +51,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
   private void doDebugInfo(CallbackContext callbackContext) throws JSONException
   {
     JSONObject a_result=new JSONObject();
+    a_result.put("a_log",this.logResult());
     a_result.put("is_active",this.is_active);
 
     JSONObject a_result_permission=new JSONObject();
@@ -59,13 +60,6 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     for (String s_permission : a_permission)
       a_result_permission.put(s_permission,cordova.hasPermission(s_permission));
     a_result.put("a_permission",a_result_permission);
-
-    JSONArray a_result_log=new JSONArray();
-    for (String s_log : this.a_log)
-      a_result_log.put(s_log);
-    a_result.put("a_log",a_result_log);
-    this.a_log=new ArrayList<String>();
-
     callbackContext.success(a_result);
   }
 
@@ -74,19 +68,25 @@ public class Wl_Pay_Ccr extends CordovaPlugin
    *
    * @param callbackContext Callback context.
    */
-  private void doPermissionRequest(CallbackContext callbackContext)
+  private void doPermissionRequest(CallbackContext callbackContext) throws JSONException
   {
     // Plugin is deactivated.
     if(!this.is_active)
     {
-      callbackContext.error("Plugin is not activated.");
+      JSONObject a_result=new JSONObject();
+      a_result.put("a_log",this.logResult());
+      a_result.put("s_message","Plugin is not activated.");
+
+      callbackContext.error(a_result);
       return;
     }
 
     // See
     // https://cordova.apache.org/docs/en/latest/guide/platforms/android/plugin.html#android-permissions
     this.o_context_permission=callbackContext;
-    cordova.requestPermissions(this, 0, this.o_processor.permissionList());
+    String[] a_permission=this.o_processor.permissionList();
+    this.log("Require permissions: "+a_permission.length);
+    cordova.requestPermissions(this, 1, a_permission);
   }
 
   /**
@@ -101,7 +101,12 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     Wl_Pay_Ccr_Abstract o_processor=Wl_Pay_Ccr_Abstract.create(id_pay_processor);
     if(o_processor==null)
     {
-      callbackContext.error("Interface for this payment processor is not implemented.");
+      JSONObject a_result=new JSONObject();
+      a_result.put("a_log",this.logResult());
+      a_result.put("id_pay_processor",id_pay_processor);
+      a_result.put("s_message","Interface for this payment processor is not implemented.");
+
+      callbackContext.error(a_result);
       return;
     }
 
@@ -110,6 +115,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     this.o_processor=o_processor;
 
     JSONObject a_result=new JSONObject();
+    a_result.put("a_log",this.logResult());
     a_result.put("has_permissions",this.permissionHas());
 
     PluginResult o_result = new PluginResult(PluginResult.Status.OK, a_result);
@@ -127,7 +133,11 @@ public class Wl_Pay_Ccr extends CordovaPlugin
   {
     if(!this.is_active)
     {
-      callbackContext.error("Not initialized.");
+      JSONObject a_result=new JSONObject();
+      a_result.put("a_log",this.logResult());
+      a_result.put("s_message","Not initialized.");
+
+      callbackContext.error(a_result);
       return;
     }
 
@@ -139,7 +149,10 @@ public class Wl_Pay_Ccr extends CordovaPlugin
 
     this.o_context_event.sendPluginResult(o_result);
 
-    callbackContext.success("Complete.");
+    a_result=new JSONObject();
+    a_result.put("a_log",this.logResult());
+    a_result.put("s_message","Complete.");
+    callbackContext.success(a_result);
 
     this.is_active=false;
     this.o_context_event=null;
@@ -181,6 +194,21 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     this.a_log.add(s_message);
   }
 
+  /**
+   * Prepares logs for returning in result.
+   *
+   * @return Logs prepared for returning in result.
+   */
+  private JSONArray logResult()
+  {
+    JSONArray a_log=new JSONArray();
+    for (String s_log : this.a_log)
+      a_log.put(s_log);
+    this.a_log=new ArrayList<String>();
+
+    return a_log;
+  }
+
   @Override
   public void onRequestPermissionResult(int requestCode, String[] permissions,
                                         int[] grantResults) throws JSONException
@@ -193,17 +221,20 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     }
 
     JSONObject a_result=new JSONObject();
+    a_result.put("a_log",this.logResult());
     a_result.put("requestCode",requestCode);
 
     JSONArray a_result_permission=new JSONArray();
     for (String s_permission : permissions)
       a_result_permission.put(s_permission);
     a_result.put("a_permission",a_result_permission);
+    a_result.put("a_permission.length",permissions.length);
 
     JSONArray a_result_grant=new JSONArray();
     for (int i_result : grantResults)
       a_result_grant.put(i_result);
     a_result.put("a_grant",a_result_grant);
+    a_result.put("a_grant.length",grantResults.length);
 
     for(int r:grantResults)
     {
