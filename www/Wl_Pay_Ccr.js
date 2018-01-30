@@ -24,33 +24,10 @@ Wl_Pay_Ccr.log=function(s_message)
  * Processes requests to credit card reader plugin.
  *
  * @private
- * @param {Object} o_event Request event object.
+ * @param {{}} a_data Data arrived in the message.
  */
-Wl_Pay_Ccr.messageGet=function(o_event)
+Wl_Pay_Ccr.messageGet=function(a_data)
 {
-  // No trailing slash!
-  if(o_event.origin !== 'http://demo.wellnessliving.com')
-  {
-    Wl_Pay_Ccr.log('[error] Wl_Pay_Ccr.messageGet got a message from an invalid origin: '+o_event.origin);
-    return;
-  }
-
-  try
-  {
-    var a_data = JSON.parse(o_event.data);
-  }
-  catch(e)
-  {
-    // JSON parse error may occur in a case messages are sent from unknown sites.
-    return;
-  }
-
-  if(!a_data)
-    return;
-
-  if(!a_data.hasOwnProperty('s_source')||a_data['s_source']!=='Wl_Pay_Cordova_Ccr.frame')
-    return;
-
   if(!a_data.hasOwnProperty('i_call'))
   {
     Wl_Pay_Ccr.log({
@@ -60,7 +37,7 @@ Wl_Pay_Ccr.messageGet=function(o_event)
     return;
   }
 
-  if(!a_data.hasOwnProperty('a_argument')||(typeof a_data['a_argument']!=='object')||!(a_data['a_argument'] instanceof Array)||!a_data.hasOwnProperty('s_method'))
+  if(!a_data.hasOwnProperty('a_argument')||(typeof a_data['a_argument']!=='object')||!(a_data['a_argument'] instanceof Array)||!a_data.hasOwnProperty('s_command'))
   {
     Wl_Pay_Ccr.log({
       'a_data': a_data,
@@ -76,23 +53,50 @@ Wl_Pay_Ccr.messageGet=function(o_event)
     return;
   }
 
+  var has_result=false;
+
   cordova.exec(
     function(x_result)
     {
+      has_result=true;
+
       Wl_Pay_Ccr.log({
         's_message': 'Test writing log on success.',
         'x_result': x_result
       });
 
-      Communication.postMessage({
-        'i_call': a_data.i_call,
-        'is_ok': true,
-        's_source': 'Wl_Pay_Ccr.top',
-        'x_result': x_result
-      });
+      if(has_result)
+      {
+        if(typeof x_result!=='object'||!x_result.hasOwnProperty('event'))
+        {
+          Wl_Pay_Ccr.log({
+            'a_data': a_data,
+            's_message': 'Unexpected duplicate result returned. Ignored.',
+            'x_result': x_result
+          });
+          return;
+        }
+
+        Communication.postMessage({
+          'a_argument': x_result,
+          'event': x_result['event'],
+          's_source': 'Wl_Pay_Ccr.top'
+        });
+      }
+      else
+      {
+        Communication.postMessage({
+          'i_call': a_data.i_call,
+          'is_ok': true,
+          's_source': 'Wl_Pay_Ccr.top',
+          'x_result': x_result
+        });
+      }
     },
     function(x_result)
     {
+      has_result=true;
+
       Wl_Pay_Ccr.log({
         's_message': 'Test writing log on error.',
         'x_result': x_result
@@ -106,22 +110,7 @@ Wl_Pay_Ccr.messageGet=function(o_event)
       });
     },
     "Wl_Pay_Ccr",
-    a_data['s_method'],
+    a_data['s_command'],
     a_data['a_argument']
   );
 };
-
-/**
- * Initializes credit card reader plugin.
- *
- * @protected
- */
-Wl_Pay_Ccr.startup=function()
-{
-  if(window.addEventListener)
-    window.addEventListener('message',Wl_Pay_Ccr.messageGet,false);
-  else
-    window.attachEvent('onmessage',Wl_Pay_Ccr.messageGet);
-};
-
-Wl_Pay_Ccr.startup();
