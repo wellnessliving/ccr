@@ -114,3 +114,5 @@ Wl_Pay_Ccr.messageGet=function(a_data)
     a_data['a_argument']
   );
 };
+
+module.exports = Wl_Pay_Ccr;
