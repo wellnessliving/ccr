@@ -58,8 +58,6 @@ Wl_Pay_Ccr.messageGet=function(a_data)
   cordova.exec(
     function(x_result)
     {
-      has_result=true;
-
       Wl_Pay_Ccr.log({
         's_message': 'Test writing log on success.',
         'x_result': x_result
@@ -85,6 +83,8 @@ Wl_Pay_Ccr.messageGet=function(a_data)
       }
       else
       {
+        has_result=true;
+
         Communication.postMessage({
           'i_call': a_data.i_call,
           'is_ok': true,

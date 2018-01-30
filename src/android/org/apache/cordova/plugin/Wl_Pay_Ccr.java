@@ -37,6 +37,26 @@ public class Wl_Pay_Ccr extends CordovaPlugin
   private Wl_Pay_Ccr_Abstract o_processor=null;
 
   /**
+   * Returns debug information.
+   *
+   * @param callbackContext Callback context.
+   */
+  private void doDebugInfo(CallbackContext callbackContext) throws JSONException
+  {
+    JSONObject a_result=new JSONObject();
+    a_result.put("is_active",this.is_active);
+
+    JSONObject a_result_permission=new JSONObject();
+
+    String[] a_permission=this.o_processor.permissionList();
+    for (String s_permission : a_permission)
+      a_result_permission.put(s_permission,cordova.hasPermission(s_permission));
+    a_result.put("a_permission",a_result_permission);
+
+    callbackContext.success(a_result);
+  }
+
+  /**
    * Requests permissions that are not granted.
    *
    * @param callbackContext Callback context.
@@ -115,7 +135,12 @@ public class Wl_Pay_Ccr extends CordovaPlugin
   @Override
   public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException
   {
-    if(action.equals("permissionRequest"))
+    if(action.equals("debugInfo"))
+    {
+      this.doDebugInfo(callbackContext);
+      return true;
+    }
+    else if(action.equals("permissionRequest"))
     {
       this.doPermissionRequest(callbackContext);
       return true;
