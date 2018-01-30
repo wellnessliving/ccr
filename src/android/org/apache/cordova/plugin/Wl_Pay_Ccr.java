@@ -227,6 +227,9 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     a_result.put("a_log",this.logResult());
     a_result.put("requestCode",requestCode);
 
+    boolean has_permissions=this.permissionHas();
+    a_result.put("has_permissions",has_permissions);
+
     JSONArray a_result_permission=new JSONArray();
     for (String s_permission : permissions)
       a_result_permission.put(s_permission);
@@ -239,18 +242,29 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     a_result.put("a_grant",a_result_grant);
     a_result.put("a_grant.length",grantResults.length);
 
-    for(int r:grantResults)
+    if(has_permissions)
     {
-      if(r == PackageManager.PERMISSION_DENIED)
+      for(int r:grantResults)
       {
-        a_result.put("s_message","Permission denied.");
-        this.o_context_permission.error(a_result);
-        this.o_context_permission=null;
-        return;
+        if(r == PackageManager.PERMISSION_DENIED)
+        {
+          has_permissions=false;
+          break;
+        }
       }
     }
-    a_result.put("s_message","Permissions allowed.");
-    this.o_context_permission.success(a_result);
+
+    if(has_permissions)
+    {
+      a_result.put("s_message","Permissions allowed.");
+      this.o_context_permission.success(a_result);
+    }
+    else
+    {
+      a_result.put("s_message","Permission denied.");
+      this.o_context_permission.error(a_result);
+    }
+
     this.o_context_permission=null;
   }
 
