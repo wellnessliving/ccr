@@ -82,7 +82,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     PluginResult o_result = new PluginResult(PluginResult.Status.OK, a_result);
     o_result.setKeepCallback(true);
 
-    callbackContext.success(o_result);
+    callbackContext.sendPluginResult(o_result);
   }
 
   /**
@@ -104,7 +104,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     PluginResult o_result = new PluginResult(PluginResult.Status.OK, a_result);
     o_result.setKeepCallback(true);
 
-    this.o_context_event.success(o_result);
+    this.o_context_event.sendPluginResult(o_result);
 
     callbackContext.success("Complete.");
 
