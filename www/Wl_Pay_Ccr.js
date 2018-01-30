@@ -79,9 +79,12 @@ Wl_Pay_Ccr.messageGet=function(a_data)
           return;
         }
 
+        var s_event=x_result['event'];
+        delete x_result['event'];
+
         Communication.postMessage({
           'a_argument': x_result,
-          'event': x_result['event'],
+          'event': s_event,
           's_source': 'Wl_Pay_Ccr.top'
         });
       }
