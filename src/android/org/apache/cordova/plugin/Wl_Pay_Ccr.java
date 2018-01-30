@@ -1,5 +1,6 @@
 package org.apache.cordova.plugin;
 
+import android.Manifest;
 import android.content.pm.PackageManager;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
@@ -21,7 +22,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
   /**
    * Whether plugin was initialized successfully.
    */
-  private ArrayList<String> a_log=new ArrayList<String>();
+  private JSONArray a_log=new JSONArray();
 
   /**
    * Whether plugin was initialized successfully.
@@ -54,12 +55,16 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     a_result.put("a_log",this.logResult());
     a_result.put("is_active",this.is_active);
 
-    JSONObject a_result_permission=new JSONObject();
+    if(this.o_processor!=null)
+    {
+      JSONObject a_result_permission=new JSONObject();
 
-    String[] a_permission=this.o_processor.permissionList();
-    for (String s_permission : a_permission)
-      a_result_permission.put(s_permission,cordova.hasPermission(s_permission));
-    a_result.put("a_permission",a_result_permission);
+      String[] a_permission=this.o_processor.permissionList();
+      for (String s_permission : a_permission)
+        a_result_permission.put(s_permission,cordova.hasPermission(s_permission));
+      a_result.put("a_permission",a_result_permission);
+    }
+
     callbackContext.success(a_result);
   }
 
@@ -86,7 +91,8 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     this.o_context_permission=callbackContext;
     String[] a_permission=this.o_processor.permissionList();
     this.log("Require permissions: "+a_permission.length);
-    cordova.requestPermissions(this, 1, a_permission);
+    //cordova.requestPermissions(this, 1, a_permission);
+    cordova.requestPermission(this,1, Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS);
   }
 
   /**
@@ -191,7 +197,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
    */
   private void log(String s_message)
   {
-    this.a_log.add(s_message);
+    this.a_log.put(s_message);
   }
 
   /**
@@ -201,11 +207,8 @@ public class Wl_Pay_Ccr extends CordovaPlugin
    */
   private JSONArray logResult()
   {
-    JSONArray a_log=new JSONArray();
-    for (String s_log : this.a_log)
-      a_log.put(s_log);
-    this.a_log=new ArrayList<String>();
-
+    JSONArray a_log=this.a_log;
+    this.a_log=new JSONArray();
     return a_log;
   }
 

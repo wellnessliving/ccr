@@ -14,6 +14,9 @@ function Wl_Pay_Ccr()
  */
 Wl_Pay_Ccr.log=function(a_log)
 {
+  if(typeof a_log==='object'&&a_log instanceof Array&&!a_log.length)
+    return;
+
   Communication.postMessage({
     'a_log': a_log,
     's_source': 'Wl_Pay_Ccr.top'
