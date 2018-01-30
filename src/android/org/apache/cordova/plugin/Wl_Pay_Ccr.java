@@ -91,8 +91,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     this.o_context_permission=callbackContext;
     String[] a_permission=this.o_processor.permissionList();
     this.log("Require permissions: "+a_permission.length);
-    //cordova.requestPermissions(this, 1, a_permission);
-    cordova.requestPermission(this,1, Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS);
+    cordova.requestPermissions(this, 1, a_permission);
   }
 
   /**
