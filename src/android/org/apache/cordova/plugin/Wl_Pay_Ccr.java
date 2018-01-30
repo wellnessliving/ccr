@@ -1,5 +1,6 @@
 package org.apache.cordova.plugin;
 
+import android.content.pm.PackageManager;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 
@@ -77,8 +78,10 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     JSONObject a_result=new JSONObject();
     a_result.put("has_permissions",this.permissionHas());
 
-    callbackContext.setKeepCallback(true);
-    callbackContext.success(a_result);
+    PluginResult o_result = new PluginResult(PluginResult.Status.OK, a_result);
+    o_result.setKeepCallback(true);
+
+    callbackContext.success(o_result);
   }
 
   /**
@@ -97,8 +100,10 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     JSONObject a_result=new JSONObject();
     a_result.put("event","tearDown");
 
-    this.o_context_event.setKeepCallback(false);
-    this.o_context_event.success(a_result);
+    PluginResult o_result = new PluginResult(PluginResult.Status.OK, a_result);
+    o_result.setKeepCallback(true);
+
+    this.o_context_event.success(o_result);
 
     callbackContext.success("Complete.");
 
@@ -109,17 +114,20 @@ public class Wl_Pay_Ccr extends CordovaPlugin
   @Override
   public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException
   {
-    switch (action)
+    if(action.equals("permissionRequest"))
     {
-      case "permissionRequest":
-        this.doPermissionRequest(callbackContext);
-        return true;
-      case "startup":
-        this.doStartup(args.getJSONObject(0), callbackContext);
-        return true;
-      case "tearDown":
-        this.doTearDown(callbackContext);
-        return true;
+      this.doPermissionRequest(callbackContext);
+      return true;
+    }
+    else if(action.equals("startup"))
+    {
+      this.doStartup(args.getJSONObject(0), callbackContext);
+      return true;
+    }
+    else if(action.equals("tearDown"))
+    {
+      this.doTearDown(callbackContext);
+      return true;
     }
     return false;
   }
