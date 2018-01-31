@@ -1,6 +1,5 @@
 package org.apache.cordova.plugin;
 
-import android.Manifest;
 import android.content.pm.PackageManager;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
@@ -9,8 +8,6 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 /**
  * Interface for Android SDKs of NMI and Direct Connect.
@@ -54,6 +51,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     JSONObject a_result=new JSONObject();
     a_result.put("a_log",this.logResult());
     a_result.put("is_active",this.is_active);
+    a_result.put("is_debug",true);
 
     if(this.o_processor!=null)
     {
