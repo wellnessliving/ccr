@@ -99,6 +99,7 @@ Wl_Pay_Ccr.messageGet=function(a_data)
           'a_log': a_log,
           'i_call': a_data.i_call,
           'is_ok': true,
+          's_method': a_data['s_command'],
           's_source': 'Wl_Pay_Ccr.top',
           'x_result': x_result
         });
@@ -124,7 +125,7 @@ Wl_Pay_Ccr.messageGet=function(a_data)
         'x_result': x_result
       });
     },
-    "Wl_Pay_Ccr",
+    a_data['s_command']==='class-nx'?'Wl_Pay_Ccr_Nx':"Wl_Pay_Ccr",
     a_data['s_command'],
     a_data['a_argument']
   );

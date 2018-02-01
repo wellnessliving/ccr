@@ -51,7 +51,6 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     JSONObject a_result=new JSONObject();
     a_result.put("a_log",this.logResult());
     a_result.put("is_active",this.is_active);
-    a_result.put("is_debug",true);
 
     if(this.o_processor!=null)
     {
@@ -206,7 +205,16 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     {
       throw new JSONException("Example exception");
     }
-    return false;
+    else if(action.equals("error"))
+    {
+      this.logError("Example error.");
+      callbackContext.success("ok");
+      return true;
+    }
+
+    this.logError("[Wl_Pay_Ccr.execute] Method not found: "+action);
+    callbackContext.error("Method not found.");
+    return true;
   }
 
   /**
