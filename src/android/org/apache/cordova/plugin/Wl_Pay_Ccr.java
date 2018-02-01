@@ -12,7 +12,7 @@ import org.json.JSONObject;
 /**
  * Interface for Android SDKs of NMI and Direct Connect.
  *
- * @see https://secure.networkmerchants.com/gw/merchants/resources/integration/integration_portal.php#mobile_methodology
+ * @see <a href="https://secure.networkmerchants.com/gw/merchants/resources/integration/integration_portal.php#mobile_methodology">NMI Integration Documentation</a>
  */
 public class Wl_Pay_Ccr extends CordovaPlugin
 {
@@ -76,6 +76,8 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     // Plugin is deactivated.
     if(!this.is_active)
     {
+      this.logError("[Wl_Pay_Ccr.doPermissionRequest] Permissions may not be requested when plugin is not initialized.");
+
       JSONObject a_result=new JSONObject();
       a_result.put("a_log",this.logResult());
       a_result.put("s_message","Plugin is not activated.");
@@ -88,7 +90,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     // https://cordova.apache.org/docs/en/latest/guide/platforms/android/plugin.html#android-permissions
     this.o_context_permission=callbackContext;
     String[] a_permission=this.o_processor.permissionList();
-    this.log("Require permissions: "+a_permission.length);
+    this.logInfo("Require permissions: "+a_permission.length);
     cordova.requestPermissions(this, 1, a_permission);
   }
 
@@ -100,6 +102,19 @@ public class Wl_Pay_Ccr extends CordovaPlugin
    */
   private void doStartup(JSONObject a_config, CallbackContext callbackContext) throws JSONException
   {
+    if(this.is_active)
+    {
+      this.logError("[Wl_Pay_Ccr.doStartup] It is not allowed to initialize plugin when it is initialized already.");
+
+      JSONObject a_result=new JSONObject();
+      a_result.put("a_log",this.logResult());
+      a_result.put("s_message","Plugin is initialized already.");
+      a_result.put("s_error","already");
+
+      callbackContext.error(a_result);
+      return;
+    }
+
     int id_pay_processor=a_config.getInt("id_pay_processor");
     Wl_Pay_Ccr_Abstract o_processor=Wl_Pay_Ccr_Abstract.create(id_pay_processor);
     if(o_processor==null)
@@ -108,6 +123,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
       a_result.put("a_log",this.logResult());
       a_result.put("id_pay_processor",id_pay_processor);
       a_result.put("s_message","Interface for this payment processor is not implemented.");
+      a_result.put("s_error","not-implemented");
 
       callbackContext.error(a_result);
       return;
@@ -136,6 +152,8 @@ public class Wl_Pay_Ccr extends CordovaPlugin
   {
     if(!this.is_active)
     {
+      this.logError("[Wl_Pay_Ccr.doTearDown] It is not allowed to tear down plugin that is not initialized.");
+
       JSONObject a_result=new JSONObject();
       a_result.put("a_log",this.logResult());
       a_result.put("s_message","Not initialized.");
@@ -148,7 +166,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     a_result.put("event","tearDown");
 
     PluginResult o_result = new PluginResult(PluginResult.Status.OK, a_result);
-    o_result.setKeepCallback(true);
+    o_result.setKeepCallback(false);
 
     this.o_context_event.sendPluginResult(o_result);
 
@@ -184,17 +202,37 @@ public class Wl_Pay_Ccr extends CordovaPlugin
       this.doTearDown(callbackContext);
       return true;
     }
+    else if(action.equals("exception"))
+    {
+      throw new JSONException("Example exception");
+    }
     return false;
   }
 
   /**
-   * Writes a message to debug log.
+   * Writes a message to debug logInfo.
    *
-   * @param s_message Message to write to log.
+   * @param s_message Message to write to logInfo.
    */
-  private void log(String s_message)
+  private void logError(String s_message) throws JSONException
   {
-    this.a_log.put(s_message);
+    JSONObject a_item=new JSONObject();
+    a_item.put("is_error",true);
+    a_item.put("s_message",s_message);
+    this.a_log.put(a_item);
+  }
+
+  /**
+   * Writes a message to debug logInfo.
+   *
+   * @param s_message Message to write to logInfo.
+   */
+  private void logInfo(String s_message) throws JSONException
+  {
+    JSONObject a_item=new JSONObject();
+    a_item.put("is_error",false);
+    a_item.put("s_message",s_message);
+    this.a_log.put(a_item);
   }
 
   /**
@@ -225,7 +263,6 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     a_result.put("requestCode",requestCode);
 
     boolean has_permissions=this.permissionHas();
-    a_result.put("has_permissions",has_permissions);
 
     JSONArray a_result_permission=new JSONArray();
     for (String s_permission : permissions)
@@ -250,6 +287,8 @@ public class Wl_Pay_Ccr extends CordovaPlugin
         }
       }
     }
+
+    a_result.put("has_permissions",has_permissions);
 
     if(has_permissions)
     {

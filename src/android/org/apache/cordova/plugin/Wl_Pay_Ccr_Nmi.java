@@ -16,7 +16,10 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract
 
     return new String[]{
       Manifest.permission.RECORD_AUDIO,
-      Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS,
+
+      // This permission can not be granted.
+      //Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS,
+
       Manifest.permission.WRITE_EXTERNAL_STORAGE,
       Manifest.permission.INTERNET
     };

@@ -61,9 +61,10 @@ Wl_Pay_Ccr.messageGet=function(a_data)
   cordova.exec(
     function(x_result)
     {
+      var a_log=[];
       if(typeof x_result==='object'&&x_result.hasOwnProperty('a_log'))
       {
-        Wl_Pay_Ccr.log(x_result.a_log);
+        a_log=x_result.a_log;
         delete x_result.a_log;
       }
 
@@ -73,6 +74,7 @@ Wl_Pay_Ccr.messageGet=function(a_data)
         {
           Wl_Pay_Ccr.log([{
             'a_data': a_data,
+            'is_error': true,
             's_message': 'Unexpected duplicate result returned. Ignored.',
             'x_result': x_result
           }]);
@@ -84,6 +86,7 @@ Wl_Pay_Ccr.messageGet=function(a_data)
 
         Communication.postMessage({
           'a_argument': x_result,
+          'a_log': a_log,
           'event': s_event,
           's_source': 'Wl_Pay_Ccr.top'
         });
@@ -93,6 +96,7 @@ Wl_Pay_Ccr.messageGet=function(a_data)
         has_result=true;
 
         Communication.postMessage({
+          'a_log': a_log,
           'i_call': a_data.i_call,
           'is_ok': true,
           's_source': 'Wl_Pay_Ccr.top',
@@ -102,15 +106,18 @@ Wl_Pay_Ccr.messageGet=function(a_data)
     },
     function(x_result)
     {
+      var a_log=[];
+
       if(typeof x_result==='object'&&x_result.hasOwnProperty('a_log'))
       {
-        Wl_Pay_Ccr.log(x_result.a_log);
+        a_log=x_result.a_log;
         delete x_result.a_log;
       }
 
       has_result=true;
 
       Communication.postMessage({
+        'a_log': a_log,
         'i_call': a_data.i_call,
         'is_ok': false,
         's_source': 'Wl_Pay_Ccr.top',
