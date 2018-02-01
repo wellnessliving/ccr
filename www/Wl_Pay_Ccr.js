@@ -115,6 +115,17 @@ Wl_Pay_Ccr.messageGet=function(a_data)
         delete x_result.a_log;
       }
 
+      if(typeof x_result==='string')
+      {
+        x_result={
+          's_message': x_result
+        };
+        if(x_result['s_message']==='Class not found')
+          x_result['s_error']='class-nx';
+        else
+          x_result['s_error']='internal';
+      }
+
       has_result=true;
 
       Communication.postMessage({
