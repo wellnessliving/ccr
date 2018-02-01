@@ -201,21 +201,6 @@ public class Wl_Pay_Ccr extends CordovaPlugin
       this.doTearDown(callbackContext);
       return true;
     }
-    else if(action.equals("exception"))
-    {
-      throw new JSONException("Example exception");
-    }
-    else if(action.equals("logError"))
-    {
-      // To test how error logging works.
-      this.logError("Example error.");
-
-      JSONObject a_result=new JSONObject();
-      a_result.put("a_log",this.logResult());
-
-      callbackContext.success(a_result);
-      return true;
-    }
 
     this.logError("[Wl_Pay_Ccr.execute] Method not found: "+action);
 
@@ -277,21 +262,8 @@ public class Wl_Pay_Ccr extends CordovaPlugin
 
     JSONObject a_result=new JSONObject();
     a_result.put("a_log",this.logResult());
-    a_result.put("requestCode",requestCode);
 
     boolean has_permissions=this.permissionHas();
-
-    JSONArray a_result_permission=new JSONArray();
-    for (String s_permission : permissions)
-      a_result_permission.put(s_permission);
-    a_result.put("a_permission",a_result_permission);
-    a_result.put("a_permission.length",permissions.length);
-
-    JSONArray a_result_grant=new JSONArray();
-    for (int i_result : grantResults)
-      a_result_grant.put(i_result);
-    a_result.put("a_grant",a_result_grant);
-    a_result.put("a_grant.length",grantResults.length);
 
     if(has_permissions)
     {
