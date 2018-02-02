@@ -1,5 +1,7 @@
 package org.apache.cordova.plugin;
 
+import android.content.Context;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,6 +41,16 @@ abstract public class Wl_Pay_Ccr_Abstract
    * @return Debugging information.
    */
   abstract JSONObject debugGet() throws JSONException;
+
+  /**
+   * Returns application context.
+   *
+   * @return Application context.
+   */
+  Context getApplicationContext()
+  {
+    return this.o_controller.cordova.getActivity().getApplicationContext();
+  }
 
   /**
    * Writes a message to debug logInfo.
