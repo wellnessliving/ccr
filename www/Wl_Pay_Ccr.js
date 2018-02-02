@@ -136,7 +136,7 @@ Wl_Pay_Ccr.messageGet=function(a_data)
         'x_result': x_result
       });
     },
-    a_data['s_command']==='class-nx'?'Wl_Pay_Ccr_Nx':"Wl_Pay_Ccr",
+    "Wl_Pay_Ccr",
     a_data['s_command'],
     a_data['a_argument']
   );

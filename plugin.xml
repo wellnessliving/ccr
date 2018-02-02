@@ -55,6 +55,8 @@
       <uses-feature android:name="android.hardware.microphone" android:required="false" />
     </config-file>
 
+    <source-file src="src/android/nmi/payment-gateway.aar" target-dir="libs" framework="true" />
+
     <source-file src="src/android/org/apache/cordova/plugin/PayProcessorSid.java" target-dir="src/org/apache/cordova/plugin" />
     <source-file src="src/android/org/apache/cordova/plugin/Wl_Pay_Ccr.java" target-dir="src/org/apache/cordova/plugin" />
     <source-file src="src/android/org/apache/cordova/plugin/Wl_Pay_Ccr_Abstract.java" target-dir="src/org/apache/cordova/plugin" />

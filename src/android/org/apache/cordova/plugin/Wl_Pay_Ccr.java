@@ -27,6 +27,17 @@ public class Wl_Pay_Ccr extends CordovaPlugin
   private boolean is_active=false;
 
   /**
+   * Whether a method call is being processed now.
+   *
+   * <tt>true</tt> if
+   * {@link Wl_Pay_Ccr#execute(java.lang.String, org.json.JSONArray, org.apache.cordova.CallbackContext)}
+   * is being executed now.
+   *
+   * <tt>false</tt> if a background process is being executed now.
+   */
+  private boolean is_method=false;
+
+  /**
    * Callback context for sending events.
    */
   private CallbackContext o_context_event=null;
@@ -115,7 +126,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     }
 
     int id_pay_processor=a_config.getInt("id_pay_processor");
-    Wl_Pay_Ccr_Abstract o_processor=Wl_Pay_Ccr_Abstract.create(id_pay_processor);
+    Wl_Pay_Ccr_Abstract o_processor=Wl_Pay_Ccr_Abstract.create(id_pay_processor,this);
     if(o_processor==null)
     {
       JSONObject a_result=new JSONObject();
@@ -131,6 +142,8 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     this.is_active=true;
     this.o_context_event=callbackContext;
     this.o_processor=o_processor;
+
+    o_processor.startup();
 
     JSONObject a_result=new JSONObject();
     a_result.put("a_log",this.logResult());
@@ -161,6 +174,12 @@ public class Wl_Pay_Ccr extends CordovaPlugin
       return;
     }
 
+    this.o_processor.tearDown();
+
+    // **** BE ATTENTIVE ***
+    // All tear down actions should be performed before the code the follows.
+    // The following code sends final event.
+    // No events can be sent after that.
     JSONObject a_result=new JSONObject();
     a_result.put("event","tearDown");
 
@@ -181,34 +200,74 @@ public class Wl_Pay_Ccr extends CordovaPlugin
   @Override
   public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException
   {
-    if(action.equals("debugInfo"))
-    {
-      this.doDebugInfo(callbackContext);
-      return true;
-    }
-    else if(action.equals("permissionRequest"))
-    {
-      this.doPermissionRequest(callbackContext);
-      return true;
-    }
-    else if(action.equals("startup"))
-    {
-      this.doStartup(args.getJSONObject(0), callbackContext);
-      return true;
-    }
-    else if(action.equals("tearDown"))
-    {
-      this.doTearDown(callbackContext);
-      return true;
-    }
+    this.is_method=true;
 
-    this.logError("[Wl_Pay_Ccr.execute] Method not found: "+action);
+    try
+    {
+      if(action.equals("debugInfo"))
+      {
+        this.doDebugInfo(callbackContext);
+        return true;
+      }
+      else if(action.equals("permissionRequest"))
+      {
+        this.doPermissionRequest(callbackContext);
+        return true;
+      }
+      else if(action.equals("startup"))
+      {
+        this.doStartup(args.getJSONObject(0), callbackContext);
+        return true;
+      }
+      else if(action.equals("tearDown"))
+      {
+        this.doTearDown(callbackContext);
+        return true;
+      }
 
-    JSONObject a_result=new JSONObject();
-    a_result.put("a_log",this.logResult());
-    a_result.put("s_message","Method not found.");
-    callbackContext.error(a_result);
-    return true;
+      this.logError("[Wl_Pay_Ccr.execute] Method not found: "+action);
+
+      JSONObject a_result=new JSONObject();
+      a_result.put("a_log",this.logResult());
+      a_result.put("s_message","Method not found.");
+      callbackContext.error(a_result);
+      return true;
+    }
+    finally
+    {
+      this.is_method=false;
+    }
+  }
+
+  /**
+   * Fires an event.
+   *
+   * @param a_event Event data to send.
+   */
+  private void fire(String s_event,JSONObject a_event) throws JSONException
+  {
+    if(this.o_context_event==null)
+      return;
+
+    a_event.put("event",s_event);
+
+    PluginResult o_result = new PluginResult(PluginResult.Status.OK, a_event);
+    o_result.setKeepCallback(true);
+    this.o_context_event.sendPluginResult(o_result);
+  }
+
+  /**
+   * Fires log event.
+   */
+  private void fireLog() throws JSONException
+  {
+    if(this.a_log.length()==0)
+      return;
+
+    JSONObject a_event=new JSONObject();
+    a_event.put("a_log",this.logResult());
+
+    this.fire("log",a_event);
   }
 
   /**
@@ -221,7 +280,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     JSONObject a_item=new JSONObject();
     a_item.put("is_error",true);
     a_item.put("s_message",s_message);
-    this.a_log.put(a_item);
+    this.logPut(a_item);
   }
 
   /**
@@ -229,12 +288,24 @@ public class Wl_Pay_Ccr extends CordovaPlugin
    *
    * @param s_message Message to write to logInfo.
    */
-  private void logInfo(String s_message) throws JSONException
+  void logInfo(String s_message) throws JSONException
   {
     JSONObject a_item=new JSONObject();
     a_item.put("is_error",false);
     a_item.put("s_message",s_message);
-    this.a_log.put(a_item);
+    this.logPut(a_item);
+  }
+
+  /**
+   * Puts a message to the log.
+   *
+   * @param o_message Message to put to log.
+   */
+  private void logPut(JSONObject o_message) throws JSONException
+  {
+    this.a_log.put(o_message);
+    if(!this.is_method)
+      this.fireLog();
   }
 
   /**
