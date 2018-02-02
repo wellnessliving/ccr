@@ -6,16 +6,43 @@ import com.SafeWebServices.PaymentGateway.PGSwipeController.SwipeListener;
 import com.SafeWebServices.PaymentGateway.PGSwipeDevice;
 import com.SafeWebServices.PaymentGateway.PGSwipedCard;
 
-import org.apache.cordova.R;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Connector for mobile SDK of NMI.
  */
 public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
 {
-  private PGSwipeController swipeController;
+  /**
+   * Swipe controller object.
+   */
+  private PGSwipeController swipeController=null;
 
+  @Override
+  JSONObject debugGet() throws JSONException
+  {
+    JSONObject a_debug=new JSONObject();
+
+    a_debug.put("s_class","Wl_Pay_Ccr_Nmi");
+
+    if(this.swipeController==null)
+    {
+      a_debug.put("s_message","swipeController is null.");
+    }
+    else
+    {
+      PGSwipeDevice o_device=this.swipeController.getDevice();
+
+      a_debug.put("getDefaultMsg",o_device.getDefaultMsg());
+      a_debug.put("getDeviceType",o_device.getDeviceType());
+      a_debug.put("getIsActivated",o_device.getIsActivated());
+      a_debug.put("getIsConnected",o_device.getIsConnected());
+      a_debug.put("getIsReadyForSwipe",o_device.getIsReadyForSwipe());
+    }
+
+    return a_debug;
+  }
 
   @Override
   public void onSwipedCard(PGSwipedCard pgSwipedCard, PGSwipeDevice pgSwipeDevice)
@@ -146,5 +173,6 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
   public void tearDown()
   {
     this.swipeController.getDevice().stopSwipeController();
+    this.swipeController=null;
   }
 }

@@ -1,6 +1,7 @@
 package org.apache.cordova.plugin;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Abstract class for all connector.
@@ -31,6 +32,13 @@ abstract public class Wl_Pay_Ccr_Abstract
 
     return o_processor;
   }
+
+  /**
+   * Returns debugging information.
+   *
+   * @return Debugging information.
+   */
+  abstract JSONObject debugGet() throws JSONException;
 
   /**
    * Writes a message to debug logInfo.

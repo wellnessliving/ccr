@@ -71,6 +71,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
       for (String s_permission : a_permission)
         a_result_permission.put(s_permission,cordova.hasPermission(s_permission));
       a_result.put("a_permission",a_result_permission);
+      a_result.put("a_processor",this.o_processor.debugGet());
     }
 
     callbackContext.success(a_result);
