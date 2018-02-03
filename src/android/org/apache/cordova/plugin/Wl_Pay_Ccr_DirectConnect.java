@@ -46,4 +46,10 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract
   {
 
   }
+
+  @Override
+  public void testSwipe(JSONObject a_card) throws JSONException
+  {
+
+  }
 }
