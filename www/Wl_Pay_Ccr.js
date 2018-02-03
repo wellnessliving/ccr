@@ -132,6 +132,7 @@ Wl_Pay_Ccr.messageGet=function(a_data)
         'a_log': a_log,
         'i_call': a_data.i_call,
         'is_ok': false,
+        's_method': a_data['s_command'],
         's_source': 'Wl_Pay_Ccr.top',
         'x_result': x_result
       });

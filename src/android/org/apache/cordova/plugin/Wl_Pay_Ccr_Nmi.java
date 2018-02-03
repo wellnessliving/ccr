@@ -25,7 +25,7 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
   /**
    * Encryption key.
    */
-  private String s_key;
+  private String s_key=null;
 
   /**
    * Swipe controller object.
@@ -74,20 +74,6 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
 
       a_debug.put("a_card",a_card);
     }
-
-    JSONObject a_card=new JSONObject();
-
-    PGKeyedCard card = new PGKeyedCard("4111111111111111", "2501", "111");
-
-    PGEncrypt o_card_encrypt = new PGEncrypt();
-    o_card_encrypt.setKey(this.s_key);
-
-    a_card.put("s_encrypt",o_card_encrypt.encrypt(card,true));
-    a_card.put("s_expire",card.getExpirationDate());
-    a_card.put("s_holder","Card Holder");
-    a_card.put("s_number_mask","**** 1248");
-
-    this.controller().fireSwipe(a_card);
 
     return a_debug;
   }

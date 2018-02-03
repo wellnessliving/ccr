@@ -301,6 +301,18 @@ public class Wl_Pay_Ccr extends CordovaPlugin
       callbackContext.error(a_result);
       return true;
     }
+    catch (Exception e)
+    {
+      JSONObject a_result=new JSONObject();
+      a_result.put("a_log",this.logResult());
+      a_result.put("s_class",e.getClass());
+      a_result.put("s_error","internal");
+      a_result.put("s_message",e.getMessage());
+      a_result.put("s_message_local",e.getLocalizedMessage());
+      a_result.put("s_stack",e.getStackTrace());
+      callbackContext.error(a_result);
+      return true;
+    }
     finally
     {
       this.is_method=false;
