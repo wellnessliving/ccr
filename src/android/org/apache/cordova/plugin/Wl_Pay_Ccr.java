@@ -445,10 +445,12 @@ public class Wl_Pay_Ccr extends CordovaPlugin
 
     if(has_permissions)
     {
-      this.o_processor.startup();
-
       a_result.put("s_message","Permissions allowed.");
       this.o_context_permission.success(a_result);
+
+      // First send reply that permissions are granted.
+      // Only after that - events that can be fired by o_processor.startup()
+      this.o_processor.startup();
     }
     else
     {
