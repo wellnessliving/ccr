@@ -68,7 +68,7 @@ Wl_Pay_Ccr.messageGet=function(a_data)
         delete x_result.a_log;
       }
 
-      if(has_result)
+      if(has_result||typeof x_result==='object'&&x_result.hasOwnProperty('event'))
       {
         if(typeof x_result!=='object'||!x_result.hasOwnProperty('event'))
         {
@@ -76,6 +76,17 @@ Wl_Pay_Ccr.messageGet=function(a_data)
             'a_data': a_data,
             'is_error': true,
             's_message': 'Unexpected duplicate result returned. Ignored.',
+            'x_result': x_result
+          }]);
+          return;
+        }
+
+        if(a_data['s_command']!=='startup')
+        {
+          Wl_Pay_Ccr.log([{
+            'a_data': a_data,
+            'is_error': true,
+            's_message': 'Only startup() may issue events.',
             'x_result': x_result
           }]);
           return;

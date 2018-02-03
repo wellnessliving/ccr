@@ -175,9 +175,6 @@ public class Wl_Pay_Ccr extends CordovaPlugin
 
     boolean has_permissions=this.permissionHas();
 
-    if(has_permissions)
-      o_processor.startup();
-
     JSONObject a_result=new JSONObject();
     a_result.put("a_log",this.logResult());
     a_result.put("has_permissions",has_permissions);
@@ -186,6 +183,12 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     o_result.setKeepCallback(true);
 
     callbackContext.sendPluginResult(o_result);
+
+    // startup() may issue events.
+    // These events should be issued AFTER plugin initialization completes at JavaScript side.
+    // To complete that initialization, result should be sent prior sending of any events.
+    if(has_permissions)
+      o_processor.startup();
   }
 
   /**
