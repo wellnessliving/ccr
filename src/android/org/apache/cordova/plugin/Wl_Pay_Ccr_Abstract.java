@@ -13,6 +13,14 @@ abstract public class Wl_Pay_Ccr_Abstract
   private Wl_Pay_Ccr o_controller=null;
 
   /**
+   * Returns plugin controller object.
+   */
+  Wl_Pay_Ccr controller()
+  {
+    return this.o_controller;
+  }
+
+  /**
    * Create interface object for specified processor.
    *
    * @param id_pay_processor ID of a processor for which interface object should be created.
@@ -72,10 +80,15 @@ abstract public class Wl_Pay_Ccr_Abstract
   /**
    * Initializes plugin.
    */
-  abstract public void startup();
+  abstract public void startup() throws JSONException;
 
   /**
    * Tears plugin down.
    */
   abstract public void tearDown();
+
+  /**
+   * Fires a swipe event with specified card data. Used for testing purposes.
+   */
+  abstract public void testSwipe(JSONObject a_card) throws JSONException;
 }

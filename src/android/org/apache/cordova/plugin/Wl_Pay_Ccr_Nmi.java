@@ -1,6 +1,9 @@
 package org.apache.cordova.plugin;
 
 import android.Manifest;
+
+import com.SafeWebServices.PaymentGateway.PGEncrypt;
+import com.SafeWebServices.PaymentGateway.PGKeyedCard;
 import com.SafeWebServices.PaymentGateway.PGSwipeController;
 import com.SafeWebServices.PaymentGateway.PGSwipeController.SwipeListener;
 import com.SafeWebServices.PaymentGateway.PGSwipeDevice;
@@ -15,6 +18,16 @@ import org.json.JSONObject;
 public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
 {
   /**
+   * Credit card object that was read last.
+   */
+  private PGSwipedCard o_card=null;
+
+  /**
+   * Encryption key.
+   */
+  private String s_key;
+
+  /**
    * Swipe controller object.
    */
   private PGSwipeController swipeController=null;
@@ -25,6 +38,7 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
     JSONObject a_debug=new JSONObject();
 
     a_debug.put("s_class","Wl_Pay_Ccr_Nmi");
+    a_debug.put("s_key",this.s_key);
 
     if(this.swipeController==null)
     {
@@ -41,15 +55,65 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
       a_debug.put("getIsReadyForSwipe",o_device.getIsReadyForSwipe());
     }
 
+    if(this.o_card==null)
+    {
+      a_debug.put("s_card","[Card was not read]");
+    }
+    else
+    {
+      JSONObject a_card=new JSONObject();
+
+      a_card.put("getCardholderName",this.o_card.getCardholderName());
+      a_card.put("getCVV",this.o_card.getCVV());
+      a_card.put("getDirectPostString",this.o_card.getDirectPostString(true));
+      a_card.put("getExpirationDate",this.o_card.getExpirationDate());
+      a_card.put("getMaskedCardNumber",this.o_card.getMaskedCardNumber());
+      a_card.put("getTrack1",this.o_card.getTrack1());
+      a_card.put("getTrack2",this.o_card.getTrack2());
+      a_card.put("getTrack3",this.o_card.getTrack3());
+
+      a_debug.put("a_card",a_card);
+    }
+
+    JSONObject a_card=new JSONObject();
+
+    PGKeyedCard card = new PGKeyedCard("4111111111111111", "2501", "111");
+
+    PGEncrypt o_card_encrypt = new PGEncrypt();
+    o_card_encrypt.setKey(this.s_key);
+
+    a_card.put("s_encrypt",o_card_encrypt.encrypt(card,true));
+    a_card.put("s_expire",card.getExpirationDate());
+    a_card.put("s_holder","Card Holder");
+    a_card.put("s_number_mask","**** 1248");
+
+    this.controller().fireSwipe(a_card);
+
     return a_debug;
   }
 
   @Override
-  public void onSwipedCard(PGSwipedCard pgSwipedCard, PGSwipeDevice pgSwipeDevice)
+  public void onSwipedCard(PGSwipedCard card, PGSwipeDevice pgSwipeDevice)
   {
+    this.o_card=card;
+
     try
     {
       this.logInfo("[Wl_Pay_Ccr_Nmi.onSwipedCard]");
+      if(card!=null)
+      {
+        PGEncrypt o_card_encrypt = new PGEncrypt();
+        o_card_encrypt.setKey(this.s_key);
+
+        JSONObject a_card=new JSONObject();
+
+        a_card.put("s_encrypt",o_card_encrypt.encrypt(card,true));
+        a_card.put("s_expire",card.getExpirationDate());
+        a_card.put("s_holder",card.getCardholderName());
+        a_card.put("s_number_mask",card.getMaskedCardNumber());
+
+        this.controller().fireSwipe(a_card);
+      }
     }
     catch (JSONException ignored)
     {
@@ -147,8 +211,11 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
   }
 
   @Override
-  public void startup()
+  public void startup() throws JSONException
   {
+    JSONObject a_config=this.controller().config().getJSONObject("a_processor");
+    this.s_key=a_config.getString("s_key");
+
     /*
      * Create swipe controller for device to be used.
      * The device type being used should be un-commented here.
@@ -201,5 +268,26 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
   {
     this.swipeController.getDevice().stopSwipeController();
     this.swipeController=null;
+  }
+
+  @Override
+  public void testSwipe(JSONObject a_card) throws JSONException
+  {
+    PGSwipedCard card = new PGSwipedCard(
+      a_card.getString("s_track_1"),
+      a_card.getString("s_track_2"),
+      a_card.getString("s_track_3"),
+      ""
+    );
+
+    PGEncrypt o_card_encrypt = new PGEncrypt();
+    o_card_encrypt.setKey(this.s_key);
+
+    a_card.put("s_encrypt",o_card_encrypt.encrypt(card,true));
+    a_card.put("s_expire",card.getExpirationDate());
+    a_card.put("s_holder",a_card.getString("s_holder"));
+    a_card.put("s_number_mask",card.getMaskedCardNumber());
+
+    this.controller().fireSwipe(a_card);
   }
 }

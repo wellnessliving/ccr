@@ -17,6 +17,11 @@ import org.json.JSONObject;
 public class Wl_Pay_Ccr extends CordovaPlugin
 {
   /**
+   * Plugin configuration object.
+   */
+  private JSONObject a_config=null;
+
+  /**
    * Whether plugin was initialized successfully.
    */
   private JSONArray a_log=new JSONArray();
@@ -53,6 +58,16 @@ public class Wl_Pay_Ccr extends CordovaPlugin
   private Wl_Pay_Ccr_Abstract o_processor=null;
 
   /**
+   * Returns configuration array.
+   *
+   * @return Configuration array.
+   */
+  JSONObject config()
+  {
+    return this.a_config;
+  }
+
+  /**
    * Returns debug information.
    *
    * @param callbackContext Callback context.
@@ -75,6 +90,9 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     }
 
     callbackContext.success(a_result);
+
+    this.logInfo("Example log message.");
+    this.fireLog();
   }
 
   /**
@@ -97,12 +115,22 @@ public class Wl_Pay_Ccr extends CordovaPlugin
       return;
     }
 
+    if(this.permissionHas())
+    {
+      this.logError("[Wl_Pay_Ccr.doPermissionRequest] It is not allowed to require permissions if they are already granted.");
+
+      JSONObject a_result=new JSONObject();
+      a_result.put("a_log",this.logResult());
+      a_result.put("s_message","Permissions are already granted.");
+
+      callbackContext.error(a_result);
+      return;
+    }
+
     // See
     // https://cordova.apache.org/docs/en/latest/guide/platforms/android/plugin.html#android-permissions
     this.o_context_permission=callbackContext;
-    String[] a_permission=this.o_processor.permissionList();
-    this.logInfo("Require permissions: "+a_permission.length);
-    cordova.requestPermissions(this, 1, a_permission);
+    cordova.requestPermissions(this, 1, this.o_processor.permissionList());
   }
 
   /**
@@ -143,12 +171,16 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     this.is_active=true;
     this.o_context_event=callbackContext;
     this.o_processor=o_processor;
+    this.a_config=a_config;
 
-    o_processor.startup();
+    boolean has_permissions=this.permissionHas();
+
+    if(has_permissions)
+      o_processor.startup();
 
     JSONObject a_result=new JSONObject();
     a_result.put("a_log",this.logResult());
-    a_result.put("has_permissions",this.permissionHas());
+    a_result.put("has_permissions",has_permissions);
 
     PluginResult o_result = new PluginResult(PluginResult.Status.OK, a_result);
     o_result.setKeepCallback(true);
@@ -198,6 +230,36 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     this.o_context_event=null;
   }
 
+  /**
+   * Fires a swipe event with specified card data. Used for testing purposes.
+   *
+   * @param a_card Card data.
+   * @param callbackContext Callback context.
+   */
+  private void doTestSwipe(JSONObject a_card, CallbackContext callbackContext) throws JSONException
+  {
+    if(!this.is_active)
+    {
+      this.logError("[Wl_Pay_Ccr.doTestSwipe] Swipe event can not be fired when plugin is inactive.");
+
+      JSONObject a_result=new JSONObject();
+      a_result.put("a_log",this.logResult());
+      a_result.put("s_message","Swipe event can not be fired when plugin is inactive.");
+      a_result.put("s_error","inactive");
+
+      callbackContext.error(a_result);
+      return;
+    }
+
+    this.o_processor.testSwipe(a_card);
+
+    JSONObject a_result=new JSONObject();
+    a_result.put("a_log",this.logResult());
+    a_result.put("s_message","Swipe even is fired.");
+
+    callbackContext.success(a_result);
+  }
+
   @Override
   public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException
   {
@@ -223,6 +285,11 @@ public class Wl_Pay_Ccr extends CordovaPlugin
       else if(action.equals("tearDown"))
       {
         this.doTearDown(callbackContext);
+        return true;
+      }
+      else if(action.equals("testSwipe"))
+      {
+        this.doTestSwipe(args.getJSONObject(0),callbackContext);
         return true;
       }
 
@@ -251,6 +318,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
       return;
 
     a_event.put("event",s_event);
+    a_event.put("a_log",this.logResult());
 
     PluginResult o_result = new PluginResult(PluginResult.Status.OK, a_event);
     o_result.setKeepCallback(true);
@@ -266,9 +334,18 @@ public class Wl_Pay_Ccr extends CordovaPlugin
       return;
 
     JSONObject a_event=new JSONObject();
-    a_event.put("a_log",this.logResult());
 
     this.fire("log",a_event);
+  }
+
+  /**
+   * Fires card swipe event.
+   *
+   * @param a_card Card data.
+   */
+  void fireSwipe(JSONObject a_card) throws JSONException
+  {
+    this.fire("swipe",a_card);
   }
 
   /**
@@ -353,6 +430,8 @@ public class Wl_Pay_Ccr extends CordovaPlugin
 
     if(has_permissions)
     {
+      this.o_processor.startup();
+
       a_result.put("s_message","Permissions allowed.");
       this.o_context_permission.success(a_result);
     }
