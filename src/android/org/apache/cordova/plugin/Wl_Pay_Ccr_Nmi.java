@@ -257,23 +257,27 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
   }
 
   @Override
-  public void testSwipe(JSONObject a_card) throws JSONException
+  public void testSwipe(JSONObject a_card_swipe) throws JSONException
   {
     PGSwipedCard card = new PGSwipedCard(
-      a_card.getString("s_track_1"),
-      a_card.getString("s_track_2"),
-      a_card.getString("s_track_3"),
+      a_card_swipe.getString("s_track_1"),
+      a_card_swipe.getString("s_track_2"),
+      a_card_swipe.getString("s_track_3"),
       ""
     );
 
     PGEncrypt o_card_encrypt = new PGEncrypt();
     o_card_encrypt.setKey(this.s_key);
 
-    a_card.put("s_encrypt",o_card_encrypt.encrypt(card,true));
-    a_card.put("s_expire",card.getExpirationDate());
-    a_card.put("s_holder",a_card.getString("s_holder"));
-    a_card.put("s_number_mask",card.getMaskedCardNumber());
+    JSONObject a_card_event=new JSONObject();
 
-    this.controller().fireSwipe(a_card);
+    a_card_event.put("s_encrypt",o_card_encrypt.encrypt(card,true));
+    a_card_event.put("s_expire",card.getExpirationDate());
+    if(card.getExpirationDate()==null)
+      a_card_event.put("s_expire_is_null",true);
+    a_card_event.put("s_holder",a_card_swipe.getString("s_holder"));
+    a_card_event.put("s_number_mask",card.getMaskedCardNumber());
+
+    this.controller().fireSwipe(a_card_event);
   }
 }
