@@ -265,6 +265,9 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
       a_card_swipe.getString("s_track_3"),
       ""
     );
+    card.setCardholderName(a_card_swipe.getString("s_holder"));
+    card.setExpirationDate(a_card_swipe.getString("s_expire"));
+    card.setMaskedCardNumber(a_card_swipe.getString("s_number_mask"));
 
     PGEncrypt o_card_encrypt = new PGEncrypt();
     o_card_encrypt.setKey(this.s_key);
@@ -273,9 +276,7 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
 
     a_card_event.put("s_encrypt",o_card_encrypt.encrypt(card,true));
     a_card_event.put("s_expire",card.getExpirationDate());
-    if(card.getExpirationDate()==null)
-      a_card_event.put("s_expire_is_null",true);
-    a_card_event.put("s_holder",a_card_swipe.getString("s_holder"));
+    a_card_event.put("s_holder",card.getCardholderName());
     a_card_event.put("s_number_mask",card.getMaskedCardNumber());
 
     this.controller().fireSwipe(a_card_event);
