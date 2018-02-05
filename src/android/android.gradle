@@ -10,7 +10,7 @@ repositories{
 
 dependencies {
     compile(name:'dc-idt', ext:'aar') {
-        exclude group:'com.idtechproducts'
+        exclude module:'LIDTech'
     }
     compile(name:'dc-sdk', ext:'aar')
     compile(name:'nmi', ext:'aar')
