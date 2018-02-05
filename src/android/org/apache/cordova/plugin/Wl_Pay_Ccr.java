@@ -90,9 +90,6 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     }
 
     callbackContext.success(a_result);
-
-    this.logInfo("Example log message.");
-    this.fireLog();
   }
 
   /**
@@ -211,6 +208,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     }
 
     this.o_processor.tearDown();
+    this.o_processor=null;
 
     // **** BE ATTENTIVE ***
     // All tear down actions should be performed before the code the follows.
