@@ -99,6 +99,8 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
 
         this.controller().fireSwipe(a_card);
       }
+      else
+        this.controller().fireSwipeError();
     }
     catch (JSONException ignored)
     {
@@ -246,8 +248,11 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
   @Override
   public void tearDown()
   {
-    this.swipeController.getDevice().stopSwipeController();
-    this.swipeController=null;
+    if(this.swipeController!=null)
+    {
+      this.swipeController.getDevice().stopSwipeController();
+      this.swipeController=null;
+    }
   }
 
   @Override

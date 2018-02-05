@@ -140,15 +140,8 @@ public class Wl_Pay_Ccr extends CordovaPlugin
   {
     if(this.is_active)
     {
-      this.logError("[Wl_Pay_Ccr.doStartup] It is not allowed to initialize plugin when it is initialized already.");
-
-      JSONObject a_result=new JSONObject();
-      a_result.put("a_log",this.logResult());
-      a_result.put("s_message","Plugin is initialized already.");
-      a_result.put("s_error","already");
-
-      callbackContext.error(a_result);
-      return;
+      this.logError("[Wl_Pay_Ccr.doStartup] Plugin is marked as active. Deactivating before activation.");
+      this.tearDown();
     }
 
     int id_pay_processor=a_config.getInt("id_pay_processor");
@@ -207,28 +200,12 @@ public class Wl_Pay_Ccr extends CordovaPlugin
       return;
     }
 
-    this.o_processor.tearDown();
-    this.o_processor=null;
+    this.tearDown();
 
-    // **** BE ATTENTIVE ***
-    // All tear down actions should be performed before the code the follows.
-    // The following code sends final event.
-    // No events can be sent after that.
     JSONObject a_result=new JSONObject();
-    a_result.put("event","tearDown");
-
-    PluginResult o_result = new PluginResult(PluginResult.Status.OK, a_result);
-    o_result.setKeepCallback(false);
-
-    this.o_context_event.sendPluginResult(o_result);
-
-    a_result=new JSONObject();
     a_result.put("a_log",this.logResult());
     a_result.put("s_message","Complete.");
     callbackContext.success(a_result);
-
-    this.is_active=false;
-    this.o_context_event=null;
   }
 
   /**
@@ -346,9 +323,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     if(this.a_log.length()==0)
       return;
 
-    JSONObject a_event=new JSONObject();
-
-    this.fire("log",a_event);
+    this.fire("log",new JSONObject());
   }
 
   /**
@@ -359,6 +334,14 @@ public class Wl_Pay_Ccr extends CordovaPlugin
   void fireSwipe(JSONObject a_card) throws JSONException
   {
     this.fire("swipe",a_card);
+  }
+
+  /**
+   * Fires card swipe event.
+   */
+  void fireSwipeError() throws JSONException
+  {
+    this.fire("swipeError",new JSONObject());
   }
 
   /**
@@ -473,5 +456,35 @@ public class Wl_Pay_Ccr extends CordovaPlugin
         return false;
     }
     return true;
+  }
+
+  /**
+   * Stops plugin.
+   */
+  private void tearDown() throws JSONException
+  {
+    if(this.o_processor!=null)
+    {
+      this.o_processor.tearDown();
+      this.o_processor=null;
+    }
+
+    if(o_context_event!=null)
+    {
+      // **** BE ATTENTIVE ***
+      // All tear down actions should be performed before the code the follows.
+      // The following code sends final event.
+      // No events can be sent after that.
+      JSONObject a_result=new JSONObject();
+      a_result.put("event","tearDown");
+
+      PluginResult o_result = new PluginResult(PluginResult.Status.OK, a_result);
+      o_result.setKeepCallback(false);
+
+      this.o_context_event.sendPluginResult(o_result);
+      this.o_context_event=null;
+    }
+
+    this.is_active=false;
   }
 }
