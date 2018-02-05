@@ -3,7 +3,6 @@ package org.apache.cordova.plugin;
 import android.Manifest;
 
 import com.SafeWebServices.PaymentGateway.PGEncrypt;
-import com.SafeWebServices.PaymentGateway.PGKeyedCard;
 import com.SafeWebServices.PaymentGateway.PGSwipeController;
 import com.SafeWebServices.PaymentGateway.PGSwipeController.SwipeListener;
 import com.SafeWebServices.PaymentGateway.PGSwipeDevice;
@@ -201,7 +200,7 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
   {
     JSONObject a_config=this.controller().config().getJSONObject("a_processor");
     this.s_key=a_config.getString("s_key");
-    PGSwipeDevice.SwipeDevice deviceType= WlDeviceSid.idNmi(a_config.getInt("id_device"));
+    PGSwipeDevice.SwipeDevice deviceType= Wl_DeviceSid.idNmi(a_config.getInt("id_device"));
 
     this.swipeController = new PGSwipeController(this,this.getApplicationContext(), deviceType);
 

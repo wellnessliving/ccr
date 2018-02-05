@@ -31,9 +31,10 @@ abstract public class Wl_Pay_Ccr_Abstract
     Wl_Pay_Ccr_Abstract o_processor=null;
     switch (id_pay_processor)
     {
-      case PayProcessorSid.DIRECT_CONNECT:
+      case Wl_ProcessorSid.DIRECT_CONNECT:
         o_processor=new Wl_Pay_Ccr_DirectConnect();
-      case PayProcessorSid.NMI:
+        break;
+      case Wl_ProcessorSid.NMI:
         o_processor=new Wl_Pay_Ccr_Nmi();
     }
 

@@ -5,7 +5,7 @@ import com.SafeWebServices.PaymentGateway.PGSwipeDevice;
 /**
  * A list of devices supported by credit card reader plugin.
  */
-class WlDeviceSid
+class Wl_DeviceSid
 {
   /**
    * Payment processor: NMI.
@@ -45,7 +45,7 @@ class WlDeviceSid
       case NMI_UNIMAG:
         return PGSwipeDevice.SwipeDevice.UNIMAG;
       default:
-        throw new IllegalArgumentException("[WlDeviceSid.idNmi] Device ID is not registered.");
+        throw new IllegalArgumentException("[Wl_DeviceSid.idNmi] Device ID is not registered.");
     }
   }
 
@@ -62,9 +62,9 @@ class WlDeviceSid
       case NMI_ENTERPRISE:
       case NMI_IPS:
       case NMI_UNIMAG:
-        return PayProcessorSid.NMI;
+        return Wl_ProcessorSid.NMI;
       default:
-        throw new IllegalArgumentException("[WlDeviceSid.idProcessor] Device ID is not registered.");
+        throw new IllegalArgumentException("[Wl_DeviceSid.idProcessor] Device ID is not registered.");
     }
   }
 }

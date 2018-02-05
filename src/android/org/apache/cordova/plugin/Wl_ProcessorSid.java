@@ -3,7 +3,7 @@ package org.apache.cordova.plugin;
 /**
  * A list of payment processors.
  */
-class PayProcessorSid
+class Wl_ProcessorSid
 {
   /**
    * Payment gateway for Direct Connect.
