@@ -2,8 +2,8 @@ package org.apache.cordova.plugin;
 
 import android.Manifest;
 
-import com.directconnect.mobilesdk.device.Device;
-import com.directconnect.mobilesdk.device.DeviceManager;
+//import com.directconnect.mobilesdk.device.Device;
+//import com.directconnect.mobilesdk.device.DeviceManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
