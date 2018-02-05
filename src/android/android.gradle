@@ -1,13 +1,11 @@
-defaultConfig {
-    // https://stackoverflow.com/questions/43877893/exclude-module-at-gradle
-    // NMI and DirectConnect both contain library to work with IDTech.
-    multiDexEnabled true
-}
-
 repositories{
     flatDir {
         dirs 'libs'
     }
+}
+
+dexOptions {
+    preDexLibraries = false
 }
 
 dependencies {
