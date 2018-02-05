@@ -4,9 +4,9 @@ repositories{
     }
 }
 
-dexOptions {
-    preDexLibraries = false
-}
+//dexOptions {
+//    preDexLibraries = false
+//}
 
 dependencies {
     compile(name:'dc-idt', ext:'aar') {
