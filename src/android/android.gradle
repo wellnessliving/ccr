@@ -10,7 +10,7 @@ repositories{
 
 dependencies {
     compile(name:'dc-idt', ext:'aar') {
-        exclude module:'IDT_UniMagSDKAndroid_v4.2'
+        exclude group:'com.idtechproducts'
     }
     compile(name:'dc-sdk', ext:'aar')
     compile(name:'nmi', ext:'aar')
