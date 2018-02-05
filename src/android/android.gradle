@@ -5,7 +5,7 @@ repositories{
 }
 
 dependencies {
-    compile(name:'dc-idt', ext:'aar')
-    compile(name:'dc-sdk', ext:'aar')
+    //compile(name:'dc-idt', ext:'aar')
+    //compile(name:'dc-sdk', ext:'aar')
     compile(name:'nmi', ext:'aar')
 }
