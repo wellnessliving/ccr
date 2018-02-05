@@ -5,7 +5,9 @@ repositories{
 }
 
 dependencies {
-    //compile(name:'dc-idt', ext:'aar')
-    //compile(name:'dc-sdk', ext:'aar')
+    // Order is important!
+    compile(name:'dc-sdk', ext:'aar') // Should go first.
+    compile(name:'dc-idt', ext:'aar')
+
     compile(name:'nmi', ext:'aar')
 }
