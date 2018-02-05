@@ -201,14 +201,9 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
   {
     JSONObject a_config=this.controller().config().getJSONObject("a_processor");
     this.s_key=a_config.getString("s_key");
+    PGSwipeDevice.SwipeDevice deviceType= WlDeviceSid.idNmi(a_config.getInt("id_device"));
 
-    /*
-     * Create swipe controller for device to be used.
-     * The device type being used should be un-commented here.
-     */
-    //this.swipeController = new PGSwipeController(this, PGSwipeDevice.SwipeDevice.UNIMAG);
-    this.swipeController = new PGSwipeController(this,this.getApplicationContext(), PGSwipeDevice.SwipeDevice.ENTERPRISE);
-    //this.swipeController = new PGSwipeController(this, PGSwipeDevice.SwipeDevice.IPS);
+    this.swipeController = new PGSwipeController(this,this.getApplicationContext(), deviceType);
 
     // Sets the time between requestSwipe and when swipes will no longer be accepted.
     // Default and maximum are 20 seconds. The minimum is 3 seconds.
