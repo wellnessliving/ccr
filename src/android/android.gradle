@@ -9,9 +9,9 @@ dexOptions {
 }
 
 dependencies {
-    // Order is important!
-    compile(name:'dc-sdk', ext:'aar') // Should go first.
-    compile(name:'dc-idt', ext:'aar')
-
+    compile(name:'dc-idt', ext:'aar') {
+        exclude module:'IDT_UniMagSDKAndroid_v4.2'
+    }
+    compile(name:'dc-sdk', ext:'aar')
     compile(name:'nmi', ext:'aar')
 }
