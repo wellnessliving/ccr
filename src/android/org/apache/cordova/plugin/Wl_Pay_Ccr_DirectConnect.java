@@ -47,6 +47,7 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
    */
   public static Wl_Pay_Ccr_DirectConnect create(Wl_Pay_Ccr o_controller) throws JSONException
   {
+    o_controller.logInfo("Config: "+o_controller.config().toString());
     JSONObject a_config=o_controller.config().getJSONObject("a_processor");
 
     int id_device=a_config.getInt("id_device");
