@@ -1,0 +1,4 @@
+Попов: удалён файл
+libs\IDT_UniMagSDKAndroid_v4.2.jar
+так как он дублирует
+\src\android\nmi\payment-gateway.aar\libs\idtech-card-reader-resources-v4.4.jar

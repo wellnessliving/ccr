@@ -72,11 +72,21 @@ abstract public class Wl_Pay_Ccr_Abstract
   }
 
   /**
+   * Writes an error message to debug logInfo.
+   *
+   * @param s_message Error message to write to log.
+   */
+  void logError(String s_message) throws JSONException
+  {
+    this.o_controller.logError(s_message);
+  }
+
+  /**
    * Returns a list of permissions that are required by plugin.
    *
    * @return A list of permissions that are required by plugin.
    */
-  abstract protected String[] permissionList();
+  abstract protected String[] permissionList() throws JSONException;
 
   /**
    * Initializes plugin.

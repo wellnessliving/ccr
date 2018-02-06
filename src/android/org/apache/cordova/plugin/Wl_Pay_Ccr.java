@@ -345,11 +345,11 @@ public class Wl_Pay_Ccr extends CordovaPlugin
   }
 
   /**
-   * Writes a message to debug logInfo.
+   * Writes an error message to debug logInfo.
    *
-   * @param s_message Message to write to logInfo.
+   * @param s_message Error message to write to log.
    */
-  private void logError(String s_message) throws JSONException
+  void logError(String s_message) throws JSONException
   {
     JSONObject a_item=new JSONObject();
     a_item.put("is_error",true);
@@ -447,7 +447,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
    *
    * @return Whether all permissions are granted.
    */
-  private boolean permissionHas()
+  private boolean permissionHas() throws JSONException
   {
     String[] a_permission=this.o_processor.permissionList();
     for (String s_permission : a_permission)

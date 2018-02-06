@@ -8,6 +8,34 @@ import com.SafeWebServices.PaymentGateway.PGSwipeDevice;
 class Wl_DeviceSid
 {
   /**
+   * Payment processor: Direct Connect.
+   *
+   * Device: <tt>IDTech/Augusta</tt>.
+   */
+  static final int DC_IDT_AUGUSTA=4;
+
+  /**
+   * Payment processor: Direct Connect.
+   *
+   * Device: <tt>IDTech/BTMag</tt>.
+   */
+  static final int DC_IDT_BT_MAG=5;
+
+  /**
+   * Payment processor: Direct Connect.
+   *
+   * Device: <tt>IDTech/UniMag</tt>.
+   */
+  static final int DC_IDT_UNI_MAG=6;
+
+  /**
+   * Payment processor: Direct Connect.
+   *
+   * Device: <tt>IDTech/UniPay</tt>.
+   */
+  static final int DC_IDT_UNI_PAY=7;
+
+  /**
    * Payment processor: NMI.
    *
    * Device: Enterprise.
