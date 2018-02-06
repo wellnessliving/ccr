@@ -285,7 +285,7 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
         return new String[]{
           Manifest.permission.MODIFY_AUDIO_SETTINGS,
           Manifest.permission.RECORD_AUDIO,
-          Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS,
+          // Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS,
           Manifest.permission.WRITE_EXTERNAL_STORAGE,
           Manifest.permission.READ_EXTERNAL_STORAGE,
           Manifest.permission.INTERNET,
