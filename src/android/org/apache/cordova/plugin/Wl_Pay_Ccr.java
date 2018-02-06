@@ -144,6 +144,9 @@ public class Wl_Pay_Ccr extends CordovaPlugin
       this.tearDown();
     }
 
+    // a_config is used in DirectConnect version of create().
+    this.a_config=a_config;
+
     int id_pay_processor=a_config.getInt("id_pay_processor");
     Wl_Pay_Ccr_Abstract o_processor=Wl_Pay_Ccr_Abstract.create(id_pay_processor,this);
     if(o_processor==null)
@@ -161,7 +164,6 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     this.is_active=true;
     this.o_context_event=callbackContext;
     this.o_processor=o_processor;
-    this.a_config=a_config;
 
     boolean has_permissions=this.permissionHas();
 
