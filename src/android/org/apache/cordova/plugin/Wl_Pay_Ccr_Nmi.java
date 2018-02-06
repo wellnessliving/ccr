@@ -78,36 +78,6 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
   }
 
   @Override
-  public void onSwipedCard(PGSwipedCard card, PGSwipeDevice pgSwipeDevice)
-  {
-    this.o_card=card;
-
-    try
-    {
-      this.logInfo("[Wl_Pay_Ccr_Nmi.onSwipedCard]");
-      if(card!=null)
-      {
-        PGEncrypt o_card_encrypt = new PGEncrypt();
-        o_card_encrypt.setKey(this.s_key);
-
-        JSONObject a_card=new JSONObject();
-
-        a_card.put("s_encrypt",o_card_encrypt.encrypt(card,true));
-        a_card.put("s_expire",card.getExpirationDate());
-        a_card.put("s_holder",card.getCardholderName());
-        a_card.put("s_number_mask",card.getMaskedCardNumber());
-
-        this.controller().fireSwipe(a_card);
-      }
-      else
-        this.controller().fireSwipeError();
-    }
-    catch (JSONException ignored)
-    {
-    }
-  }
-
-  @Override
   public void onDeviceReadyForSwipe(PGSwipeDevice pgSwipeDevice)
   {
     try
@@ -173,6 +143,36 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
     try
     {
       this.logInfo("[Wl_Pay_Ccr_Nmi.onDeviceDeactivated]");
+    }
+    catch (JSONException ignored)
+    {
+    }
+  }
+
+  @Override
+  public void onSwipedCard(PGSwipedCard card, PGSwipeDevice pgSwipeDevice)
+  {
+    this.o_card=card;
+
+    try
+    {
+      this.logInfo("[Wl_Pay_Ccr_Nmi.onSwipedCard]");
+      if(card!=null)
+      {
+        PGEncrypt o_card_encrypt = new PGEncrypt();
+        o_card_encrypt.setKey(this.s_key);
+
+        JSONObject a_card=new JSONObject();
+
+        a_card.put("s_encrypt",o_card_encrypt.encrypt(card,true));
+        a_card.put("s_expire",card.getExpirationDate());
+        a_card.put("s_holder",card.getCardholderName());
+        a_card.put("s_number_mask",card.getMaskedCardNumber());
+
+        this.controller().fireSwipe(a_card);
+      }
+      else
+        this.controller().fireSwipeError();
     }
     catch (JSONException ignored)
     {

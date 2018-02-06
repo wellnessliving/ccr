@@ -26,13 +26,13 @@ abstract public class Wl_Pay_Ccr_Abstract
    * @param id_pay_processor ID of a processor for which interface object should be created.
    * @return Interface object for specified processor.
    */
-  public static Wl_Pay_Ccr_Abstract create(int id_pay_processor, Wl_Pay_Ccr o_controller)
+  public static Wl_Pay_Ccr_Abstract create(int id_pay_processor, Wl_Pay_Ccr o_controller) throws JSONException
   {
     Wl_Pay_Ccr_Abstract o_processor=null;
     switch (id_pay_processor)
     {
       case Wl_ProcessorSid.DIRECT_CONNECT:
-        o_processor=new Wl_Pay_Ccr_DirectConnect();
+        o_processor=Wl_Pay_Ccr_DirectConnect.create(o_controller);
         break;
       case Wl_ProcessorSid.NMI:
         o_processor=new Wl_Pay_Ccr_Nmi();
