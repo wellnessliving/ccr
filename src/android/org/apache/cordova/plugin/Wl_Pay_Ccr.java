@@ -39,6 +39,11 @@ public class Wl_Pay_Ccr extends CordovaPlugin
    * is being executed now.
    *
    * <tt>false</tt> if a background process is being executed now.
+   *
+   * This field may be set to <tt>false</tt> in <tt>do*</tt> methods if result is already sent, but
+   * there are other calls that may invoke exception. Doing so leads to that exception is sent as
+   * a log event, and not as a erroneous result which can not be returned (due to that result is
+   * already sent).
    */
   private boolean is_method=false;
 
@@ -180,7 +185,22 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     // These events should be issued AFTER plugin initialization completes at JavaScript side.
     // To complete that initialization, result should be sent prior sending of any events.
     if(has_permissions)
-      o_processor.startup();
+    {
+      this.is_method=false;
+
+      try
+      {
+        o_processor.startup();
+      }
+      catch (Exception e)
+      {
+        // tearDown() can not be called because we need to return this exception into the browser.
+        // This can only be done with a log event.
+        // tearDown() deactivates sending of events.
+        this.is_active=false;
+        throw e;
+      }
+    }
   }
 
   /**
@@ -289,7 +309,8 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     catch (Exception e)
     {
       JSONObject a_result=new JSONObject();
-      a_result.put("a_log",this.logResult());
+      if(this.is_method)
+        a_result.put("a_log",this.logResult());
       a_result.put("s_class",e.getClass());
       a_result.put("s_error","internal");
       a_result.put("s_message",e.getMessage());
@@ -298,11 +319,20 @@ public class Wl_Pay_Ccr extends CordovaPlugin
       StackTraceElement[] a_stack=e.getStackTrace();
       StringBuilder s_stack= new StringBuilder();
       for(StackTraceElement a_element:a_stack)
-        s_stack.append(a_element.getClassName()).append(':').append(a_element.getLineNumber()).append("\r\n");
+      {
+        if(a_element.getClassName().equals(CordovaPlugin.class.getName()))
+          break;
+        if(s_stack.length()>0)
+          s_stack.append(" - ");
+        s_stack.append(a_element.getClassName()).append(':').append(a_element.getLineNumber());
+      }
 
       a_result.put("s_stack",s_stack);
 
-      callbackContext.error(a_result);
+      if(this.is_method)
+        callbackContext.error(a_result);
+      else
+        this.logError(a_result);
       return true;
     }
     finally
@@ -356,6 +386,17 @@ public class Wl_Pay_Ccr extends CordovaPlugin
   void fireSwipeError() throws JSONException
   {
     this.fire("swipeError",new JSONObject());
+  }
+
+  /**
+   * Writes an error message to debug logInfo.
+   *
+   * @param a_error Error object.
+   */
+  private void logError(JSONObject a_error) throws JSONException
+  {
+    a_error.put("is_error",true);
+    this.logPut(a_error);
   }
 
   /**

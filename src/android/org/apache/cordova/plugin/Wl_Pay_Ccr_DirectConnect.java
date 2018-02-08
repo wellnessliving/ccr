@@ -143,12 +143,11 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
   }
 
   @Override
-  public void onConnected()
+  public void onCardInserted(CardData cardData)
   {
     try
     {
-      this.logInfo("[Wl_Pay_Ccr_DirectConnect.onConnected]");
-      this.deviceManager.acceptCard("Swipe Card");
+      this.logInfo("[Wl_Pay_Ccr_DirectConnect.onCardInserted]");
     }
     catch (JSONException ignored)
     {
@@ -156,11 +155,11 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
   }
 
   @Override
-  public void onDisconnected()
+  public void onCardRemoved()
   {
     try
     {
-      this.logInfo("[Wl_Pay_Ccr_DirectConnect.onDisconnected]");
+      this.logInfo("[Wl_Pay_Ccr_DirectConnect.onCardRemoved]");
     }
     catch (JSONException ignored)
     {
@@ -211,11 +210,12 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
   }
 
   @Override
-  public void onCardInserted(CardData cardData)
+  public void onConnected()
   {
     try
     {
-      this.logInfo("[Wl_Pay_Ccr_DirectConnect.onCardInserted]");
+      this.logInfo("[Wl_Pay_Ccr_DirectConnect.onConnected]");
+      this.deviceManager.acceptCard("Swipe Card");
     }
     catch (JSONException ignored)
     {
@@ -223,11 +223,23 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
   }
 
   @Override
-  public void onCardRemoved()
+  public void onDisconnected()
   {
     try
     {
-      this.logInfo("[Wl_Pay_Ccr_DirectConnect.onCardRemoved]");
+      this.logInfo("[Wl_Pay_Ccr_DirectConnect.onDisconnected]");
+    }
+    catch (JSONException ignored)
+    {
+    }
+  }
+
+  @Override
+  public void onMenuSelected(int i)
+  {
+    try
+    {
+      this.logInfo("[Wl_Pay_Ccr_DirectConnect.onMenuSelected]");
     }
     catch (JSONException ignored)
     {
@@ -252,18 +264,6 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
     try
     {
       this.logInfo("[Wl_Pay_Ccr_DirectConnect.onYNAnswered]");
-    }
-    catch (JSONException ignored)
-    {
-    }
-  }
-
-  @Override
-  public void onMenuSelected(int i)
-  {
-    try
-    {
-      this.logInfo("[Wl_Pay_Ccr_DirectConnect.onMenuSelected]");
     }
     catch (JSONException ignored)
     {
