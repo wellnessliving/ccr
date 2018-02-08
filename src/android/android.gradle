@@ -4,14 +4,8 @@ repositories{
     }
 }
 
-ext.dexOptions {
-    preDexLibraries = false
-}
-
 dependencies {
-    compile(name:'dc-idt', ext:'aar') {
-        exclude module:'LIDTech'
-    }
+    compile(name:'dc-idt', ext:'aar')
     compile(name:'dc-sdk', ext:'aar')
     compile(name:'nmi', ext:'aar')
 }
