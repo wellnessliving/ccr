@@ -267,6 +267,11 @@ public class Wl_Pay_Ccr extends CordovaPlugin
         this.doTearDown(callbackContext);
         return true;
       }
+      else if(action.equals("testException"))
+      {
+        Wl_DeviceSid.testException();
+        return false; // Exception is thrown above. Never returns.
+      }
       else if(action.equals("testSwipe"))
       {
         this.doTestSwipe(args.getJSONObject(0),callbackContext);
@@ -289,7 +294,14 @@ public class Wl_Pay_Ccr extends CordovaPlugin
       a_result.put("s_error","internal");
       a_result.put("s_message",e.getMessage());
       a_result.put("s_message_local",e.getLocalizedMessage());
-      a_result.put("s_stack",e.getStackTrace());
+
+      StackTraceElement[] a_stack=e.getStackTrace();
+      StringBuilder s_stack= new StringBuilder();
+      for(StackTraceElement a_element:a_stack)
+        s_stack.append(a_element.getClassName()).append(':').append(a_element.getLineNumber()).append("\r\n");
+
+      a_result.put("s_stack",s_stack);
+
       callbackContext.error(a_result);
       return true;
     }

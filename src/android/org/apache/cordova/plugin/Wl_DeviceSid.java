@@ -95,4 +95,12 @@ class Wl_DeviceSid
         throw new IllegalArgumentException("[Wl_DeviceSid.idProcessor] Device ID is not registered.");
     }
   }
+
+  /**
+   * Throws an exception. Used for testing purposes.
+   */
+  static void testException()
+  {
+    throw new IllegalArgumentException("Example exception message.");
+  }
 }
