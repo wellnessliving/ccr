@@ -59,13 +59,13 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
     {
       case Wl_DeviceSid.DC_IDT_AUGUSTA:
         devices = AugustaDeviceManager.getAvailableDevices();
-        if(devices.length==0)
+        if(devices==null||devices.length==0)
           return null;
         deviceManager = new AugustaDeviceManager(devices[0], o_context);
         break;
       case Wl_DeviceSid.DC_IDT_BT_MAG:
         devices = BTMagDeviceManager.getAvailableDevices();
-        if(devices.length==0)
+        if(devices==null||devices.length==0)
           return null;
         deviceManager = new BTMagDeviceManager(devices[0], o_context);
         break;
