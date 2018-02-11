@@ -302,6 +302,7 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
   @Override
   public void startup() throws JSONException
   {
+    this.logError("[Wl_Pay_Ccr_DirectConnect.startup]");
     this.deviceManager.connect(this);
   }
 
