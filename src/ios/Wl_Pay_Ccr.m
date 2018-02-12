@@ -3,18 +3,57 @@
 
 @implementation Wl_Pay_Ccr
 
-- (void)debugInfo:(CDVInvokedUrlCommand*)command
+- (void)_end
+{
+  is_method=NO;
+}
+
+- (void)_exception:(id)e
+{
+  // TODO Not implemented
+}
+
+- (void)_start
+{
+  is_method=YES;
+}
+
+- (void)_success:(CDVInvokedUrlCommand*)command with:(NSDictionary *) a_result
 {
     CDVPluginResult* pluginResult = nil;
-    NSString* echo = [command.arguments objectAtIndex:0];
 
-    if (echo != nil && [echo length] > 0) {
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:echo];
-    } else {
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
-    }
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:a_result];
 
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)debugInfo:(CDVInvokedUrlCommand*)command
+{
+    [self _start];
+    @try
+    {
+        NSMutableDictionary * a_result=[[NSMutableDictionary alloc] init];
+        [a_result setValue:@"q" forKey:@"is_active"];
+        [self _success:command with:a_result];
+    }
+    @catch(id e)
+    {
+        [self _exception:e];
+    }
+    @finally
+    {
+        [self _end];
+    }
+}
+
+- (id)init
+{
+    self=[super init];
+    if(self)
+    {
+        self->is_method=NO;
+    }
+    return self;
 }
 
 @end
