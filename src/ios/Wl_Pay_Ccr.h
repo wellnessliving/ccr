@@ -2,6 +2,7 @@
 
 @interface Wl_Pay_Ccr : CDVPlugin
 {
+    BOOL is_active;
     BOOL is_method;
 }
 

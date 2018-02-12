@@ -33,7 +33,7 @@
     @try
     {
         NSMutableDictionary * a_result=[[NSMutableDictionary alloc] init];
-        [a_result setValue:@"q" forKey:@"is_active"];
+        [a_result setValue:[NSNumber numberWithBool:self->is_active] forKey:@"is_active"];
         [self _success:command with:a_result];
     }
     @catch(id e)
@@ -51,6 +51,7 @@
     self=[super init];
     if(self)
     {
+        self->is_active=NO;
         self->is_method=NO;
     }
     return self;
