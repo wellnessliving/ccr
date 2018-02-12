@@ -84,11 +84,11 @@
 
   <platform name="ios">
     <config-file target="config.xml" parent="/*">
-      <feature name="Device">
-        <param name="ios-package" value="CDVDevice"/>
+      <feature name="Wl_Pay_Ccr">
+        <param name="ios-package" value="Wl_Pay_Ccr"/>
       </feature>
     </config-file>
-    <header-file src="src/ios/CDVDevice.h" />
-    <source-file src="src/ios/CDVDevice.m" />
+    <header-file src="src/ios/Wl_Pay_Ccr.h" />
+    <source-file src="src/ios/Wl_Pay_Ccr.m" />
   </platform>
 </plugin>
