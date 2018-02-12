@@ -141,7 +141,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
    * @param a_config Configuration array.
    * @param callbackContext Callback context.
    */
-  private void doStartup(JSONObject a_config, CallbackContext callbackContext) throws JSONException,Exception
+  private void doStartup(JSONObject a_config, CallbackContext callbackContext) throws Exception
   {
     if(this.is_active)
     {
