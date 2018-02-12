@@ -300,6 +300,20 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
           Manifest.permission.BLUETOOTH,
           Manifest.permission.BLUETOOTH_ADMIN
         };
+      case Wl_DeviceSid.DC_MIURA:
+        // Union of all privileges from these files:
+        // \src\android\dc\DCMobileSDK.aar\AndroidManifest.xml
+        // \src\android\dc\DCMobileSDK-Miura.aar\AndroidManifest.xml
+        // \src\android\dc\Lib-Miura-SDK.aar\AndroidManifest.xml
+        return new String[]{
+          Manifest.permission.ACCESS_WIFI_STATE,
+          Manifest.permission.BLUETOOTH,
+          Manifest.permission.BLUETOOTH_ADMIN,
+          Manifest.permission.GET_TASKS,
+          Manifest.permission.INTERNET,
+          Manifest.permission.WRITE_EXTERNAL_STORAGE
+        };
+
       default:
         this.logError("[Wl_Pay_Ccr_DirectConnect.permissionList] Device ID is not known.");
         return new String[]{};
