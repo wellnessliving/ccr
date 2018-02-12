@@ -36,6 +36,13 @@ class Wl_DeviceSid
   static final int DC_IDT_UNI_PAY=7;
 
   /**
+   * Payment processor: Direct Connect.
+   *
+   * Device: <tt>IDTech/Miura</tt>.
+   */
+  static final int DC_MIURA=8;
+
+  /**
    * Payment processor: NMI.
    *
    * Device: Enterprise.

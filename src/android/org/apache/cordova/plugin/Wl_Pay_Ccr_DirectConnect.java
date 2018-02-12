@@ -8,6 +8,7 @@ import com.directconnect.mobilesdk.device.BTMagDeviceManager;
 import com.directconnect.mobilesdk.device.CardData;
 import com.directconnect.mobilesdk.device.Device;
 import com.directconnect.mobilesdk.device.DeviceManager;
+import com.directconnect.mobilesdk.device.MiuraDeviceManager;
 import com.directconnect.mobilesdk.device.PINData;
 import com.directconnect.mobilesdk.device.UniMagDeviceManager;
 import com.directconnect.mobilesdk.device.UniPayDeviceManager;
@@ -80,6 +81,12 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
         if(devices.length==0)
           return null;
         deviceManager = new UniPayDeviceManager(devices[0], o_context);
+        break;
+      case Wl_DeviceSid.DC_MIURA:
+        devices = MiuraDeviceManager.getAvailableDevices();
+        if(devices==null||devices.length==0)
+          return null;
+        deviceManager = new MiuraDeviceManager(devices[0], o_context);
         break;
       default:
         return null;
@@ -302,7 +309,7 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
   @Override
   public void startup() throws JSONException
   {
-    this.logError("[Wl_Pay_Ccr_DirectConnect.startup]");
+    this.logInfo("[Wl_Pay_Ccr_DirectConnect.startup]");
     this.deviceManager.connect(this);
   }
 
