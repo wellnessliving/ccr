@@ -99,7 +99,7 @@
     <source-file src="src/ios/Wl_Pay_Ccr_Nmi.m" />
     <source-file src="src/ios/Wl_ProcessorSid.h" />
 
-    <framework src="AudioToolbox.framework" />
+    <!--<framework src="AudioToolbox.framework" />
     <framework src="AVFoundation.framework" />
     <framework src="ExternalAccessory.framework" />
     <framework src="MediaPlayer.framework" />
@@ -107,6 +107,6 @@
     <framework src="CoreBluetooth.framework" />
     <framework src="libstdc++.6.0.9.dylib" />
     <framework src="PGMobileSDK.a" />
-    <source-file src="src/ios/nmi/PGMobileSDK.a" framework="true" />
+    <source-file src="src/ios/nmi/PGMobileSDK.a" framework="true" />-->
   </platform>
 </plugin>
