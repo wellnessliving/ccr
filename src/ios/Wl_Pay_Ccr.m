@@ -153,11 +153,9 @@
             self->callbackId = command.callbackId;
             self->o_processor = o_processor;
 
-            //bool has_permissions = this.permissionHas();
-
             NSMutableDictionary* a_result = [[NSMutableDictionary alloc] init];
             [a_result setValue:[self logResult] forKey:@"a_log"];
-            [a_result setObject:[NSNumber numberWithBool:NO] forKey:@"has_permissions"];
+            [a_result setObject:[NSNumber numberWithBool:YES] forKey:@"has_permissions"];
 
             CDVPluginResult* pluginResult = nil;
 
@@ -168,23 +166,21 @@
             // startup() may issue events.
             // These events should be issued AFTER plugin initialization completes at JavaScript side.
             // To complete that initialization, result should be sent prior sending of any events.
-    //        if(has_permissions)
-    //        {
-    //            this.is_method=false;
-    //
-    //            try
-    //            {
-    //                o_processor.startup();
-    //            }
-    //            catch (Exception e)
-    //            {
-    //                // tearDown() can not be called because we need to return this exception into the browser.
-    //                // This can only be done with a log event.
-    //                // tearDown() deactivates sending of events.
-    //                this.is_active=false;
-    //                throw e;
-    //            }
-    //        }
+
+            self->is_method = NO;
+
+            @try
+            {
+                [o_processor startup];
+            }
+            @catch (id e)
+            {
+                // tearDown() can not be called because we need to return this exception into the browser.
+                // This can only be done with a log event.
+                // tearDown() deactivates sending of events.
+                self->is_active = NO;
+                @throw e;
+            }
         }
         @catch(id e)
         {
@@ -194,8 +190,5 @@
         {
             [self _end];
         }
-
-        [self logInfo:@"Log info."];
-        [self logErrorMessage:@"Log error."];
     }
 @end

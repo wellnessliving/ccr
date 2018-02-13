@@ -90,7 +90,14 @@
         <param name="ios-package" value="Wl_Pay_Ccr"/>
       </feature>
     </config-file>
+    <header-file src="src/ios/Wl_DeviceSid.h" />
     <header-file src="src/ios/Wl_Pay_Ccr.h" />
     <source-file src="src/ios/Wl_Pay_Ccr.m" />
+    <header-file src="src/ios/Wl_Pay_Ccr_Abstract.h" />
+    <source-file src="src/ios/Wl_Pay_Ccr_Abstract.m" />
+    <header-file src="src/ios/Wl_Pay_Ccr_Nmi.h" />
+    <source-file src="src/ios/Wl_Pay_Ccr_Nmi.m" />
+    <source-file src="src/ios/Wl_ProcessorSid.h" />
+    <source-file src="src/ios/nmi/PGMobileSDK.a" framework="true" />
   </platform>
 </plugin>
