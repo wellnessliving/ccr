@@ -28,5 +28,30 @@
 
     return o_processor;
 }
-    
+
+-(NSDictionary*)debugInfo
+{
+    return [[NSDictionary alloc] init];
+}
+
+- (void)logInfo: (NSString*)s_message
+{
+    [o_controller logInfo:s_message];
+}
+
+- (void)logErrorMessage: (NSString*)s_message
+{
+    [o_controller logErrorMessage:s_message];
+}
+
+-(void)startup
+{
+    @throw [NSException exceptionWithName:@"internal" reason:@"[Wl_Pay_Ccr_Abstract.startup] Call to abstract method." userInfo:nil];
+}
+
+-(void)tearDown
+{
+    @throw [NSException exceptionWithName:@"internal" reason:@"[Wl_Pay_Ccr_Abstract.tearDown] Call to abstract method." userInfo:nil];
+}
+
 @end

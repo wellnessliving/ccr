@@ -8,8 +8,14 @@
     Wl_Pay_Ccr *o_controller;
 }
 
+-(Wl_Pay_Ccr*)controller;
 +(Wl_Pay_Ccr_Abstract*)create:(long)id_pay_processor forController:(Wl_Pay_Ccr*)o_controller;
 
+-(NSDictionary*)debugInfo;
+- (void)logInfo: (NSString*)s_message;
+- (void)logErrorMessage: (NSString*)s_message;
+
 -(void)startup;
+-(void)tearDown;
 
 @end

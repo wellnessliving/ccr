@@ -15,7 +15,10 @@
     Wl_Pay_Ccr_Abstract *o_processor;
 }
 
+- (NSDictionary*) config;
 - (void)debugInfo:(CDVInvokedUrlCommand*)command;
+- (void)logErrorMessage: (NSString*)s_message;
+- (void)logInfo: (NSString*)s_message;
 - (void)startup:(CDVInvokedUrlCommand*)command;
 
 @end

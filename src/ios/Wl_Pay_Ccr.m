@@ -7,10 +7,11 @@
       is_method=NO;
     }
 
-    - (void)_error:(CDVInvokedUrlCommand*)command with:(NSDictionary *) a_result
+    - (void)_error:(CDVInvokedUrlCommand*)command with:(NSMutableDictionary *) a_result
     {
         CDVPluginResult* pluginResult = nil;
 
+        [a_result setObject:[self logResult] forKey:@"a_log"];
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:a_result];
 
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -26,10 +27,11 @@
       is_method=YES;
     }
 
-    - (void)_success:(CDVInvokedUrlCommand*)command with:(NSDictionary *) a_result
+    - (void)_success:(CDVInvokedUrlCommand*)command with:(NSMutableDictionary *) a_result
     {
         CDVPluginResult* pluginResult = nil;
 
+        [a_result setObject:[self logResult] forKey:@"a_log"];
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:a_result];
 
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -40,6 +42,11 @@
 
     }
 
+    -(NSDictionary*)config
+    {
+        return self->a_config;
+    }
+
     - (void)debugInfo:(CDVInvokedUrlCommand*)command
     {
         [self _start];
@@ -47,6 +54,16 @@
         {
             NSMutableDictionary * a_result=[[NSMutableDictionary alloc] init];
             [a_result setValue:[NSNumber numberWithBool:self->is_active] forKey:@"is_active"];
+            
+            if(o_processor==nil)
+            {
+                [a_result setValue:@"[nil]" forKey:@"o_processor"];
+            }
+            else
+            {
+                [a_result setValue:[o_processor debugInfo] forKey:@"o_processor"];
+            }
+            
             [self _success:command with:a_result];
         }
         @catch(id e)
@@ -64,8 +81,8 @@
         if(self->callbackId==nil)
             return;
 
-        [a_event setObject:s_event forKey:@"event"];
         [a_event setObject:[self logResult] forKey:@"a_log"];
+        [a_event setObject:s_event forKey:@"event"];
 
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:a_event];
         [pluginResult setKeepCallbackAsBool:YES];
@@ -140,7 +157,6 @@
             if(o_processor==nil)
             {
                 NSMutableDictionary* a_result = [[NSMutableDictionary alloc] init];
-                [a_result setValue:[self logResult] forKey:@"a_log"];
                 [a_result setObject:[NSNumber numberWithLong:id_pay_processor] forKey:@"id_pay_processor"];
                 [a_result setObject:@"Interface for this payment processor is not implemented." forKey:@"s_message"];
                 [a_result setObject:@"not-implemented" forKey:@"s_error"];
@@ -154,7 +170,6 @@
             self->o_processor = o_processor;
 
             NSMutableDictionary* a_result = [[NSMutableDictionary alloc] init];
-            [a_result setValue:[self logResult] forKey:@"a_log"];
             [a_result setObject:[NSNumber numberWithBool:YES] forKey:@"has_permissions"];
 
             CDVPluginResult* pluginResult = nil;
