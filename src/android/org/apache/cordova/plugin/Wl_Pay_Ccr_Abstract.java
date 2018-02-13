@@ -24,6 +24,7 @@ abstract public class Wl_Pay_Ccr_Abstract
    * Create interface object for specified processor.
    *
    * @param id_pay_processor ID of a processor for which interface object should be created.
+   * @param o_controller Plugin controller object.
    * @return Interface object for specified processor.
    */
   public static Wl_Pay_Ccr_Abstract create(int id_pay_processor, Wl_Pay_Ccr o_controller) throws JSONException
