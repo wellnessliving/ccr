@@ -8,6 +8,7 @@ import com.directconnect.mobilesdk.device.BTMagDeviceManager;
 import com.directconnect.mobilesdk.device.CardData;
 import com.directconnect.mobilesdk.device.Device;
 import com.directconnect.mobilesdk.device.DeviceManager;
+import com.directconnect.mobilesdk.device.MiuraDeviceManager;
 import com.directconnect.mobilesdk.device.PINData;
 import com.directconnect.mobilesdk.device.UniMagDeviceManager;
 import com.directconnect.mobilesdk.device.UniPayDeviceManager;
@@ -80,6 +81,12 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
         if(devices.length==0)
           return null;
         deviceManager = new UniPayDeviceManager(devices[0], o_context);
+        break;
+      case Wl_DeviceSid.DC_MIURA:
+        devices = MiuraDeviceManager.getAvailableDevices();
+        if(devices==null||devices.length==0)
+          return null;
+        deviceManager = new MiuraDeviceManager(devices[0], o_context);
         break;
       default:
         return null;
@@ -293,6 +300,20 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
           Manifest.permission.BLUETOOTH,
           Manifest.permission.BLUETOOTH_ADMIN
         };
+      case Wl_DeviceSid.DC_MIURA:
+        // Union of all privileges from these files:
+        // \src\android\dc\DCMobileSDK.aar\AndroidManifest.xml
+        // \src\android\dc\DCMobileSDK-Miura.aar\AndroidManifest.xml
+        // \src\android\dc\Lib-Miura-SDK.aar\AndroidManifest.xml
+        return new String[]{
+          Manifest.permission.ACCESS_WIFI_STATE,
+          Manifest.permission.BLUETOOTH,
+          Manifest.permission.BLUETOOTH_ADMIN,
+          Manifest.permission.GET_TASKS,
+          Manifest.permission.INTERNET,
+          Manifest.permission.WRITE_EXTERNAL_STORAGE
+        };
+
       default:
         this.logError("[Wl_Pay_Ccr_DirectConnect.permissionList] Device ID is not known.");
         return new String[]{};
@@ -302,7 +323,7 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
   @Override
   public void startup() throws JSONException
   {
-    this.logError("[Wl_Pay_Ccr_DirectConnect.startup]");
+    this.logInfo("[Wl_Pay_Ccr_DirectConnect.startup]");
     this.deviceManager.connect(this);
   }
 
