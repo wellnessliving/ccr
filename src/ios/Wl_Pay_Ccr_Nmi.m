@@ -1,4 +1,5 @@
 #import "Wl_Pay_Ccr_Nmi.h"
+#import "PGMobileSDK/PGEncrypt.h"
 #import "PGMobileSDK/PGSwipeController.h"
 #import "PGMobileSDK/PGSwipeDevice.h"
 #import "Wl_DeviceSid.h"
@@ -134,7 +135,37 @@
 
 -(void)tearDown
 {
-    
+    device=nil;
+    swipeController=nil;
+    card=nil;
+    s_key=nil;
+}
+
++(void)testException
+{
+    NSMutableDictionary * userInfo=[[NSMutableDictionary alloc] init];
+    [userInfo setObject:@"Example data." forKey:@"s_example"];
+    @throw [NSException exceptionWithName:@"example" reason:@"Example exception message." userInfo:userInfo];
+}
+
+-(void)testSwipe: (NSDictionary*)a_card
+{
+    PGSwipedCard* card = [[PGSwipedCard alloc] initWithTrack1:[a_card objectForKey:@"s_track_1"] track2:[a_card objectForKey:@"s_track_2"] track3:[a_card objectForKey:@"s_track_3"] cvv:nil];
+    [card setCardholderName:[a_card objectForKey:@"s_holder"]];
+    [card setExpirationDate:[a_card objectForKey:@"s_expire"]];
+    [card setMaskedCardNumber:[a_card objectForKey:@"s_number_mask"]];
+
+    PGEncrypt* o_card_encrypt = [[PGEncrypt alloc] init];
+    [o_card_encrypt setKey:s_key];
+
+    NSMutableDictionary* a_card_event = [[NSMutableDictionary alloc] init];
+
+    [a_card_event setObject:[o_card_encrypt encrypt:card includeCVV:YES] forKey:@"s_encrypt"];
+    [a_card_event setObject:[card expirationDate] forKey:@"s_expire"];
+    [a_card_event setObject:[card cardholderName] forKey:@"s_holder"];
+    [a_card_event setObject:[card maskedCardNumber] forKey:@"s_number_mask"];
+
+    [[self controller] fireSwipe:a_card_event];
 }
 
 @end

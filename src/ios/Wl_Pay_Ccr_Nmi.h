@@ -13,4 +13,7 @@
     PGSwipeController* swipeController;
 }
 
++(void)testException;
+-(void)testSwipe: (NSDictionary*)a_card;
+
 @end

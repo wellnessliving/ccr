@@ -17,8 +17,13 @@
 
 - (NSDictionary*) config;
 - (void)debugInfo:(CDVInvokedUrlCommand*)command;
+- (void)fireSwipe:(NSMutableDictionary*)a_card;
+- (void)fireSwipeError;
 - (void)logErrorMessage: (NSString*)s_message;
 - (void)logInfo: (NSString*)s_message;
 - (void)startup:(CDVInvokedUrlCommand*)command;
+- (void)tearDown:(CDVInvokedUrlCommand*)command;
+- (void)testException:(CDVInvokedUrlCommand*)command;
+- (void)testSwipe:(CDVInvokedUrlCommand*)command;
 
 @end

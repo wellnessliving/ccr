@@ -54,4 +54,9 @@
     @throw [NSException exceptionWithName:@"internal" reason:@"[Wl_Pay_Ccr_Abstract.tearDown] Call to abstract method." userInfo:nil];
 }
 
+-(void)testSwipe: (NSDictionary*)a_card
+{
+    @throw [NSException exceptionWithName:@"internal" reason:@"[Wl_Pay_Ccr_Abstract.testSwipe] Call to abstract method." userInfo:a_card];
+}
+
 @end

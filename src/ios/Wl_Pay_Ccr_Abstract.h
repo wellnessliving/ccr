@@ -17,5 +17,6 @@
 
 -(void)startup;
 -(void)tearDown;
+-(void)testSwipe: (NSDictionary*)a_card;
 
 @end

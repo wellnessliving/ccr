@@ -1,4 +1,5 @@
 #import "Wl_Pay_Ccr.h"
+#import "Wl_Pay_Ccr_Nmi.h"
 #import <Cordova/CDVPlugin.h>
 
 @implementation Wl_Pay_Ccr
@@ -17,9 +18,24 @@
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }
 
-    - (void)_exception:(id)e
+- (void)_exception:(id)e forCommand:(CDVInvokedUrlCommand*) command
     {
-      // TODO Not implemented
+        NSMutableDictionary* a_result = [[NSMutableDictionary alloc] init];
+        [a_result setObject:NSStringFromClass([e class]) forKey:@"s_class"];
+        [a_result setObject:@"internal" forKey:@"s_error"];
+        
+        if([e isKindOfClass:[NSException class]])
+        {
+            [a_result setObject:[e reason] forKey:@"s_message"];
+            [a_result setObject:[e name] forKey:@"s_name"];
+            [a_result setObject:[e userInfo] forKey:@"a_info"];
+            [a_result setObject:[e callStackSymbols] forKey:@"s_stack"];
+        }
+        
+        if(is_method)
+            [self _error:command with:a_result];
+        else
+            [self logErrorDictionary:a_result];
     }
 
     - (void)_start
@@ -39,6 +55,31 @@
 
     - (void)_tearDown
     {
+        if(o_processor!=nil)
+        {
+            [o_processor tearDown];
+            o_processor=nil;
+        }
+        
+        if(callbackId!=nil)
+        {
+            // **** BE ATTENTIVE ***
+            // All tear down actions should be performed before the code the follows.
+            // The following code sends final event.
+            // No events can be sent after that.
+            NSMutableDictionary* a_result = [[NSMutableDictionary alloc] init];
+            [a_result setObject:@"tearDown" forKey:@"event"];
+            
+            CDVPluginResult* pluginResult = nil;
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:a_result];
+            [pluginResult setKeepCallbackAsBool:NO];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
+
+            
+            callbackId = nil;
+        }
+        
+        is_active = NO;
 
     }
 
@@ -68,7 +109,7 @@
         }
         @catch(id e)
         {
-            [self _exception:e];
+            [self _exception:e forCommand:command];
         }
         @finally
         {
@@ -89,19 +130,32 @@
         [self.commandDelegate sendPluginResult:pluginResult callbackId:self->callbackId];
     }
 
-    - (id)init
+- (void)fireLog
+{
+    if([a_log count]==0)
+        return;
+    
+    [self fire:@"log" forData:[[NSMutableDictionary alloc] init]];
+}
+
+- (void)fireSwipe:(NSMutableDictionary*)a_card
+{
+    [self fire:@"swipe" forData:a_card];
+}
+
+- (void)fireSwipeError
+{
+    [self fire:@"swipeError" forData:[[NSMutableDictionary alloc] init]];
+}
+
+    - (void)pluginInitialize
     {
-        self=[super init];
-        if(self)
-        {
-            self->a_config=nil;
-            self->a_log = [[NSMutableArray alloc] init];
-            self->callbackId = nil;
-            self->is_active=NO;
-            self->is_method=NO;
-            self->o_processor = nil;
-        }
-        return self;
+        self->a_config=nil;
+        self->a_log = [[NSMutableArray alloc] init];
+        self->callbackId = nil;
+        self->is_active=NO;
+        self->is_method=NO;
+        self->o_processor = nil;
     }
 
     -(void)logErrorDictionary: (NSMutableDictionary*)a_error
@@ -136,6 +190,8 @@
     - (void)logPut: (NSDictionary*)o_message
     {
         [self->a_log addObject:o_message];
+        if(!is_method&&callbackId!=nil)
+            [self fireLog];
     }
 
     - (void)startup: (CDVInvokedUrlCommand*)command
@@ -199,11 +255,97 @@
         }
         @catch(id e)
         {
-            [self _exception:e];
+            [self _exception:e forCommand:command];
         }
         @finally
         {
             [self _end];
         }
     }
+
+- (void)tearDown:(CDVInvokedUrlCommand*)command
+{
+    [self _start];
+    @try
+    {
+        if(!is_active)
+        {
+            [self logErrorMessage:@"[Wl_Pay_Ccr.tearDown] It is not allowed to tear down plugin that is not initialized."];
+            
+            NSMutableDictionary* a_result = [[NSMutableDictionary alloc] init];
+            [a_result setObject:@"Not initialized." forKey:@"s_message"];
+            
+            [self _error:command with:a_result];
+            return;
+        }
+        
+        [self _tearDown];
+        
+        NSMutableDictionary* a_result = [[NSMutableDictionary alloc] init];
+        [a_result setObject:@"Complete." forKey:@"s_message"];
+        
+        [self _success:command with:a_result];
+    }
+    @catch(id e)
+    {
+        [self _exception:e forCommand:command];
+    }
+    @finally
+    {
+        [self _end];
+    }
+
+}
+
+-(void)testException:(CDVInvokedUrlCommand *)command
+{
+    [self _start];
+    @try
+    {
+        [Wl_Pay_Ccr_Nmi testException];
+    }
+    @catch(id e)
+    {
+        [self _exception:e forCommand:command];
+    }
+    @finally
+    {
+        [self _end];
+    }
+}
+
+- (void)testSwipe:(CDVInvokedUrlCommand*)command
+{
+    [self _start];
+    @try
+    {
+        if(!is_active)
+        {
+            [self logErrorMessage:@"[Wl_Pay_Ccr.doTestSwipe] Swipe event can not be fired when plugin is inactive."];
+            
+            NSMutableDictionary *a_result=[[NSMutableDictionary alloc] init];
+            [a_result setObject:@"Swipe event can not be fired when plugin is inactive." forKey:@"s_message"];
+            [a_result setObject:@"inactive" forKey:@"s_error"];
+            [self _error:command with:a_result];
+            return;
+        }
+        
+        NSDictionary *a_card = [command.arguments objectAtIndex:0];
+        
+        [o_processor testSwipe:a_card];
+         
+        NSMutableDictionary *a_result=[[NSMutableDictionary alloc] init];
+        [a_result setObject:@"Swipe event is fired." forKey:@"s_message"];
+        [self _success:command with:a_result];
+    }
+    @catch(id e)
+    {
+        [self _exception:e forCommand:command];
+    }
+    @finally
+    {
+        [self _end];
+    }
+}
+
 @end
