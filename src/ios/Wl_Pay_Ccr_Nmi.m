@@ -107,6 +107,25 @@
 -(void)didSwipeCard:(PGSwipedCard *)card device:(PGSwipeDevice *)sender
 {
     self->card=card;
+    [self logInfo:@"[Wl_Pay_Ccr_Nmi.didSwipeCard]"];
+    if(card!=nil)
+    {
+        PGEncrypt* o_card_encrypt = [[PGEncrypt alloc] init];
+        [o_card_encrypt setKey:s_key];
+        
+        NSMutableDictionary* a_card_event = [[NSMutableDictionary alloc] init];
+        
+        [a_card_event setObject:[o_card_encrypt encrypt:card includeCVV:YES] forKey:@"s_encrypt"];
+        [a_card_event setObject:[card expirationDate] forKey:@"s_expire"];
+        [a_card_event setObject:[card cardholderName] forKey:@"s_holder"];
+        [a_card_event setObject:[card maskedCardNumber] forKey:@"s_number_mask"];
+        
+        [[self controller] fireSwipe:a_card_event];
+    }
+    else
+    {
+        [[self controller] fireSwipeError];
+    }
 }
 
 -(int)idNmi:(int)id_device
