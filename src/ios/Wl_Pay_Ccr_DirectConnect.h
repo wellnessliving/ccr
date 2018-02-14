@@ -1,12 +1,18 @@
-//
-//  Wl_Pay_Ccr_DirectConnect.h
-//  WellnessLiving Elevate
-//
-//  Created by Koins on 14.02.2018.
-//
+#import <Foundation/Foundation.h>
+#import "Wl_Pay_Ccr.h"
+#import "Wl_Pay_Ccr_Abstract.h"
+#import "include/DCMobileSDK-Device.h"
 
-#ifndef Wl_Pay_Ccr_DirectConnect_h
-#define Wl_Pay_Ccr_DirectConnect_h
+@interface Wl_Pay_Ccr_DirectConnect: Wl_Pay_Ccr_Abstract <DCGDeviceDelegate>
+{
+    NSArray* devices;
+    DCGDeviceManager* deviceManager;
+    short id_device;
+    DCGCardData* o_card_last;
+}
 
++ (Wl_Pay_Ccr_DirectConnect*)create: (Wl_Pay_Ccr*)o_controller;
+- (void)testSwipe: (NSDictionary*)a_card;
 
-#endif /* Wl_Pay_Ccr_DirectConnect_h */
+@end
+
