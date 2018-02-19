@@ -37,7 +37,7 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
     JSONObject a_debug=new JSONObject();
 
     a_debug.put("s_class","Wl_Pay_Ccr_Nmi");
-    a_debug.put("s_key",this.s_key);
+    a_debug.put("s_key",this.s_key==null?"[null]":this.s_key);
 
     if(this.swipeController==null)
     {
@@ -253,6 +253,8 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
       this.swipeController.getDevice().stopSwipeController();
       this.swipeController=null;
     }
+    this.s_key=null;
+    this.o_card=null;
   }
 
   @Override

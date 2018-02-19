@@ -433,7 +433,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
   private void logPut(JSONObject o_message) throws JSONException
   {
     this.a_log.put(o_message);
-    if(!this.is_method)
+    if(!this.is_method&&this.o_context_event!=null)
       this.fireLog();
   }
 

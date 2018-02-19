@@ -112,6 +112,6 @@
     <source-file src="src/ios/nmi/PGMobileSDK.a" framework="true" />
 
     <header-file src="src/ios/dc/include" />
-    <source-file src="src/ios/dc/lib/libDCMobileSDK.a" framework="true" />
+    <source-file src="src/ios/dc/lib" framework="true" />
   </platform>
 </plugin>
