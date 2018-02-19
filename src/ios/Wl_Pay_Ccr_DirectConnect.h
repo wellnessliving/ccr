@@ -15,4 +15,3 @@
 - (void)testSwipe: (NSDictionary*)a_card;
 
 @end
-

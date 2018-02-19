@@ -24,7 +24,9 @@
     }
     
     if(card==nil)
+    {
         [a_debug setObject:@"[nil]" forKey:@"card"];
+    }
     else
     {
         NSMutableDictionary* a_card = [[NSMutableDictionary alloc] init];

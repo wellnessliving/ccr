@@ -1,5 +1,6 @@
 #import "Wl_Pay_Ccr_Abstract.h"
 #import "Wl_Pay_Ccr_Nmi.h"
+#import "Wl_Pay_Ccr_DirectConnect.h"
 #import "Wl_ProcessorSid.h"
 
 @implementation Wl_Pay_Ccr_Abstract
@@ -15,6 +16,7 @@
     switch (id_pay_processor)
     {
         case WL_PROCESSOR_DIRECT_CONNECT:
+            o_processor = [Wl_Pay_Ccr_DirectConnect create:o_controller];
             break;
         case WL_PROCESSOR_NMI:
             o_processor = [[Wl_Pay_Ccr_Nmi alloc] init];

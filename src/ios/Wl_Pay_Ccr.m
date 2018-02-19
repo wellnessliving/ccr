@@ -201,7 +201,7 @@
         {
             if(self->is_active)
             {
-                [self logErrorMessage:@"[Wl_Pay_Ccr.startup] Plugin is marked as active. Deactivating before activation."];
+                [self logInfo:@"[Wl_Pay_Ccr.startup] Plugin is marked as active. Deactivating before activation."];
                 [self _tearDown];
             }
 

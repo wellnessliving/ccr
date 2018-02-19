@@ -34,6 +34,12 @@
 #define WL_DEVICE_DC_MIURA 8
 
 /**
+ * Payment processor: Direct Connect.
+ * Device: PAX.
+ */
+#define WL_DEVICE_DC_PAX 9
+
+/**
  * Payment processor: NMI.
  *
  * Device: Enterprise.
