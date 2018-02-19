@@ -112,7 +112,8 @@
     <source-file src="src/ios/nmi/PGMobileSDK.a" framework="true" />
 
     <header-file src="src/ios/dc/include" />
-    <source-file src="src/ios/dc/lib/IDTECH_UniMag.a" framework="true" />
+    <!-- This library must not be included because is already connected for MNI. -->
+    <!--<source-file src="src/ios/dc/lib/IDTECH_UniMag.a" framework="true" />-->
     <source-file src="src/ios/dc/lib/libBTMagSDK.a" framework="true" />
     <source-file src="src/ios/dc/lib/libDCMobileSDK.a" framework="true" />
     <source-file src="src/ios/dc/lib/libDCMobileSDK-IDT.a" framework="true" />
