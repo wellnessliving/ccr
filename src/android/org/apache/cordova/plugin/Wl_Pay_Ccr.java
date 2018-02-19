@@ -145,7 +145,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
   {
     if(this.is_active)
     {
-      this.logError("[Wl_Pay_Ccr.doStartup] Plugin is marked as active. Deactivating before activation.");
+      this.logInfo("[Wl_Pay_Ccr.doStartup] Plugin is marked as active. Deactivating before activation.");
       this.tearDown();
     }
 

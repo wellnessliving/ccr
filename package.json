@@ -1,0 +1,32 @@
+{
+  "name": "wl-pay-ccr",
+  "description": "Interface for Android and iOS SDKs of NMI and Direct Connect.",
+  "version": "0.0.0",
+  "cordova": {
+    "id": "wl-pay-ccr",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yuri-popoff/ccr.git"
+  },
+  "keywords": [
+    "NMI",
+    "Direct Connect",
+    "CardReader",
+    "CreditCard",
+    "Debit Card",
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios"
+  ],
+  "author": "",
+  "license": "WellnessLiving",
+  "bugs": {
+    "url": "https://github.com/yuri-popoff/ccr/issues"
+  },
+  "homepage": "https://github.com/yuri-popoff/ccr#readme"
+}
