@@ -187,31 +187,29 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
 
     try
     {
-      this.logInfo("[Wl_Pay_Ccr_DirectConnect.onCardSwiped]");
+      if(cardData!=null&&cardData.getDataType()!=CardData.DataType.nil)
+      {
+        JSONObject a_card=new JSONObject();
 
-//      if(cardData!=null&&cardData.getDataType()!=CardData.DataType.nil)
-//      {
-//        JSONObject a_card=new JSONObject();
-//
-//        a_card.put("s_number",cardData.getPAN());
-//        a_card.put("s_expire",cardData.getExpDate());
-//        a_card.put("s_holder",cardData.getCardholderName());
-//        a_card.put("s_stripe",cardData.getTrack1()+cardData.getTrack2()+cardData.getTrack3());
-//        a_card.put("s_track_1",cardData.getTrack1());
-//        a_card.put("s_track_2",cardData.getTrack2());
-//        a_card.put("s_track_3",cardData.getTrack3());
-//
-//        a_card.put("getDataBlock",cardData.getDataBlock());
-//        a_card.put("getDataType",this.o_card_last.getDataType().toString());
-//        a_card.put("getKSN",cardData.getKSN());
-//        a_card.put("getServiceCode",cardData.getServiceCode());
-//
-//        this.controller().fireSwipe(a_card);
-//      }
-//      else
-//        this.controller().fireSwipeError();
-//
-//      this.deviceManager.acceptCard("Swipe Card");
+        a_card.put("s_number",cardData.getPAN());
+        a_card.put("s_expire",cardData.getExpDate());
+        a_card.put("s_holder",cardData.getCardholderName());
+        a_card.put("s_stripe",cardData.getTrack1()+cardData.getTrack2()+cardData.getTrack3());
+        a_card.put("s_track_1",cardData.getTrack1());
+        a_card.put("s_track_2",cardData.getTrack2());
+        a_card.put("s_track_3",cardData.getTrack3());
+
+        a_card.put("getDataBlock",cardData.getDataBlock());
+        a_card.put("getDataType",this.o_card_last.getDataType().toString());
+        a_card.put("getKSN",cardData.getKSN());
+        a_card.put("getServiceCode",cardData.getServiceCode());
+
+        this.controller().fireSwipe(a_card);
+      }
+      else
+        this.controller().fireSwipeError();
+
+      this.deviceManager.acceptCard("Swipe Card");
     }
     catch (JSONException ignored)
     {
