@@ -150,11 +150,23 @@
 
         [a_card setObject:[cardData PAN] forKey:@"s_number"];
         [a_card setObject:[cardData ExpDate] forKey:@"s_expire"];
-        [a_card setObject:[cardData CardholderName] forKey:@"s_holder"];
+        if([cardData CardholderName]==nil)
+            [a_card setObject:@"[nil]" forKey:@"s_holder"];
+        else
+            [a_card setObject:[cardData CardholderName] forKey:@"s_holder"];
         [a_card setObject:[NSString stringWithFormat:@"%@%@%@",[cardData Track1],[cardData Track2],[cardData Track3]] forKey:@"s_stripe"];
-        [a_card setObject:[cardData Track1] forKey:@"s_track_1"];
-        [a_card setObject:[cardData Track2] forKey:@"s_track_2"];
-        [a_card setObject:[cardData Track3] forKey:@"s_track_3"];
+        if([cardData Track1]==nil)
+            [a_card setObject:@"[nil]" forKey:@"s_track_1"];
+        else
+            [a_card setObject:[cardData Track1] forKey:@"s_track_1"];
+        if([cardData Track2]==nil)
+            [a_card setObject:@"[nil]" forKey:@"s_track_2"];
+        else
+            [a_card setObject:[cardData Track2] forKey:@"s_track_2"];
+        if([cardData Track3]==nil)
+            [a_card setObject:@"[nil]" forKey:@"s_track_3"];
+        else
+            [a_card setObject:[cardData Track3] forKey:@"s_track_3"];
 
         [a_card setObject:[cardData DataBlock] forKey:@"DataBlock"];
         [a_card setObject:[NSNumber numberWithInteger:[cardData DataType]] forKey:@"DataType"];
