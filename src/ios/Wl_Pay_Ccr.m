@@ -28,7 +28,8 @@
         {
             [a_result setObject:[e reason] forKey:@"s_message"];
             [a_result setObject:[e name] forKey:@"s_name"];
-            [a_result setObject:[e userInfo] forKey:@"a_info"];
+            if([e userInfo]!=nil)
+                [a_result setObject:[e userInfo] forKey:@"a_info"];
             [a_result setObject:[e callStackSymbols] forKey:@"s_stack"];
         }
         
