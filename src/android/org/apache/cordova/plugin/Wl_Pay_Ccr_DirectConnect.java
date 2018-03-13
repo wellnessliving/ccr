@@ -216,7 +216,8 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
       else
         this.controller().fireSwipeError();
 
-      this.deviceManager.acceptCard("Swipe Card");
+      if(!(this.deviceManager instanceof VirtualDeviceManager))
+        this.deviceManager.acceptCard("Swipe Card");
     }
     catch (JSONException ignored)
     {
@@ -359,6 +360,6 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
     VirtualDeviceManager deviceManager=new VirtualDeviceManager(devices[0],o_context);
 
     deviceManager.connect(this);
-    deviceManager.acceptCard("Enter card data.");
+    //deviceManager.acceptCard("Enter card data.");
   }
 }
