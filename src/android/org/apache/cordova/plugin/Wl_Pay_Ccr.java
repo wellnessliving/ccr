@@ -63,6 +63,43 @@ public class Wl_Pay_Ccr extends CordovaPlugin
   private Wl_Pay_Ccr_Abstract o_processor=null;
 
   /**
+   * Processes exception.
+   *
+   * Serializes exception object, and sends it to application in the browser.
+   *
+   * @param callbackContext Callback context.
+   * @param e Exception object.
+   */
+  private void _exception(CallbackContext callbackContext,Exception e) throws JSONException
+  {
+    JSONObject a_result=new JSONObject();
+    if(this.is_method)
+      a_result.put("a_log",this.logResult());
+    a_result.put("s_class",e.getClass());
+    a_result.put("s_error","internal");
+    a_result.put("s_message",e.getMessage());
+    a_result.put("s_message_local",e.getLocalizedMessage());
+
+    StackTraceElement[] a_stack=e.getStackTrace();
+    StringBuilder s_stack= new StringBuilder();
+    for(StackTraceElement a_element:a_stack)
+    {
+      if(a_element.getClassName().equals(CordovaPlugin.class.getName()))
+        break;
+      if(s_stack.length()>0)
+        s_stack.append(" - ");
+      s_stack.append(a_element.getClassName()).append(':').append(a_element.getLineNumber());
+    }
+
+    a_result.put("s_stack",s_stack);
+
+    if(this.is_method&&callbackContext!=null)
+      callbackContext.error(a_result);
+    else
+      this.logError(a_result);
+  }
+
+  /**
    * Returns configuration array.
    *
    * @return Configuration array.
@@ -308,31 +345,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     }
     catch (Exception e)
     {
-      JSONObject a_result=new JSONObject();
-      if(this.is_method)
-        a_result.put("a_log",this.logResult());
-      a_result.put("s_class",e.getClass());
-      a_result.put("s_error","internal");
-      a_result.put("s_message",e.getMessage());
-      a_result.put("s_message_local",e.getLocalizedMessage());
-
-      StackTraceElement[] a_stack=e.getStackTrace();
-      StringBuilder s_stack= new StringBuilder();
-      for(StackTraceElement a_element:a_stack)
-      {
-        if(a_element.getClassName().equals(CordovaPlugin.class.getName()))
-          break;
-        if(s_stack.length()>0)
-          s_stack.append(" - ");
-        s_stack.append(a_element.getClassName()).append(':').append(a_element.getLineNumber());
-      }
-
-      a_result.put("s_stack",s_stack);
-
-      if(this.is_method)
-        callbackContext.error(a_result);
-      else
-        this.logError(a_result);
+      this._exception(callbackContext,e);
       return true;
     }
     finally
@@ -453,48 +466,57 @@ public class Wl_Pay_Ccr extends CordovaPlugin
   public void onRequestPermissionResult(int requestCode, String[] permissions,
                                         int[] grantResults) throws JSONException
   {
-    // Plugin was deactivated during request of permissions.
-    if(!this.is_active||this.o_context_permission==null)
+    try
     {
-      this.o_context_permission=null;
-      return;
-    }
-
-    JSONObject a_result=new JSONObject();
-    a_result.put("a_log",this.logResult());
-
-    boolean has_permissions=this.permissionHas();
-
-    if(has_permissions)
-    {
-      for(int r:grantResults)
+      // Plugin was deactivated during request of permissions.
+      if(!this.is_active||this.o_context_permission==null)
       {
-        if(r == PackageManager.PERMISSION_DENIED)
+        this.o_context_permission=null;
+        return;
+      }
+
+      JSONObject a_result=new JSONObject();
+      a_result.put("a_log",this.logResult());
+
+      boolean has_permissions=this.permissionHas();
+
+      if(has_permissions)
+      {
+        for(int r:grantResults)
         {
-          has_permissions=false;
-          break;
+          if(r == PackageManager.PERMISSION_DENIED)
+          {
+            has_permissions=false;
+            break;
+          }
         }
       }
+
+      a_result.put("has_permissions",has_permissions);
+
+      if(has_permissions)
+      {
+        a_result.put("s_message","Permissions allowed.");
+        this.o_context_permission.success(a_result);
+
+        // First send reply that permissions are granted.
+        // Only after that - events that can be fired by o_processor.startup()
+        this.o_processor.startup();
+      }
+      else
+      {
+        a_result.put("s_message","Permission denied.");
+        this.o_context_permission.error(a_result);
+      }
     }
-
-    a_result.put("has_permissions",has_permissions);
-
-    if(has_permissions)
+    catch (Exception e)
     {
-      a_result.put("s_message","Permissions allowed.");
-      this.o_context_permission.success(a_result);
-
-      // First send reply that permissions are granted.
-      // Only after that - events that can be fired by o_processor.startup()
-      this.o_processor.startup();
+      this._exception(this.o_context_permission,e);
     }
-    else
+    finally
     {
-      a_result.put("s_message","Permission denied.");
-      this.o_context_permission.error(a_result);
+      this.o_context_permission=null;
     }
-
-    this.o_context_permission=null;
   }
 
   /**

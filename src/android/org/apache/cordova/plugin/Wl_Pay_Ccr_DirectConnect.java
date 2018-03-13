@@ -12,6 +12,7 @@ import com.directconnect.mobilesdk.device.MiuraDeviceManager;
 import com.directconnect.mobilesdk.device.PINData;
 import com.directconnect.mobilesdk.device.UniMagDeviceManager;
 import com.directconnect.mobilesdk.device.UniPayDeviceManager;
+import com.directconnect.mobilesdk.device.VirtualDeviceManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -191,18 +192,24 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
       {
         JSONObject a_card=new JSONObject();
 
-        a_card.put("s_number",cardData.getPAN());
-        a_card.put("s_expire",cardData.getExpDate());
-        a_card.put("s_holder",cardData.getCardholderName());
-        a_card.put("s_stripe",cardData.getTrack1()+cardData.getTrack2()+cardData.getTrack3());
-        a_card.put("s_track_1",cardData.getTrack1());
-        a_card.put("s_track_2",cardData.getTrack2());
-        a_card.put("s_track_3",cardData.getTrack3());
+        JSONObject a_encrypt=new JSONObject();
+        a_encrypt.put("DataBlock",cardData.getDataBlock()); // Example: "F1DAC156A909552E...E8E62EA1AA103906"
+        a_encrypt.put("EncryptionType", cardData.getEncryptionParameters().getEncryptionType()); // Example: "DUKPT"
+        a_encrypt.put("HSMDevice", cardData.getEncryptionParameters().getHSMDevice()); // Example: "Thales"
+        a_encrypt.put("KSN",cardData.getKSN()); // Example: "0000020000004FA00001"
+        a_encrypt.put("TerminalType", cardData.getEncryptionParameters().getTerminalType()); // Example: "Miura"
 
-        a_card.put("getDataBlock",cardData.getDataBlock());
-        a_card.put("getDataType",this.o_card_last.getDataType().toString());
-        a_card.put("getKSN",cardData.getKSN());
-        a_card.put("getServiceCode",cardData.getServiceCode());
+        a_card.put("a_encrypt",a_encrypt);
+        a_card.put("s_number_mask",cardData.getPAN()); // Example: "450220******1234"
+        a_card.put("s_expire",cardData.getExpDate()); // Example: "0318"
+        // a_card.put("s_holder",cardData.getCardholderName()); Returns null.
+
+        // a_card.put("s_track_1",cardData.getTrack1()); // Returns null.
+        // a_card.put("s_track_2",cardData.getTrack2()); // contains masked credit card a expiration date, and not a valid track value.
+        // a_card.put("s_track_3",cardData.getTrack3()); // Returns null.
+
+        // a_card.put("getDataType",this.o_card_last.getDataType().toString()); // Returns: "P2PE"
+        // a_card.put("getServiceCode",cardData.getServiceCode()); // Example: 201
 
         this.controller().fireSwipe(a_card);
       }
@@ -341,16 +348,17 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
   @Override
   public void testSwipe(JSONObject a_card) throws JSONException
   {
-    JSONObject a_card_event=new JSONObject();
+    devices = VirtualDeviceManager.getAvailableDevices();
+    if(devices.length==0)
+    {
+      this.logError("VirtualDeviceManager.getAvailableDevices returns an empty array");
+      return;
+    }
 
-    a_card_event.put("s_expire",a_card.getString("s_expire"));
-    a_card_event.put("s_holder",a_card.getString("s_holder"));
-    a_card_event.put("s_number",a_card.getString("s_number"));
-    a_card_event.put("s_stripe",a_card.getString("s_stripe"));
-    a_card_event.put("s_track_1",a_card.getString("s_track_1"));
-    a_card_event.put("s_track_2",a_card.getString("s_track_2"));
-    a_card_event.put("s_track_3",a_card.getString("s_track_3"));
+    Context o_context=this.controller().cordova.getActivity().getApplicationContext();
+    VirtualDeviceManager deviceManager=new VirtualDeviceManager(devices[0],o_context);
 
-    this.controller().fireSwipe(a_card_event);
+    deviceManager.connect(this);
+    deviceManager.acceptCard("Enter card data.");
   }
 }
