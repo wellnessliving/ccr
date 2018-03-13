@@ -357,6 +357,13 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
     }
 
     Context o_context=this.controller().cordova.getActivity().getApplicationContext();
+
+    if(o_context==null)
+      this.logInfo("***** o_context is null");
+    else
+      this.logInfo("***** o_context is not null");
+    this.logInfo("***** devives.length="+devices.length);
+
     VirtualDeviceManager deviceManager=new VirtualDeviceManager(devices[0],o_context);
 
     deviceManager.connect(this);
