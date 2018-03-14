@@ -362,7 +362,7 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
       return;
     }
 
-    if(this.id_device==Wl_DeviceSid.VIRTUAL)
+    if(this.id_device!=Wl_DeviceSid.VIRTUAL)
     {
       this.logError("Can not do testSwipe() because current device is not for testing purposes.");
       return;
