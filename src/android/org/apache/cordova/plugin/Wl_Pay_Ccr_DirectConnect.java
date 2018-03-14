@@ -89,7 +89,7 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
           return null;
         deviceManager = new MiuraDeviceManager(devices[0], o_context);
         break;
-      case Wl_DeviceSid.TEST_VIRTUAL:
+      case Wl_DeviceSid.VIRTUAL:
         devices = VirtualDeviceManager.getAvailableDevices();
         if(devices.length==0)
           return null;
@@ -222,7 +222,7 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
       else
         this.controller().fireSwipeError();
 
-      if(this.id_device!=Wl_DeviceSid.TEST_VIRTUAL)
+      if(this.id_device!=Wl_DeviceSid.VIRTUAL)
         this.deviceManager.acceptCard("Swipe Card");
     }
     catch (JSONException ignored)
@@ -236,7 +236,7 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
     try
     {
       this.logInfo("[Wl_Pay_Ccr_DirectConnect.onConnected]");
-      if(this.id_device!=Wl_DeviceSid.TEST_VIRTUAL)
+      if(this.id_device!=Wl_DeviceSid.VIRTUAL)
         this.deviceManager.acceptCard("Swipe Card");
     }
     catch (JSONException ignored)
@@ -362,7 +362,7 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
       return;
     }
 
-    if(this.id_device==Wl_DeviceSid.TEST_VIRTUAL)
+    if(this.id_device==Wl_DeviceSid.VIRTUAL)
     {
       this.logError("Can not do testSwipe() because current device is not for testing purposes.");
       return;

@@ -68,7 +68,7 @@ class Wl_DeviceSid
    *
    * Currently supported only by Direct Connect.
    */
-  static final int TEST_VIRTUAL=10;
+  static final int VIRTUAL =10;
 
   /**
    * Converts device ID to NMI device ID.
