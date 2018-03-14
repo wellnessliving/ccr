@@ -59,7 +59,7 @@ abstract public class Wl_Pay_Ccr_Abstract
    */
   Context getApplicationContext()
   {
-    return this.o_controller.cordova.getActivity().getApplicationContext();
+    return this.o_controller.cordova.getActivity();
   }
 
   /**
