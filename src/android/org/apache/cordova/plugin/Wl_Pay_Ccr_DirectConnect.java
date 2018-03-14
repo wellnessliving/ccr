@@ -190,10 +190,10 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
   @Override
   public void onCardSwiped(CardData cardData)
   {
-    this.o_card_last=cardData;
-
     try
     {
+      this.o_card_last=cardData;
+
       if(cardData!=null&&cardData.getDataType()!=CardData.DataType.nil)
       {
         JSONObject a_card=new JSONObject();
@@ -225,8 +225,9 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
       if(this.id_device!=Wl_DeviceSid.VIRTUAL)
         this.deviceManager.acceptCard("Swipe Card");
     }
-    catch (JSONException ignored)
+    catch (Exception e)
     {
+      this.controller()._exception(null,e);
     }
   }
 

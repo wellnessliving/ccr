@@ -70,33 +70,39 @@ public class Wl_Pay_Ccr extends CordovaPlugin
    * @param callbackContext Callback context.
    * @param e Exception object.
    */
-  private void _exception(CallbackContext callbackContext,Exception e) throws JSONException
+  void _exception(CallbackContext callbackContext,Exception e)
   {
-    JSONObject a_result=new JSONObject();
-    if(this.is_method)
-      a_result.put("a_log",this.logResult());
-    a_result.put("s_class",e.getClass());
-    a_result.put("s_error","internal");
-    a_result.put("s_message",e.getMessage());
-    a_result.put("s_message_local",e.getLocalizedMessage());
-
-    StackTraceElement[] a_stack=e.getStackTrace();
-    StringBuilder s_stack= new StringBuilder();
-    for(StackTraceElement a_element:a_stack)
+    try
     {
-      if(a_element.getClassName().equals(CordovaPlugin.class.getName()))
-        break;
-      if(s_stack.length()>0)
-        s_stack.append(" - ");
-      s_stack.append(a_element.getClassName()).append(':').append(a_element.getLineNumber());
+      JSONObject a_result=new JSONObject();
+      if(this.is_method)
+        a_result.put("a_log",this.logResult());
+      a_result.put("s_class",e.getClass());
+      a_result.put("s_error","internal");
+      a_result.put("s_message",e.getMessage());
+      a_result.put("s_message_local",e.getLocalizedMessage());
+
+      StackTraceElement[] a_stack=e.getStackTrace();
+      StringBuilder s_stack= new StringBuilder();
+      for(StackTraceElement a_element:a_stack)
+      {
+        if(a_element.getClassName().equals(CordovaPlugin.class.getName()))
+          break;
+        if(s_stack.length()>0)
+          s_stack.append(" - ");
+        s_stack.append(a_element.getClassName()).append(':').append(a_element.getLineNumber());
+      }
+
+      a_result.put("s_stack",s_stack);
+
+      if(this.is_method&&callbackContext!=null)
+        callbackContext.error(a_result);
+      else
+        this.logError(a_result);
     }
-
-    a_result.put("s_stack",s_stack);
-
-    if(this.is_method&&callbackContext!=null)
-      callbackContext.error(a_result);
-    else
-      this.logError(a_result);
+    catch (JSONException ignored)
+    {
+    }
   }
 
   /**

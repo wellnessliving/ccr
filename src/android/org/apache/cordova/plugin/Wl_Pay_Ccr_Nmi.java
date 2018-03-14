@@ -261,6 +261,12 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
   @Override
   public void testSwipe(JSONObject a_card_swipe) throws JSONException
   {
+    if(this.s_key==null)
+    {
+      this.logError("testSwipe() can not be called because encryption key is not set.");
+      return;
+    }
+
     PGKeyedCard card = new PGKeyedCard(
       a_card_swipe.getString("s_number"),
       a_card_swipe.getString("s_expire"),
