@@ -3,6 +3,7 @@ package org.apache.cordova.plugin;
 import android.Manifest;
 
 import com.SafeWebServices.PaymentGateway.PGEncrypt;
+import com.SafeWebServices.PaymentGateway.PGKeyedCard;
 import com.SafeWebServices.PaymentGateway.PGSwipeController;
 import com.SafeWebServices.PaymentGateway.PGSwipeController.SwipeListener;
 import com.SafeWebServices.PaymentGateway.PGSwipeDevice;
@@ -260,15 +261,11 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
   @Override
   public void testSwipe(JSONObject a_card_swipe) throws JSONException
   {
-    PGSwipedCard card = new PGSwipedCard(
-      a_card_swipe.getString("s_track_1"),
-      a_card_swipe.getString("s_track_2"),
-      a_card_swipe.getString("s_track_3"),
-      ""
+    PGKeyedCard card = new PGKeyedCard(
+      a_card_swipe.getString("s_number"),
+      a_card_swipe.getString("s_expire"),
+      a_card_swipe.getString("s_cvv")
     );
-    card.setCardholderName(a_card_swipe.getString("s_holder"));
-    card.setExpirationDate(a_card_swipe.getString("s_expire"));
-    card.setMaskedCardNumber(a_card_swipe.getString("s_number_mask"));
 
     PGEncrypt o_card_encrypt = new PGEncrypt();
     o_card_encrypt.setKey(this.s_key);
@@ -276,9 +273,9 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
     JSONObject a_card_event=new JSONObject();
 
     a_card_event.put("s_encrypt",o_card_encrypt.encrypt(card,true));
-    a_card_event.put("s_expire",card.getExpirationDate());
-    a_card_event.put("s_holder",card.getCardholderName());
-    a_card_event.put("s_number_mask",card.getMaskedCardNumber());
+    a_card_event.put("s_expire",a_card_swipe.getString("s_expire"));
+    a_card_event.put("s_holder",a_card_swipe.getString("s_holder"));
+    a_card_event.put("s_number_mask","****"+a_card_swipe.getString("s_number").substring(12,15));
 
     this.controller().fireSwipe(a_card_event);
   }
