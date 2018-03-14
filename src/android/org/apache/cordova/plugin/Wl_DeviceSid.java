@@ -64,6 +64,13 @@ class Wl_DeviceSid
   private static final int NMI_UNIMAG=1;
 
   /**
+   * Virtual device for testing purposes.
+   *
+   * Currently supported only by Direct Connect.
+   */
+  static final int TEST_VIRTUAL=10;
+
+  /**
    * Converts device ID to NMI device ID.
    *
    * @param id_device Device ID.

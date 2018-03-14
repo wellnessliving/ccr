@@ -89,6 +89,12 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
           return null;
         deviceManager = new MiuraDeviceManager(devices[0], o_context);
         break;
+      case Wl_DeviceSid.TEST_VIRTUAL:
+        devices = VirtualDeviceManager.getAvailableDevices();
+        if(devices.length==0)
+          return null;
+        deviceManager = new VirtualDeviceManager(devices[0], o_context);
+        break;
       default:
         return null;
     }
@@ -216,7 +222,7 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
       else
         this.controller().fireSwipeError();
 
-      if(!(this.deviceManager instanceof VirtualDeviceManager))
+      if(this.id_device!=Wl_DeviceSid.TEST_VIRTUAL)
         this.deviceManager.acceptCard("Swipe Card");
     }
     catch (JSONException ignored)
@@ -230,7 +236,8 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
     try
     {
       this.logInfo("[Wl_Pay_Ccr_DirectConnect.onConnected]");
-      this.deviceManager.acceptCard("Swipe Card");
+      if(this.id_device!=Wl_DeviceSid.TEST_VIRTUAL)
+        this.deviceManager.acceptCard("Swipe Card");
     }
     catch (JSONException ignored)
     {
@@ -349,24 +356,18 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
   @Override
   public void testSwipe(JSONObject a_card) throws JSONException
   {
-    devices = VirtualDeviceManager.getAvailableDevices();
-    if(devices.length==0)
+    if(this.deviceManager==null)
     {
-      this.logError("VirtualDeviceManager.getAvailableDevices returns an empty array");
+      this.logError("deviceManager is not initialized.");
       return;
     }
 
-    Context o_context=this.controller().cordova.getActivity().getApplicationContext();
+    if(this.id_device==Wl_DeviceSid.TEST_VIRTUAL)
+    {
+      this.logError("Can not do testSwipe() because current device is not for testing purposes.");
+      return;
+    }
 
-    if(o_context==null)
-      this.logInfo("***** o_context is null");
-    else
-      this.logInfo("***** o_context is not null");
-    this.logInfo("***** devives.length="+devices.length);
-
-    VirtualDeviceManager deviceManager=new VirtualDeviceManager(devices[0],o_context);
-
-    deviceManager.connect(this);
-    //deviceManager.acceptCard("Enter card data.");
+    this.deviceManager.acceptCard("Enter card data.");
   }
 }
