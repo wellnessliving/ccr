@@ -93,7 +93,7 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
         devices = VirtualDeviceManager.getAvailableDevices();
         if(devices.length==0)
           return null;
-        deviceManager = new VirtualDeviceManager(devices[0], o_controller.cordova.getContext());
+        deviceManager = new VirtualDeviceManager(devices[0], o_controller.cordova.getActivity());
         break;
       default:
         return null;
