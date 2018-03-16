@@ -329,7 +329,8 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
           Manifest.permission.INTERNET,
           Manifest.permission.WRITE_EXTERNAL_STORAGE
         };
-
+      case Wl_DeviceSid.VIRTUAL:
+        return new String[]{};
       default:
         this.logError("[Wl_Pay_Ccr_DirectConnect.permissionList] Device ID is not known.");
         return new String[]{};
