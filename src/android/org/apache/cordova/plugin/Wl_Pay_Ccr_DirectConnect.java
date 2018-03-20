@@ -194,7 +194,7 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
     {
       this.o_card_last=cardData;
 
-      if(cardData!=null&&cardData.getDataType()!=CardData.DataType.nil)
+      if(cardData!=null&&cardData.getDataType()!=CardData.DataType.nil&&cardData.getEncryptionParameters()!=nil)
       {
         JSONObject a_card=new JSONObject();
 
