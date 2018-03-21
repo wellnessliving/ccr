@@ -1,5 +1,6 @@
 #import "Wl_Pay_Ccr_Nmi.h"
 #import "PGMobileSDK/PGEncrypt.h"
+#import "PGMobileSDK/PGKeyedCard.h"
 #import "PGMobileSDK/PGSwipeController.h"
 #import "PGMobileSDK/PGSwipeDevice.h"
 #import "Wl_DeviceSid.h"
@@ -177,7 +178,7 @@
         return;
     }
 
-    PGKeyedCard* card = [[PGKeyedCard alloc] initWithNumber:[a_card objectForKey:@"s_number"] expire:[a_card objectForKey:@"s_expire"] cvv:[a_card objectForKey:@"s_cvv"]];
+    PGKeyedCard* card = [[PGKeyedCard alloc] initWithCardNumber:[a_card objectForKey:@"s_number"] expirationDate:[a_card objectForKey:@"s_expire"] cvv:[a_card objectForKey:@"s_cvv"]];
 
     PGEncrypt* o_card_encrypt = [[PGEncrypt alloc] init];
     [o_card_encrypt setKey:s_key];
@@ -187,7 +188,7 @@
     [a_card_event setObject:[o_card_encrypt encrypt:card includeCVV:YES] forKey:@"s_encrypt"];
     [a_card_event setObject:[a_card objectForKey:@"s_expire"] forKey:@"s_expire"];
     [a_card_event setObject:[a_card objectForKey:@"s_holder"] forKey:@"s_holder"];
-    [a_card_event setObject:[NSString stringWithFormat:@"****%@",[[a_card objectForKey:@"s_number"] substringWithRange:NSMakeRange(12,15)]] forKey:@"s_number_mask"];
+    [a_card_event setObject:[NSString stringWithFormat:@"****%@",[[a_card objectForKey:@"s_number"] substringWithRange:NSMakeRange(12,4)]] forKey:@"s_number_mask"];
 
     [[self controller] fireSwipe:a_card_event];
 }

@@ -150,7 +150,7 @@
     
     [self logInfo:@"[Wl_Pay_Ccr_DirectConnect.cardData]"];
     
-    if(cardData!=nil&&[cardData DataType]!=DCGCardDataType_Nil&&[cardData EncryptionParameters]!=DCGEncryptionParameters_Nil)
+    if(cardData!=nil&&[cardData DataType]!=DCGCardDataType_Nil&&[cardData EncryptionParameters]!=nil)
     {
         NSMutableDictionary* a_card = [[NSMutableDictionary alloc] init];
 
