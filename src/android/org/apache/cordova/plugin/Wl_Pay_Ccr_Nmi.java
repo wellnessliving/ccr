@@ -165,7 +165,8 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
 
         JSONObject a_card=new JSONObject();
 
-        a_card.put("s_encrypt",o_card_encrypt.encrypt(card,true));
+        a_card.put("s_device","android");
+        a_card.put("s_encrypt",o_card_encrypt.encrypt(card,false));
         a_card.put("s_expire",card.getExpirationDate());
         a_card.put("s_holder",card.getCardholderName());
         a_card.put("s_number_mask",card.getMaskedCardNumber());
@@ -278,7 +279,8 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
 
     JSONObject a_card_event=new JSONObject();
 
-    a_card_event.put("s_encrypt",o_card_encrypt.encrypt(card,true));
+    a_card_event.put("s_device","android-test");
+    a_card_event.put("s_encrypt",o_card_encrypt.encrypt(card,false));
     a_card_event.put("s_expire",a_card_swipe.getString("s_expire"));
     a_card_event.put("s_holder",a_card_swipe.getString("s_holder"));
     a_card_event.put("s_number_mask","****"+a_card_swipe.getString("s_number").substring(12,15));
