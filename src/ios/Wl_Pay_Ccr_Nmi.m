@@ -1,5 +1,6 @@
 #import "Wl_Pay_Ccr_Nmi.h"
 #import "PGMobileSDK/PGEncrypt.h"
+#import "PGMobileSDK/PGKeyedCard.h"
 #import "PGMobileSDK/PGSwipeController.h"
 #import "PGMobileSDK/PGSwipeDevice.h"
 #import "Wl_DeviceSid.h"
@@ -171,10 +172,13 @@
 
 -(void)testSwipe: (NSDictionary*)a_card
 {
-    PGSwipedCard* card = [[PGSwipedCard alloc] initWithTrack1:[a_card objectForKey:@"s_track_1"] track2:[a_card objectForKey:@"s_track_2"] track3:[a_card objectForKey:@"s_track_3"] cvv:nil];
-    [card setCardholderName:[a_card objectForKey:@"s_holder"]];
-    [card setExpirationDate:[a_card objectForKey:@"s_expire"]];
-    [card setMaskedCardNumber:[a_card objectForKey:@"s_number_mask"]];
+    if(s_key==nil)
+    {
+        [self logErrorMessage:@"[Wl_Pay_Ccr_Nmi.testSwipe] deviceManager is not initialized."];
+        return;
+    }
+
+    PGKeyedCard* card = [[PGKeyedCard alloc] initWithCardNumber:[a_card objectForKey:@"s_number"] expirationDate:[a_card objectForKey:@"s_expire"] cvv:[a_card objectForKey:@"s_cvv"]];
 
     PGEncrypt* o_card_encrypt = [[PGEncrypt alloc] init];
     [o_card_encrypt setKey:s_key];
@@ -182,9 +186,9 @@
     NSMutableDictionary* a_card_event = [[NSMutableDictionary alloc] init];
 
     [a_card_event setObject:[o_card_encrypt encrypt:card includeCVV:YES] forKey:@"s_encrypt"];
-    [a_card_event setObject:[card expirationDate] forKey:@"s_expire"];
-    [a_card_event setObject:[card cardholderName] forKey:@"s_holder"];
-    [a_card_event setObject:[card maskedCardNumber] forKey:@"s_number_mask"];
+    [a_card_event setObject:[a_card objectForKey:@"s_expire"] forKey:@"s_expire"];
+    [a_card_event setObject:[a_card objectForKey:@"s_holder"] forKey:@"s_holder"];
+    [a_card_event setObject:[NSString stringWithFormat:@"****%@",[[a_card objectForKey:@"s_number"] substringWithRange:NSMakeRange(12,4)]] forKey:@"s_number_mask"];
 
     [[self controller] fireSwipe:a_card_event];
 }

@@ -54,6 +54,12 @@
              return nil;
              deviceManager = [[DCGPAXDeviceManager alloc] init:[devices objectAtIndex:0]];
              break;*/
+        case WL_DEVICE_VIRTUAL:
+             devices = [DCGVirtualDeviceManager getAvailableDevices];
+             if(devices==nil||[devices count]==0)
+                return nil;
+            deviceManager = [[DCGVirtualDeviceManager alloc] init:[devices objectAtIndex:0]];
+            break;
         default:
             return nil;
     }
@@ -130,48 +136,34 @@
 
 - (void)onCardInserted:(DCGCardData *)cardData
 {
-    [self logInfo:@"[Wl_Pay_Ccr_DerectConnect.onCardInserted]"];
+    [self logInfo:@"[Wl_Pay_Ccr_DirectConnect.onCardInserted]"];
 }
 
 - (void)onCardRemoved
 {
-    [self logInfo:@"[Wl_Pay_Ccr_DerectConnect.onCardRemoved]"];
+    [self logInfo:@"[Wl_Pay_Ccr_DirectConnect.onCardRemoved]"];
 }
 
 - (void)onCardSwiped:(DCGCardData *)cardData
 {
     o_card_last = cardData;
     
-    [self logInfo:@"[Wl_Pay_Ccr_DerectConnect.cardData]"];
+    [self logInfo:@"[Wl_Pay_Ccr_DirectConnect.cardData]"];
     
-    if(cardData!=nil&&[cardData DataType]!=DCGCardDataType_Nil)
+    if(cardData!=nil&&[cardData DataType]!=DCGCardDataType_Nil&&[cardData EncryptionParameters]!=nil)
     {
         NSMutableDictionary* a_card = [[NSMutableDictionary alloc] init];
 
-        [a_card setObject:[cardData PAN] forKey:@"s_number"];
-        [a_card setObject:[cardData ExpDate] forKey:@"s_expire"];
-        if([cardData CardholderName]==nil)
-            [a_card setObject:@"[nil]" forKey:@"s_holder"];
-        else
-            [a_card setObject:[cardData CardholderName] forKey:@"s_holder"];
-        [a_card setObject:[NSString stringWithFormat:@"%@%@%@",[cardData Track1],[cardData Track2],[cardData Track3]] forKey:@"s_stripe"];
-        if([cardData Track1]==nil)
-            [a_card setObject:@"[nil]" forKey:@"s_track_1"];
-        else
-            [a_card setObject:[cardData Track1] forKey:@"s_track_1"];
-        if([cardData Track2]==nil)
-            [a_card setObject:@"[nil]" forKey:@"s_track_2"];
-        else
-            [a_card setObject:[cardData Track2] forKey:@"s_track_2"];
-        if([cardData Track3]==nil)
-            [a_card setObject:@"[nil]" forKey:@"s_track_3"];
-        else
-            [a_card setObject:[cardData Track3] forKey:@"s_track_3"];
+        NSMutableDictionary* a_encrypt = [[NSMutableDictionary alloc] init];
+        [a_encrypt setObject:[cardData DataBlock] forKey:@"DataBlock"];
+        [a_encrypt setObject:[[cardData EncryptionParameters] EncryptionType] forKey:@"EncryptionType"];
+        [a_encrypt setObject:[[cardData EncryptionParameters] HSMDevice] forKey:@"HSMDevice"];
+        [a_encrypt setObject:[cardData KSN] forKey:@"KSN"];
+        [a_encrypt setObject:[[cardData EncryptionParameters] TerminalType] forKey:@"TerminalType"];
 
-        [a_card setObject:[cardData DataBlock] forKey:@"DataBlock"];
-        [a_card setObject:[NSNumber numberWithInteger:[cardData DataType]] forKey:@"DataType"];
-        [a_card setObject:[cardData KSN] forKey:@"KSN"];
-        [a_card setObject:[cardData ServiceCode] forKey:@"ServiceCode"];
+        [a_card setObject:a_encrypt forKey:@"a_encrypt"];
+        [a_card setObject:[cardData PAN] forKey:@"s_number_mask"];
+        [a_card setObject:[cardData ExpDate] forKey:@"s_expire"];
 
         [o_controller fireSwipe:a_card];
     }
@@ -180,37 +172,39 @@
         [o_controller fireSwipeError];
     }
 
-    [deviceManager acceptCard:@"Swipe Card"];
+    if(id_device!=WL_DEVICE_VIRTUAL)
+        [deviceManager acceptCard:@"Swipe Card"];
 }
 
 - (void)onConnected
 {
-    [self logInfo:@"[Wl_Pay_Ccr_DerectConnect.onConnected]"];
-    [deviceManager acceptCard:@"Swipe Card"];
+    [self logInfo:@"[Wl_Pay_Ccr_DirectConnect.onConnected]"];
+    if(id_device!=WL_DEVICE_VIRTUAL)
+        [deviceManager acceptCard:@"Swipe Card"];
 }
 
 - (void)onDisconnected
 {
-    [self logInfo:@"[Wl_Pay_Ccr_DerectConnect.onDisconnected]"];
+    [self logInfo:@"[Wl_Pay_Ccr_DirectConnect.onDisconnected]"];
 }
 
 - (void)onMenuSelected:(int)selection
 {
-    [self logInfo:@"[Wl_Pay_Ccr_DerectConnect.onMenuSelected]"];
+    [self logInfo:@"[Wl_Pay_Ccr_DirectConnect.onMenuSelected]"];
 }
 
 - (void)onPINEntered:(DCGPINData *)pinData
 { 
-    [self logInfo:@"[Wl_Pay_Ccr_DerectConnect.onPINEntered]"];
+    [self logInfo:@"[Wl_Pay_Ccr_DirectConnect.onPINEntered]"];
 }
 
 - (void)onYNAnswered:(int)response { 
-    [self logInfo:@"[Wl_Pay_Ccr_DerectConnect.onYNAnswered]"];
+    [self logInfo:@"[Wl_Pay_Ccr_DirectConnect.onYNAnswered]"];
 }
 
 -(void) startup
 {
-    [self logInfo:@"[Wl_Pay_Ccr_DerectConnect.startup]"];
+    [self logInfo:@"[Wl_Pay_Ccr_DirectConnect.startup]"];
     [deviceManager connect:self];
 }
 
@@ -226,17 +220,19 @@
 
 - (void)testSwipe: (NSDictionary*)a_card
 {
-    NSMutableDictionary* a_card_event = [[NSMutableDictionary alloc] init];
-    
-    [a_card_event setObject:[a_card objectForKey:@"s_expire"] forKey:@"s_expire"];
-    [a_card_event setObject:[a_card objectForKey:@"s_holder"] forKey:@"s_holder"];
-    [a_card_event setObject:[a_card objectForKey:@"s_number"] forKey:@"s_number"];
-    [a_card_event setObject:[a_card objectForKey:@"s_stripe"] forKey:@"s_stripe"];
-    [a_card_event setObject:[a_card objectForKey:@"s_stack_1"] forKey:@"s_stack_1"];
-    [a_card_event setObject:[a_card objectForKey:@"s_stack_2"] forKey:@"s_stack_2"];
-    [a_card_event setObject:[a_card objectForKey:@"s_stack_3"] forKey:@"s_stack_3"];
+    if(deviceManager==nil)
+    {
+        [self logErrorMessage:@"[Wl_Pay_Ccr_DirectConnect.testSwipe] deviceManager is not initialized."];
+        return;
+    }
 
-    [[self controller] fireSwipe:a_card_event];
+    if(id_device!=WL_DEVICE_VIRTUAL)
+    {
+        [self logErrorMessage:@"[Wl_Pay_Ccr_DirectConnect.testSwipe] Can not do testSwipe() because current device is not for testing purposes."];
+        return;
+    }
+
+    [deviceManager acceptCard:@"Enter card data."];
 }
 
 @end

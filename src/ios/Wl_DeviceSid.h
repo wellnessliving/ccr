@@ -59,3 +59,10 @@
  * Device: Unimag.
  */
 #define WL_DEVICE_NMI_UNIMAG 1
+
+/**
+ * Virtual device for testing purposes.
+ *
+ * Currently supported only by Direct Connect.
+ */
+#define WL_DEVICE_VIRTUAL 10
