@@ -118,7 +118,8 @@
         
         NSMutableDictionary* a_card_event = [[NSMutableDictionary alloc] init];
         
-        [a_card_event setObject:[o_card_encrypt encrypt:card includeCVV:YES] forKey:@"s_encrypt"];
+        [a_card_event setObject:@"ios" forKey:@"s_device"];
+        [a_card_event setObject:[o_card_encrypt encrypt:card includeCVV:NO] forKey:@"s_encrypt"];
         [a_card_event setObject:[card expirationDate] forKey:@"s_expire"];
         [a_card_event setObject:[card cardholderName] forKey:@"s_holder"];
         [a_card_event setObject:[card maskedCardNumber] forKey:@"s_number_mask"];
