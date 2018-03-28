@@ -158,6 +158,14 @@
 
 -(void)tearDown
 {
+    if(device!=nil)
+    {
+        if([device respondsToSelector:@selector(shutdown)])
+            [device performSelector:@selector(shutdown)];
+        else if([device respondsToSelector:@selector(cancelSwipeRequest)])
+            [device performSelector:@selector(cancelSwipeRequest)];
+    }
+
     device=nil;
     swipeController=nil;
     card=nil;
