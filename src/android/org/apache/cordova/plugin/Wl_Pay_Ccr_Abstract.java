@@ -27,7 +27,7 @@ abstract public class Wl_Pay_Ccr_Abstract
    * @param o_controller Plugin controller object.
    * @return Interface object for specified processor.
    */
-  public static Wl_Pay_Ccr_Abstract create(int id_pay_processor, Wl_Pay_Ccr o_controller) throws JSONException
+  public static Wl_Pay_Ccr_Abstract create(int id_pay_processor, Wl_Pay_Ccr o_controller) throws JSONException, Wl_UserException
   {
     Wl_Pay_Ccr_Abstract o_processor=null;
     switch (id_pay_processor)

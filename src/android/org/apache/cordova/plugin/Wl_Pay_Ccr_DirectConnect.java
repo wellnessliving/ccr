@@ -45,9 +45,9 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
   /**
    * Creates a new Direct Connect interface object.
    *
-   * @return Direct Connect interface object. <tt>null</tt> if interface object can not be created.
+   * @return Direct Connect interface object.
    */
-  public static Wl_Pay_Ccr_DirectConnect create(Wl_Pay_Ccr o_controller) throws JSONException
+  public static Wl_Pay_Ccr_DirectConnect create(Wl_Pay_Ccr o_controller) throws JSONException, Wl_UserException
   {
     o_controller.logInfo("Config: "+o_controller.config().toString());
     JSONObject a_config=o_controller.config().getJSONObject("a_processor");
@@ -61,42 +61,48 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
     {
       case Wl_DeviceSid.DC_IDT_AUGUSTA:
         devices = AugustaDeviceManager.getAvailableDevices();
-        if(devices==null||devices.length==0)
-          return null;
+        if(devices==null)
+          throw new Wl_UserException("augusta-null","Can not initialize Augusta Device Manager (AugustaDeviceManager.getAvailableDevices() returns null).");
+        if(devices.length==0)
+          throw new Wl_UserException("augusta-empty","Can not initialize Augusta Device Manager (AugustaDeviceManager.getAvailableDevices() returns an empty array).");
         deviceManager = new AugustaDeviceManager(devices[0], o_context);
         break;
       case Wl_DeviceSid.DC_IDT_BT_MAG:
         devices = BTMagDeviceManager.getAvailableDevices();
-        if(devices==null||devices.length==0)
-          return null;
+        if(devices==null)
+          throw new Wl_UserException("bt-mag-null","Can not initialize IDTech BtMag Device Manager (BTMagDeviceManager.getAvailableDevices() returns null).");
+        if(devices.length==0)
+          throw new Wl_UserException("bt-mag-empty","Can not initialize IDTech BtMag Device Manager (BTMagDeviceManager.getAvailableDevices() returns an empty array).");
         deviceManager = new BTMagDeviceManager(devices[0], o_context);
         break;
       case Wl_DeviceSid.DC_IDT_UNI_MAG:
         devices = UniMagDeviceManager.getAvailableDevices();
         if(devices.length==0)
-          return null;
+          throw new Wl_UserException("uni-mag-empty","Can not initialize IDTech UniMag Device Manager (UniMagDeviceManager.getAvailableDevices() returns an empty array).");
         deviceManager = new UniMagDeviceManager(devices[0], o_context);
         break;
       case Wl_DeviceSid.DC_IDT_UNI_PAY:
         devices = UniPayDeviceManager.getAvailableDevices();
         if(devices.length==0)
-          return null;
+          throw new Wl_UserException("uni-pay-empty","Can not initialize IDTech UniPay Device Manager (UniPayDeviceManager.getAvailableDevices() returns an empty array).");
         deviceManager = new UniPayDeviceManager(devices[0], o_context);
         break;
       case Wl_DeviceSid.DC_MIURA:
         devices = MiuraDeviceManager.getAvailableDevices();
-        if(devices==null||devices.length==0)
-          return null;
+        if(devices==null)
+          throw new Wl_UserException("miura-null","Can not initialize Miura Device Manager (MiuraDeviceManager.getAvailableDevices() returns null).");
+        if(devices.length==0)
+          throw new Wl_UserException("miura-empty","Can not initialize Miura Device Manager (MiuraDeviceManager.getAvailableDevices() returns an empty array).");
         deviceManager = new MiuraDeviceManager(devices[0], o_context);
         break;
       case Wl_DeviceSid.VIRTUAL:
         devices = VirtualDeviceManager.getAvailableDevices();
         if(devices.length==0)
-          return null;
+          throw new Wl_UserException("virtual-empty","Can not initialize Virtual Device Manager (VirtualDeviceManager.getAvailableDevices() returns an empty array).");
         deviceManager = new VirtualDeviceManager(devices[0], o_controller.cordova.getActivity());
         break;
       default:
-        return null;
+        throw new Wl_UserException("dc-not-implemented","Interface for this DirectConnect device is not implemented.");
     }
 
     Wl_Pay_Ccr_DirectConnect o_result=new Wl_Pay_Ccr_DirectConnect();
@@ -152,6 +158,57 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
 
       a_debug.put("card",a_card);
     }
+
+    return a_debug;
+  }
+
+  static JSONObject debugGlobal() throws JSONException
+  {
+    JSONObject a_debug=new JSONObject();
+
+    Device[] devices;
+
+    devices = AugustaDeviceManager.getAvailableDevices();
+    if(devices==null)
+      a_debug.put("AugustaDeviceManager.getAvailableDevices","[null]");
+    else if(devices.length==0)
+      a_debug.put("AugustaDeviceManager.getAvailableDevices","[empty array]");
+    else
+      a_debug.put("AugustaDeviceManager.getAvailableDevices",devices.length);
+
+    devices = BTMagDeviceManager.getAvailableDevices();
+    if(devices==null)
+      a_debug.put("BTMagDeviceManager.getAvailableDevices","[null]");
+    else if(devices.length==0)
+      a_debug.put("BTMagDeviceManager.getAvailableDevices","[empty array]");
+    else
+      a_debug.put("BTMagDeviceManager.getAvailableDevices",devices.length);
+
+    devices = UniMagDeviceManager.getAvailableDevices();
+    if(devices.length==0)
+      a_debug.put("UniMagDeviceManager.getAvailableDevices","[empty array]");
+    else
+      a_debug.put("UniMagDeviceManager.getAvailableDevices",devices.length);
+
+    devices = UniPayDeviceManager.getAvailableDevices();
+    if(devices.length==0)
+      a_debug.put("UniPayDeviceManager.getAvailableDevices","[empty array]");
+    else
+      a_debug.put("UniPayDeviceManager.getAvailableDevices",devices.length);
+
+    devices = MiuraDeviceManager.getAvailableDevices();
+    if(devices==null)
+      a_debug.put("MiuraDeviceManager.getAvailableDevices","[null]");
+    else if(devices.length==0)
+      a_debug.put("MiuraDeviceManager.getAvailableDevices","[empty array]");
+    else
+      a_debug.put("MiuraDeviceManager.getAvailableDevices",devices.length);
+
+    devices = VirtualDeviceManager.getAvailableDevices();
+    if(devices.length==0)
+      a_debug.put("VirtualDeviceManager.getAvailableDevices","[empty array]");
+    else
+      a_debug.put("VirtualDeviceManager.getAvailableDevices",devices.length);
 
     return a_debug;
   }

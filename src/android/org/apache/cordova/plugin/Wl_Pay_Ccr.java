@@ -77,23 +77,33 @@ public class Wl_Pay_Ccr extends CordovaPlugin
       JSONObject a_result=new JSONObject();
       if(this.is_method)
         a_result.put("a_log",this.logResult());
-      a_result.put("s_class",e.getClass());
-      a_result.put("s_error","internal");
-      a_result.put("s_message",e.getMessage());
-      a_result.put("s_message_local",e.getLocalizedMessage());
 
-      StackTraceElement[] a_stack=e.getStackTrace();
-      StringBuilder s_stack= new StringBuilder();
-      for(StackTraceElement a_element:a_stack)
+      if(e instanceof Wl_UserException)
       {
-        if(a_element.getClassName().equals(CordovaPlugin.class.getName()))
-          break;
-        if(s_stack.length()>0)
-          s_stack.append(" - ");
-        s_stack.append(a_element.getClassName()).append(':').append(a_element.getLineNumber());
+        a_result.put("s_message",((Wl_UserException) e).messageGet());
+        a_result.put("s_error",((Wl_UserException) e).errorGet());
+      }
+      else
+      {
+        a_result.put("s_class",e.getClass());
+        a_result.put("s_error","internal");
+        a_result.put("s_message",e.getMessage());
+        a_result.put("s_message_local",e.getLocalizedMessage());
+
+        StackTraceElement[] a_stack=e.getStackTrace();
+        StringBuilder s_stack= new StringBuilder();
+        for(StackTraceElement a_element:a_stack)
+        {
+          if(a_element.getClassName().equals(CordovaPlugin.class.getName()))
+            break;
+          if(s_stack.length()>0)
+            s_stack.append(" - ");
+          s_stack.append(a_element.getClassName()).append(':').append(a_element.getLineNumber());
+        }
+
+        a_result.put("s_stack",s_stack);
       }
 
-      a_result.put("s_stack",s_stack);
 
       if(this.is_method&&callbackContext!=null)
         callbackContext.error(a_result);
@@ -136,6 +146,8 @@ public class Wl_Pay_Ccr extends CordovaPlugin
       a_result.put("a_permission",a_result_permission);
       a_result.put("a_processor",this.o_processor.debugGet());
     }
+
+    a_result.put("dc",Wl_Pay_Ccr_DirectConnect.debugGlobal());
 
     callbackContext.success(a_result);
   }
