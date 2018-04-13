@@ -53,6 +53,7 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
       a_debug.put("getIsActivated",o_device.getIsActivated());
       a_debug.put("getIsConnected",o_device.getIsConnected());
       a_debug.put("getIsReadyForSwipe",o_device.getIsReadyForSwipe());
+      a_debug.put("device.class",o_device.getClass().getName());
     }
 
     if(this.o_card==null)
@@ -165,7 +166,7 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
 
         JSONObject a_card=new JSONObject();
 
-        a_card.put("s_device","android");
+        a_card.put("s_device","android.nmi."+this.swipeController.getDevice().getClass().getName());
         a_card.put("s_encrypt",o_card_encrypt.encrypt(card,false));
         a_card.put("s_expire",card.getExpirationDate());
         a_card.put("s_holder",card.getCardholderName());

@@ -265,6 +265,7 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
         a_card.put("a_encrypt",a_encrypt);
         a_card.put("s_number_mask",cardData.getPAN()); // Example: "450220******1234"
         a_card.put("s_expire",cardData.getExpDate()); // Example: "0318"
+        a_card.put("s_device","android.dc."+this.deviceManager.getClass().getName());
         // a_card.put("s_holder",cardData.getCardholderName()); Returns null.
 
         // a_card.put("s_track_1",cardData.getTrack1()); // Returns null.
