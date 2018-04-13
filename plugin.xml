@@ -81,6 +81,7 @@
     <source-file src="src/android/org/apache/cordova/plugin/Wl_Pay_Ccr_Abstract.java" target-dir="src/org/apache/cordova/plugin" />
     <source-file src="src/android/org/apache/cordova/plugin/Wl_Pay_Ccr_DirectConnect.java" target-dir="src/org/apache/cordova/plugin" />
     <source-file src="src/android/org/apache/cordova/plugin/Wl_Pay_Ccr_Nmi.java" target-dir="src/org/apache/cordova/plugin" />
+    <source-file src="src/android/org/apache/cordova/plugin/Wl_UserException.java" target-dir="src/org/apache/cordova/plugin" />
     <source-file src="src/android/org/apache/cordova/plugin/Wl_ProcessorSid.java" target-dir="src/org/apache/cordova/plugin" />
   </platform>
 

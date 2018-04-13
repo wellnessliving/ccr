@@ -3,7 +3,7 @@ package org.apache.cordova.plugin;
 /**
  * Exception that is thrown to show error to end user.
  */
-public class Wl_UserException extends Exception
+class Wl_UserException extends Exception
 {
   /**
    * Error code.
@@ -32,7 +32,7 @@ public class Wl_UserException extends Exception
    *
    * @return Error code.
    */
-  public String errorGet()
+  String errorGet()
   {
     return this.s_error;
   }
@@ -42,7 +42,7 @@ public class Wl_UserException extends Exception
    *
    * @return Error message.
    */
-  public String messageGet()
+  String messageGet()
   {
     return this.s_message;
   }
