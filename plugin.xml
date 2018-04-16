@@ -101,6 +101,8 @@
     <header-file src="src/ios/Wl_Pay_Ccr_DirectConnect.h" />
     <source-file src="src/ios/Wl_Pay_Ccr_DirectConnect.m" />
     <source-file src="src/ios/Wl_ProcessorSid.h" />
+    <source-file src="src/ios/Wl_UserException.h" />
+    <source-file src="src/ios/Wl_UserException.m" />
     <header-file src="src/ios/nmi/PGMobileSDK" />
 
     <framework src="AudioToolbox.framework" />
