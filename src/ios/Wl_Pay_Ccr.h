@@ -16,6 +16,7 @@
 }
 
 - (NSDictionary*) config;
+- (void)_exception:(id)e forCommand:(CDVInvokedUrlCommand*)command;
 - (void)debugInfo:(CDVInvokedUrlCommand*)command;
 - (void)fireSwipe:(NSMutableDictionary*)a_card;
 - (void)fireSwipeError;

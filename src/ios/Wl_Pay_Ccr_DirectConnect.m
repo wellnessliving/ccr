@@ -146,34 +146,41 @@
 
 - (void)onCardSwiped:(DCGCardData *)cardData
 {
-    o_card_last = cardData;
-    
-    [self logInfo:@"[Wl_Pay_Ccr_DirectConnect.cardData]"];
-    
-    if(cardData!=nil&&[cardData DataType]!=DCGCardDataType_Nil&&[cardData EncryptionParameters]!=nil)
+    @try
     {
-        NSMutableDictionary* a_card = [[NSMutableDictionary alloc] init];
+        o_card_last = cardData;
 
-        NSMutableDictionary* a_encrypt = [[NSMutableDictionary alloc] init];
-        [a_encrypt setObject:[cardData DataBlock] forKey:@"DataBlock"];
-        [a_encrypt setObject:[[cardData EncryptionParameters] EncryptionType] forKey:@"EncryptionType"];
-        [a_encrypt setObject:[[cardData EncryptionParameters] HSMDevice] forKey:@"HSMDevice"];
-        [a_encrypt setObject:[cardData KSN] forKey:@"KSN"];
-        [a_encrypt setObject:[[cardData EncryptionParameters] TerminalType] forKey:@"TerminalType"];
+        [self logInfo:@"[Wl_Pay_Ccr_DirectConnect.cardData]"];
 
-        [a_card setObject:a_encrypt forKey:@"a_encrypt"];
-        [a_card setObject:[cardData PAN] forKey:@"s_number_mask"];
-        [a_card setObject:[cardData ExpDate] forKey:@"s_expire"];
+        if(cardData!=nil&&[cardData DataType]!=DCGCardDataType_Nil&&[cardData EncryptionParameters]!=nil)
+        {
+            NSMutableDictionary* a_card = [[NSMutableDictionary alloc] init];
 
-        [o_controller fireSwipe:a_card];
+            NSMutableDictionary* a_encrypt = [[NSMutableDictionary alloc] init];
+            [a_encrypt setObject:[cardData DataBlock] forKey:@"DataBlock"];
+            [a_encrypt setObject:[[cardData EncryptionParameters] EncryptionType] forKey:@"EncryptionType"];
+            [a_encrypt setObject:[[cardData EncryptionParameters] HSMDevice] forKey:@"HSMDevice"];
+            [a_encrypt setObject:[cardData KSN] forKey:@"KSN"];
+            [a_encrypt setObject:[[cardData EncryptionParameters] TerminalType] forKey:@"TerminalType"];
+
+            [a_card setObject:a_encrypt forKey:@"a_encrypt"];
+            [a_card setObject:[cardData PAN] forKey:@"s_number_mask"];
+            [a_card setObject:[cardData ExpDate] forKey:@"s_expire"];
+
+            [o_controller fireSwipe:a_card];
+        }
+        else
+        {
+            [o_controller fireSwipeError];
+        }
+
+        if(id_device!=WL_DEVICE_VIRTUAL)
+            [deviceManager acceptCard:@"Swipe Card"];
     }
-    else
+    @catch(id e)
     {
-        [o_controller fireSwipeError];
+        [o_controller _exception:e forCommand:nil];
     }
-
-    if(id_device!=WL_DEVICE_VIRTUAL)
-        [deviceManager acceptCard:@"Swipe Card"];
 }
 
 - (void)onConnected
