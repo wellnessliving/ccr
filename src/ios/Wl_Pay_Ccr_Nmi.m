@@ -118,12 +118,12 @@
         
         NSMutableDictionary* a_card_event = [[NSMutableDictionary alloc] init];
         
-        [a_card_event setObject:@"ios" forKey:@"s_device"];
+        [a_card_event setObject:[NSString stringWithFormat:@"ios.nmi.%@",NSStringFromClass([device class])] forKey:@"s_device"];
         [a_card_event setObject:[o_card_encrypt encrypt:card includeCVV:NO] forKey:@"s_encrypt"];
         [a_card_event setObject:[card expirationDate] forKey:@"s_expire"];
         [a_card_event setObject:[card cardholderName] forKey:@"s_holder"];
         [a_card_event setObject:[card maskedCardNumber] forKey:@"s_number_mask"];
-        
+
         [[self controller] fireSwipe:a_card_event];
     }
     else
@@ -151,7 +151,7 @@
 {
     NSDictionary* a_config = [[[self controller] config] objectForKey:@"a_processor"];
     self->s_key = [a_config objectForKey:@"s_key"];
-    
+
     int deviceType=[self idNmi:[[a_config objectForKey:@"id_device"] shortValue]];
     swipeController = [[PGSwipeController alloc] initWithDelegate:self audioReader:deviceType];
 }
@@ -194,7 +194,8 @@
 
     NSMutableDictionary* a_card_event = [[NSMutableDictionary alloc] init];
 
-    [a_card_event setObject:[o_card_encrypt encrypt:card includeCVV:YES] forKey:@"s_encrypt"];
+    [a_card_event setObject:@"ios-test" forKey:@"s_device"];
+    [a_card_event setObject:[o_card_encrypt encrypt:card includeCVV:false] forKey:@"s_encrypt"];
     [a_card_event setObject:[a_card objectForKey:@"s_expire"] forKey:@"s_expire"];
     [a_card_event setObject:[a_card objectForKey:@"s_holder"] forKey:@"s_holder"];
     [a_card_event setObject:[NSString stringWithFormat:@"****%@",[[a_card objectForKey:@"s_number"] substringWithRange:NSMakeRange(12,4)]] forKey:@"s_number_mask"];

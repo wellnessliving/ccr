@@ -12,6 +12,7 @@
 }
 
 + (Wl_Pay_Ccr_DirectConnect*)create: (Wl_Pay_Ccr*)o_controller;
++ (NSDictionary*)debugGlobal;
 - (void)testSwipe: (NSDictionary*)a_card;
 
 @end

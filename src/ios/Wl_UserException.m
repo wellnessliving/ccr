@@ -2,15 +2,25 @@
 
 @implementation Wl_UserException
 
-    -(id)init:(NSString*)s_error message:(NSString*)s_message
+    -(id)initWithName:(NSExceptionName)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
     {
-        self = [super init];
+        self = [super initWithName:aName reason:aReason userInfo:aUserInfo];
         if(self)
         {
-            [self s_error:s_error];
-            [self s_message:s_message];
+            s_error = aName;
+            s_message = aReason;
         }
         return self;
+    }
+
+    -(NSString*)errorGet
+    {
+        return s_error;
+    }
+
+    -(NSString*)messageGet
+    {
+        return s_message;
     }
 
 @end

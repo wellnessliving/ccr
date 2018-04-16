@@ -1,5 +1,7 @@
 #import "Wl_Pay_Ccr.h"
+#import "Wl_Pay_Ccr_DirectConnect.h"
 #import "Wl_Pay_Ccr_Nmi.h"
+#import "Wl_UserException.h"
 #import <Cordova/CDVPlugin.h>
 
 @implementation Wl_Pay_Ccr
@@ -23,8 +25,14 @@
         NSMutableDictionary* a_result = [[NSMutableDictionary alloc] init];
         [a_result setObject:NSStringFromClass([e class]) forKey:@"s_class"];
         [a_result setObject:@"internal" forKey:@"s_error"];
-        
-        if([e isKindOfClass:[NSException class]])
+
+        if([e isKindOfClass:[Wl_UserException class]])
+        {
+            [a_result setObject:[e messageGet] forKey:@"s_message"];
+            [a_result setObject:[e errorGet] forKey:@"s_error"];
+
+        }
+        else if([e isKindOfClass:[NSException class]])
         {
             [a_result setObject:[e reason] forKey:@"s_message"];
             [a_result setObject:[e name] forKey:@"s_name"];
@@ -32,7 +40,7 @@
                 [a_result setObject:[e userInfo] forKey:@"a_info"];
             [a_result setObject:[e callStackSymbols] forKey:@"s_stack"];
         }
-        
+
         if(is_method)
             [self _error:command with:a_result];
         else
@@ -61,7 +69,7 @@
             [o_processor tearDown];
             o_processor=nil;
         }
-        
+
         if(callbackId!=nil)
         {
             // **** BE ATTENTIVE ***
@@ -70,16 +78,16 @@
             // No events can be sent after that.
             NSMutableDictionary* a_result = [[NSMutableDictionary alloc] init];
             [a_result setObject:@"tearDown" forKey:@"event"];
-            
+
             CDVPluginResult* pluginResult = nil;
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:a_result];
             [pluginResult setKeepCallbackAsBool:NO];
             [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
 
-            
+
             callbackId = nil;
         }
-        
+
         is_active = NO;
 
     }
@@ -96,7 +104,7 @@
         {
             NSMutableDictionary * a_result=[[NSMutableDictionary alloc] init];
             [a_result setValue:[NSNumber numberWithBool:self->is_active] forKey:@"is_active"];
-            
+
             if(o_processor==nil)
             {
                 [a_result setValue:@"[nil]" forKey:@"o_processor"];
@@ -105,6 +113,8 @@
             {
                 [a_result setValue:[o_processor debugInfo] forKey:@"o_processor"];
             }
+
+            [a_result setValue:[Wl_Pay_Ccr_DirectConnect debugGlobal] forKey:@"dc"];
             
             [self _success:command with:a_result];
         }

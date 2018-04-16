@@ -1,18 +1,19 @@
 #import "Wl_Pay_Ccr_DirectConnect.h"
 #import "Wl_DeviceSid.h"
+#import "Wl_UserException.h"
 
 @implementation Wl_Pay_Ccr_DirectConnect
 
 + (Wl_Pay_Ccr_DirectConnect*)create: (Wl_Pay_Ccr*)o_controller
 {
     [o_controller logInfo:[NSString stringWithFormat:@"Config: %@",[o_controller config]]];
-    
+
     NSDictionary* a_config = [[o_controller config] objectForKey:@"a_processor"];
-    
+
     short id_device = [[a_config objectForKey:@"id_device"] shortValue];
     NSArray* devices;
     DCGDeviceManager* deviceManager;
-    
+
     switch(id_device)
     {
         /* Not implemented for iOS.
@@ -24,14 +25,18 @@
             break;*/
         case WL_DEVICE_DC_IDT_BT_MAG:
             devices = [DCGBTMagDeviceManager getAvailableDevices];
-            if(devices==nil||[devices count]==0)
-                return nil;
+            if(devices==nil)
+                @throw [Wl_UserException exceptionWithName:@"bt-mag-null" reason:@"Can not initialize IDTech BtMag Device Manager ([DCGBTMagDeviceManager getAvailableDevices] returns null)." userInfo:nil];
+            if([devices count]==0)
+                @throw [Wl_UserException exceptionWithName:@"bt-mag-empty" reason:@"Can not initialize IDTech BtMag Device Manager ([DCGBTMagDeviceManager getAvailableDevices] returns an empty array)." userInfo:nil];
             deviceManager = [[DCGBTMagDeviceManager alloc] init:[devices objectAtIndex:0]];
             break;
         case WL_DEVICE_DC_IDT_UNI_MAG:
             devices = [DCGUniMagDeviceManager getAvailableDevices];
-            if(devices==nil||[devices count]==0)
-                return nil;
+            if(devices==nil)
+                @throw [Wl_UserException exceptionWithName:@"uni-mag-null" reason:@"Can not initialize IDTech UniMag Device Manager ([DCGUniMagDeviceManager getAvailableDevices] returns null)." userInfo:nil];
+            if([devices count]==0)
+                @throw [Wl_UserException exceptionWithName:@"uni-mag-empty" reason:@"Can not initialize IDTech UniMag Device Manager ([DCGUniMagDeviceManager getAvailableDevices] returns an empty array)." userInfo:nil];
             deviceManager = [[DCGUniMagDeviceManager alloc] init:[devices objectAtIndex:0]];
             break;
         /* Not implemented for iOS.
@@ -43,8 +48,10 @@
             break;*/
         case WL_DEVICE_DC_MIURA:
             devices = [DCGMiuraDeviceManager getAvailableDevices];
-            if(devices==nil||[devices count]==0)
-                return nil;
+            if(devices==nil)
+                @throw [Wl_UserException exceptionWithName:@"miura-null" reason:@"Can not initialize IDTech Miura Device Manager ([DCGMiuraDeviceManager getAvailableDevices] returns null)." userInfo:nil];
+            if([devices count]==0)
+                @throw [Wl_UserException exceptionWithName:@"miura-empty" reason:@"Can not initialize IDTech Miura Device Manager ([DCGMiuraDeviceManager getAvailableDevices] returns an empty array)." userInfo:nil];
             deviceManager = [[DCGMiuraDeviceManager alloc] init:[devices objectAtIndex:0]];
             break;
         /* Not implemented for iOS.
@@ -56,14 +63,16 @@
              break;*/
         case WL_DEVICE_VIRTUAL:
              devices = [DCGVirtualDeviceManager getAvailableDevices];
-             if(devices==nil||[devices count]==0)
-                return nil;
+            if(devices==nil)
+                @throw [Wl_UserException exceptionWithName:@"virtual-null" reason:@"Can not initialize Virtual Device Manager ([DCGVirtualDeviceManager getAvailableDevices] returns null)." userInfo:nil];
+            if([devices count]==0)
+                @throw [Wl_UserException exceptionWithName:@"virtual-empty" reason:@"Can not initialize Virtual Device Manager ([DCGVirtualDeviceManager getAvailableDevices] returns an empty array)." userInfo:nil];
             deviceManager = [[DCGVirtualDeviceManager alloc] init:[devices objectAtIndex:0]];
             break;
         default:
-            return nil;
+            @throw [Wl_UserException exceptionWithName:@"dc-not-implemented" reason:@"Interface for DirecConnect device is not implemented." userInfo:nil];
     }
-    
+
     Wl_Pay_Ccr_DirectConnect* o_result = [[Wl_Pay_Ccr_DirectConnect alloc] init];
     o_result->devices = devices;
     o_result->deviceManager = deviceManager;
@@ -72,10 +81,51 @@
 
 }
 
++(NSDictionary*)debugGlobal
+{
+    NSMutableDictionary* a_debug = [[NSMutableDictionary alloc] init];
+
+    NSArray* devices;
+
+    devices = [DCGBTMagDeviceManager getAvailableDevices];
+    if(devices==nil)
+        [a_debug setObject:@"[null]" forKey:@"[DCGBTMagDeviceManager getAvailableDevices]"];
+    else if ([devices count]==0)
+        [a_debug setObject:@"[empty array]" forKey:@"[DCGBTMagDeviceManager getAvailableDevices]"];
+    else
+        [a_debug setValue:[NSNumber numberWithLong:[devices count]] forKey:@"[DCGBTMagDeviceManager getAvailableDevices]"];
+
+    devices = [DCGUniMagDeviceManager getAvailableDevices];
+    if(devices==nil)
+        [a_debug setObject:@"[null]" forKey:@"[DCGUniMagDeviceManager getAvailableDevices]"];
+    else if ([devices count]==0)
+        [a_debug setObject:@"[empty array]" forKey:@"[DCGUniMagDeviceManager getAvailableDevices]"];
+    else
+        [a_debug setValue:[NSNumber numberWithLong:[devices count]] forKey:@"[DCGUniMagDeviceManager getAvailableDevices]"];
+
+    devices = [DCGMiuraDeviceManager getAvailableDevices];
+    if(devices==nil)
+        [a_debug setObject:@"[null]" forKey:@"[DCGMiuraDeviceManager getAvailableDevices]"];
+    else if ([devices count]==0)
+        [a_debug setObject:@"[empty array]" forKey:@"[DCGMiuraDeviceManager getAvailableDevices]"];
+    else
+        [a_debug setValue:[NSNumber numberWithLong:[devices count]] forKey:@"[DCGMiuraDeviceManager getAvailableDevices]"];
+
+    devices = [DCGVirtualDeviceManager getAvailableDevices];
+    if(devices==nil)
+        [a_debug setObject:@"[null]" forKey:@"[DCGVirtualDeviceManager getAvailableDevices]"];
+    else if ([devices count]==0)
+        [a_debug setObject:@"[empty array]" forKey:@"[DCGVirtualDeviceManager getAvailableDevices]"];
+    else
+        [a_debug setValue:[NSNumber numberWithLong:[devices count]] forKey:@"[DCGVirtualDeviceManager getAvailableDevices]"];
+
+    return a_debug;
+}
+
 - (NSDictionary*)debugInfo
 {
     NSMutableDictionary* a_debug = [[NSMutableDictionary alloc] init];
-    
+
     NSMutableArray* a_device = [[NSMutableArray alloc] init];
     for(DCGDevice* device in devices)
     {
@@ -86,19 +136,19 @@
         [a_device_item setObject:[device description] forKey:@"description"];
         [a_device addObject:a_device_item];
     }
-    
+
     [a_debug setObject:a_device forKey:@"devices"];
     [a_debug setObject:devices==nil?@"[nil]":[NSNumber numberWithInteger:[devices count]] forKey:@"devices.length"];
     [a_debug setObject:deviceManager==nil?@"[nil]":NSStringFromClass([deviceManager class]) forKey:@"deviceManager.class"];
     [a_debug setObject:[NSNumber numberWithInteger:id_device] forKey:@"id_device"];
     [a_debug setObject:NSStringFromClass([self class]) forKey:@"this.class"];
-    
+
     if(deviceManager!=nil)
     {
         [a_debug setObject:[NSNumber numberWithBool:[deviceManager isCardInserted]] forKey:@"deviceManager.isCardInserted"];
         [a_debug setObject:[NSNumber numberWithBool:[deviceManager isConnected]] forKey:@"deviceManager.isConnected"];
     }
-    
+
     if(o_card_last==nil)
     {
         [a_debug setObject:@"[nil]" forKey:@"card"];
@@ -119,9 +169,8 @@
 
         [a_debug setObject:a_card forKey:@"card"];
     }
-    
-    return a_debug;
 
+    return a_debug;
 }
 
 -(id)init
@@ -166,6 +215,7 @@
             [a_card setObject:a_encrypt forKey:@"a_encrypt"];
             [a_card setObject:[cardData PAN] forKey:@"s_number_mask"];
             [a_card setObject:[cardData ExpDate] forKey:@"s_expire"];
+            [a_card setObject:[NSString stringWithFormat:@"ios.nmi.%@",NSStringFromClass([deviceManager class])] forKey:@"s_device"];
 
             [o_controller fireSwipe:a_card];
         }
@@ -201,11 +251,11 @@
 }
 
 - (void)onPINEntered:(DCGPINData *)pinData
-{ 
+{
     [self logInfo:@"[Wl_Pay_Ccr_DirectConnect.onPINEntered]"];
 }
 
-- (void)onYNAnswered:(int)response { 
+- (void)onYNAnswered:(int)response {
     [self logInfo:@"[Wl_Pay_Ccr_DirectConnect.onYNAnswered]"];
 }
 
