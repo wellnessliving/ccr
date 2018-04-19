@@ -30,7 +30,6 @@
         {
             [a_result setObject:[e messageGet] forKey:@"s_message"];
             [a_result setObject:[e errorGet] forKey:@"s_error"];
-
         }
         else if([e isKindOfClass:[NSException class]])
         {
