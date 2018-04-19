@@ -120,7 +120,8 @@
     <source-file src="src/ios/dc/lib/libBTMagSDK.a" framework="true" />
     <source-file src="src/ios/dc/lib/libDCMobileSDK.a" framework="true" />
     <source-file src="src/ios/dc/lib/libDCMobileSDK-IDT.a" framework="true" />
-    <source-file src="src/ios/dc/lib/libDCMobileSDK-Miura.a" framework="true" />
-    <source-file src="src/ios/dc/lib/libMiuraSdk.a" framework="true" />
+    <!-- Miura is rejected by Apple -->
+    <!--<source-file src="src/ios/dc/lib/libDCMobileSDK-Miura.a" framework="true" />-->
+    <!--<source-file src="src/ios/dc/lib/libMiuraSdk.a" framework="true" />-->
   </platform>
 </plugin>

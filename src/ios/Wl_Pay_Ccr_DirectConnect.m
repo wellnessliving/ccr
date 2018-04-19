@@ -46,6 +46,7 @@
                 return nil;
             deviceManager = [[DCGUnipayDeviceManager alloc] init:[devices objectAtIndex:0]];
             break;*/
+        /* Not implemented for iOS.
         case WL_DEVICE_DC_MIURA:
             devices = [DCGMiuraDeviceManager getAvailableDevices];
             if(devices==nil)
@@ -53,7 +54,7 @@
             if([devices count]==0)
                 @throw [Wl_UserException exceptionWithName:@"miura-empty" reason:@"Can not initialize IDTech Miura Device Manager ([DCGMiuraDeviceManager getAvailableDevices] returns an empty array)." userInfo:nil];
             deviceManager = [[DCGMiuraDeviceManager alloc] init:[devices objectAtIndex:0]];
-            break;
+            break;*/
         /* Not implemented for iOS.
         case WL_DEVICE_DC_PAX:
              devices = [DCGPAXDeviceManager getAvailableDevices];
@@ -103,13 +104,14 @@
     else
         [a_debug setValue:[NSNumber numberWithLong:[devices count]] forKey:@"[DCGUniMagDeviceManager getAvailableDevices]"];
 
+    /* Not implemented for iOS.
     devices = [DCGMiuraDeviceManager getAvailableDevices];
     if(devices==nil)
         [a_debug setObject:@"[null]" forKey:@"[DCGMiuraDeviceManager getAvailableDevices]"];
     else if ([devices count]==0)
         [a_debug setObject:@"[empty array]" forKey:@"[DCGMiuraDeviceManager getAvailableDevices]"];
     else
-        [a_debug setValue:[NSNumber numberWithLong:[devices count]] forKey:@"[DCGMiuraDeviceManager getAvailableDevices]"];
+        [a_debug setValue:[NSNumber numberWithLong:[devices count]] forKey:@"[DCGMiuraDeviceManager getAvailableDevices]"];*/
 
     devices = [DCGVirtualDeviceManager getAvailableDevices];
     if(devices==nil)
