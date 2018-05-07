@@ -391,9 +391,12 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
       case Wl_DeviceSid.DC_IDT_BT_MAG:
       case Wl_DeviceSid.DC_IDT_UNI_MAG:
       case Wl_DeviceSid.DC_IDT_UNI_PAY:
+      case Wl_DeviceSid.DC_MAGTEK_AUDIO:
         // Union of all privileges from these files:
         // \src\android\dc\DCMobileSDK.aar\AndroidManifest.xml
         // \src\android\dc\DCMobileSDK-IDT.aar\AndroidManifest.xml
+        // Equals content of
+        // \src\android\dc\DCMobileSDK-Magtek.aar\AndroidManifest.xml
         return new String[]{
           Manifest.permission.MODIFY_AUDIO_SETTINGS,
           Manifest.permission.RECORD_AUDIO,
