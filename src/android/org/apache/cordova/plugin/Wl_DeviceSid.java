@@ -38,6 +38,13 @@ class Wl_DeviceSid
   /**
    * Payment processor: Direct Connect.
    *
+   * Device: <tt>Magtek</tt>, connection over audio jack. Supported devices: <tt>uDynamo</tt>, <tt>aDynamo</tt>.
+   */
+  static final int DC_MAGTEK_AUDIO=11;
+
+  /**
+   * Payment processor: Direct Connect.
+   *
    * Device: <tt>IDTech/Miura</tt>.
    */
   static final int DC_MIURA=8;

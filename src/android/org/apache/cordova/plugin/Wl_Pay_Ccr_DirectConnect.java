@@ -8,6 +8,7 @@ import com.directconnect.mobilesdk.device.BTMagDeviceManager;
 import com.directconnect.mobilesdk.device.CardData;
 import com.directconnect.mobilesdk.device.Device;
 import com.directconnect.mobilesdk.device.DeviceManager;
+import com.directconnect.mobilesdk.device.MagtekDeviceManager;
 import com.directconnect.mobilesdk.device.MiuraDeviceManager;
 import com.directconnect.mobilesdk.device.PINData;
 import com.directconnect.mobilesdk.device.UniMagDeviceManager;
@@ -69,6 +70,7 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
         break;
       case Wl_DeviceSid.DC_IDT_BT_MAG:
         devices = BTMagDeviceManager.getAvailableDevices();
+        //noinspection ConstantConditions
         if(devices==null)
           throw new Wl_UserException("bt-mag-null","Can not initialize IDTech BtMag Device Manager (BTMagDeviceManager.getAvailableDevices() returns null).");
         if(devices.length==0)
@@ -87,8 +89,25 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
           throw new Wl_UserException("uni-pay-empty","Can not initialize IDTech UniPay Device Manager (UniPayDeviceManager.getAvailableDevices() returns an empty array).");
         deviceManager = new UniPayDeviceManager(devices[0], o_context);
         break;
+      case Wl_DeviceSid.DC_MAGTEK_AUDIO:
+        devices = MagtekDeviceManager.getAvailableDevices();
+        //noinspection ConstantConditions
+        if(devices==null)
+          throw new Wl_UserException("magtek-null","Can not initialize Magtek Device Manager (MagtekDeviceManager.getAvailableDevices() returns null).");
+        if(devices.length==0)
+          throw new Wl_UserException("magtek-empty","Can not initialize Magtek Device Manager (MagtekDeviceManager.getAvailableDevices() returns an empty array).");
+        switch (id_device)
+        {
+          case Wl_DeviceSid.DC_MAGTEK_AUDIO:
+            deviceManager = new MagtekDeviceManager(devices[0], o_context,"Audio");
+            break;
+          default:
+            throw new Wl_UserException("magtek-internal","Internal plugin error (Magtek connection type is not implemented).");
+        }
+        break;
       case Wl_DeviceSid.DC_MIURA:
         devices = MiuraDeviceManager.getAvailableDevices();
+        //noinspection ConstantConditions
         if(devices==null)
           throw new Wl_UserException("miura-null","Can not initialize Miura Device Manager (MiuraDeviceManager.getAvailableDevices() returns null).");
         if(devices.length==0)

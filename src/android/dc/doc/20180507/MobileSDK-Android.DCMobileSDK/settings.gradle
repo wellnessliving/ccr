@@ -1,0 +1,1 @@
+include ':dcmobilesdk', ':dcmobilesdk-idt', ':app', ':dcmobilesdk-pax', ':dcmobilesdk-magtek'

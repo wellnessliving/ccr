@@ -1,0 +1,28 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.directconnect.mobilesdk.device.magtek" >
+
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-feature android:name="android.hardware.usb.host" />
+    <uses-feature android:name="android.hardware.bluetooth_le"/>
+
+    <application android:allowBackup="true"
+        android:supportsRtl="true">
+
+        <service android:name="com.magtek.mobile.android.mtlib.MTUSBService" android:enabled="true"/>
+        <service android:name="com.magtek.mobile.android.mtlib.MTBTHService" android:enabled="true"/>
+        <service android:name="com.magtek.mobile.android.mtlib.MTBLEService" android:enabled="true"/>
+        <service android:name="com.magtek.mobile.android.mtlib.MTAudioService" android:enabled="true"/>
+
+    </application>
+
+
+
+</manifest>

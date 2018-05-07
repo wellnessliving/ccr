@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/MobileSDK-Android.DCMobileSDK.iml" filepath="$PROJECT_DIR$/MobileSDK-Android.DCMobileSDK.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dcmobilesdk/dcmobilesdk.iml" filepath="$PROJECT_DIR$/dcmobilesdk/dcmobilesdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dcmobilesdk-idt/dcmobilesdk-idt.iml" filepath="$PROJECT_DIR$/dcmobilesdk-idt/dcmobilesdk-idt.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dcmobilesdk-magtek/dcmobilesdk-magtek.iml" filepath="$PROJECT_DIR$/dcmobilesdk-magtek/dcmobilesdk-magtek.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dcmobilesdk-pax/dcmobilesdk-pax.iml" filepath="$PROJECT_DIR$/dcmobilesdk-pax/dcmobilesdk-pax.iml" />
+    </modules>
+  </component>
+</project>

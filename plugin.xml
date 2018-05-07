@@ -73,6 +73,7 @@
     <resource-file src="src/android/nmi/payment-gateway.aar" target="libs/nmi.aar"/>
     <resource-file src="src/android/dc/DCMobileSDK.aar" target="libs/dc-sdk.aar"/>
     <resource-file src="src/android/dc/DCMobileSDK-IDT.aar" target="libs/dc-idt.aar"/>
+    <resource-file src="src/android/dc/DCMobileSDK-Magtek.aar" target="libs/dc-magtek.aar"/>
     <resource-file src="src/android/dc/DCMobileSDK-Miura.aar" target="libs/dc-miura.aar"/>
     <resource-file src="src/android/dc/Lib-Miura-SDK.aar" target="libs/dc-miura-lib.aar"/>
 
