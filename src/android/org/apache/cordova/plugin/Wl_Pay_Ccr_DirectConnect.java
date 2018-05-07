@@ -12,7 +12,6 @@ import com.directconnect.mobilesdk.device.MagtekDeviceManager;
 import com.directconnect.mobilesdk.device.MiuraDeviceManager;
 import com.directconnect.mobilesdk.device.PINData;
 import com.directconnect.mobilesdk.device.UniMagDeviceManager;
-import com.directconnect.mobilesdk.device.UniPayDeviceManager;
 import com.directconnect.mobilesdk.device.VirtualDeviceManager;
 
 import org.json.JSONArray;
