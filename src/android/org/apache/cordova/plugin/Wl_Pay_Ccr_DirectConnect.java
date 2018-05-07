@@ -84,6 +84,7 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
         deviceManager = new UniMagDeviceManager(devices[0], o_context);
         break;
 // This became unavailable after update on 2018-05-07 where we added Magtek.
+// If you uncomment this, uncomment also counterpart code in debugInfo() in this file.
 //      case Wl_DeviceSid.DC_IDT_UNI_PAY:
 //        devices = UniPayDeviceManager.getAvailableDevices();
 //        if(devices.length==0)
@@ -197,6 +198,7 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
       a_debug.put("AugustaDeviceManager.getAvailableDevices",devices.length);
 
     devices = BTMagDeviceManager.getAvailableDevices();
+    //noinspection ConstantConditions
     if(devices==null)
       a_debug.put("BTMagDeviceManager.getAvailableDevices","[null]");
     else if(devices.length==0)
@@ -210,13 +212,23 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
     else
       a_debug.put("UniMagDeviceManager.getAvailableDevices",devices.length);
 
-    devices = UniPayDeviceManager.getAvailableDevices();
-    if(devices.length==0)
-      a_debug.put("UniPayDeviceManager.getAvailableDevices","[empty array]");
+//    devices = UniPayDeviceManager.getAvailableDevices();
+//    if(devices.length==0)
+//      a_debug.put("UniPayDeviceManager.getAvailableDevices","[empty array]");
+//    else
+//      a_debug.put("UniPayDeviceManager.getAvailableDevices",devices.length);
+
+    devices = MagtekDeviceManager.getAvailableDevices();
+    //noinspection ConstantConditions
+    if(devices==null)
+      a_debug.put("MagtekDeviceManager.getAvailableDevices","[null]");
+    else if(devices.length==0)
+      a_debug.put("MagtekDeviceManager.getAvailableDevices","[empty array]");
     else
-      a_debug.put("UniPayDeviceManager.getAvailableDevices",devices.length);
+      a_debug.put("MagtekDeviceManager.getAvailableDevices",devices.length);
 
     devices = MiuraDeviceManager.getAvailableDevices();
+    //noinspection ConstantConditions
     if(devices==null)
       a_debug.put("MiuraDeviceManager.getAvailableDevices","[null]");
     else if(devices.length==0)
