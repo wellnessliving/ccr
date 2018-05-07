@@ -83,12 +83,13 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
           throw new Wl_UserException("uni-mag-empty","Can not initialize IDTech UniMag Device Manager (UniMagDeviceManager.getAvailableDevices() returns an empty array).");
         deviceManager = new UniMagDeviceManager(devices[0], o_context);
         break;
-      case Wl_DeviceSid.DC_IDT_UNI_PAY:
-        devices = UniPayDeviceManager.getAvailableDevices();
-        if(devices.length==0)
-          throw new Wl_UserException("uni-pay-empty","Can not initialize IDTech UniPay Device Manager (UniPayDeviceManager.getAvailableDevices() returns an empty array).");
-        deviceManager = new UniPayDeviceManager(devices[0], o_context);
-        break;
+// This became unavailable after update on 2018-05-07 where we added Magtek.
+//      case Wl_DeviceSid.DC_IDT_UNI_PAY:
+//        devices = UniPayDeviceManager.getAvailableDevices();
+//        if(devices.length==0)
+//          throw new Wl_UserException("uni-pay-empty","Can not initialize IDTech UniPay Device Manager (UniPayDeviceManager.getAvailableDevices() returns an empty array).");
+//        deviceManager = new UniPayDeviceManager(devices[0], o_context);
+//        break;
       case Wl_DeviceSid.DC_MAGTEK_AUDIO:
         devices = MagtekDeviceManager.getAvailableDevices();
         //noinspection ConstantConditions
