@@ -165,7 +165,7 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
     else
     {
       JSONObject a_card=new JSONObject();
-      a_card.put("getCardholderName",this.o_card_last.getCardholderName());
+      a_card.put("getCardholderName",this.o_card_last.getCardholderName()==null?"[null]":this.o_card_last.getCardholderName());
       a_card.put("getDataBlock",this.o_card_last.getDataBlock());
       a_card.put("getDataType",this.o_card_last.getDataType().toString());
       a_card.put("getExpDate",this.o_card_last.getExpDate());
