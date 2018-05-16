@@ -105,4 +105,28 @@ typedef NS_ENUM (NSUInteger, DCGCardDataType) {
 @interface DCGPAXDeviceManager : DCGDeviceManager
 @end
 
+@interface DCGIDynamoDeviceManager : DCGDeviceManager
+
+@end
+
+
+@interface DCGKDynamoDeviceManager : DCGDeviceManager
+
+@end
+
+
+@interface DCGEDynamoDeviceManager : DCGDeviceManager
+
+@end
+
+
+@interface DCGUADynamoDeviceManager : DCGDeviceManager
+
+@end
+
+
+@interface DCGKDynamaxDeviceManager : DCGDeviceManager
+
+@end
+
 #endif /* DCMobileSDK_h_h */
