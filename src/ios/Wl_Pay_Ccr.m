@@ -1,6 +1,7 @@
 #import "Wl_Pay_Ccr.h"
 #import "Wl_Pay_Ccr_DirectConnect.h"
-#import "Wl_Pay_Ccr_Nmi.h"
+// Do not forget to back NMI!
+//#import "Wl_Pay_Ccr_Nmi.h"
 #import "Wl_UserException.h"
 #import <Cordova/CDVPlugin.h>
 
@@ -312,7 +313,8 @@
     [self _start];
     @try
     {
-        [Wl_Pay_Ccr_Nmi testException];
+        // Do not forget to back NMI!
+        //[Wl_Pay_Ccr_Nmi testException];
     }
     @catch(id e)
     {
