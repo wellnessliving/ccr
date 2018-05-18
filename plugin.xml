@@ -104,7 +104,8 @@
     <source-file src="src/ios/Wl_ProcessorSid.h" />
     <source-file src="src/ios/Wl_UserException.h" />
     <source-file src="src/ios/Wl_UserException.m" />
-    <header-file src="src/ios/nmi/PGMobileSDK" />
+    <!-- Do not forget to back NMI! -->
+    <!--<header-file src="src/ios/nmi/PGMobileSDK" />-->
 
     <framework src="AudioToolbox.framework" />
     <framework src="AVFoundation.framework" />
@@ -113,7 +114,8 @@
     <framework src="Security.framework" />
     <framework src="CoreBluetooth.framework" />
     <framework src="libstdc++.6.0.9.dylib" />
-    <source-file src="src/ios/nmi/PGMobileSDK.a" framework="true" />
+    <!-- Do not forget to back NMI! -->
+    <!--<source-file src="src/ios/nmi/PGMobileSDK.a" framework="true" />-->
 
     <header-file src="src/ios/dc/include" />
     <!-- This library must not be included because is already included for MNI. -->
