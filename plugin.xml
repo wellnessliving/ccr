@@ -123,7 +123,8 @@
     <!--<source-file src="src/ios/dc/lib/IDTECH_UniMag.a" framework="true" />-->
     <source-file src="src/ios/dc/lib/libBTMagSDK.a" framework="true" />
     <source-file src="src/ios/dc/lib/libDCMobileSDK.a" framework="true" />
-    <source-file src="src/ios/dc/lib/libDCMobileSDK-IDT.a" framework="true" />
+    <!-- Do not forget to back NMI! -->
+    <!--<source-file src="src/ios/dc/lib/libDCMobileSDK-IDT.a" framework="true" />-->
     <source-file src="src/ios/dc/lib/libDCMobileSDK-Magtek.a" framework="true" />
     <!-- Miura is rejected by Apple -->
     <!--<source-file src="src/ios/dc/lib/libDCMobileSDK-Miura.a" framework="true" />-->

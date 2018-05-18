@@ -23,7 +23,7 @@
                 return null;
             deviceManager = new AugustaDeviceManager(devices[0], o_context);
             break;*/
-        case WL_DEVICE_DC_IDT_BT_MAG:
+        /*case WL_DEVICE_DC_IDT_BT_MAG:
             devices = [DCGBTMagDeviceManager getAvailableDevices];
             if(devices==nil)
                 @throw [Wl_UserException exceptionWithName:@"bt-mag-null" reason:@"Can not initialize IDTech BtMag Device Manager ([DCGBTMagDeviceManager getAvailableDevices] returns null)." userInfo:nil];
@@ -38,7 +38,7 @@
             if([devices count]==0)
                 @throw [Wl_UserException exceptionWithName:@"uni-mag-empty" reason:@"Can not initialize IDTech UniMag Device Manager ([DCGUniMagDeviceManager getAvailableDevices] returns an empty array)." userInfo:nil];
             deviceManager = [[DCGUniMagDeviceManager alloc] init:[devices objectAtIndex:0]];
-            break;
+            break;*/
         case WL_DEVICE_DC_MAGTEK_AUDIO:
             devices = [DCGUADynamoDeviceManager getAvailableDevices];
             if(devices==nil)
@@ -96,7 +96,7 @@
 
     NSArray* devices;
 
-    devices = [DCGBTMagDeviceManager getAvailableDevices];
+    /*devices = [DCGBTMagDeviceManager getAvailableDevices];
     if(devices==nil)
         [a_debug setObject:@"[null]" forKey:@"[DCGBTMagDeviceManager getAvailableDevices]"];
     else if ([devices count]==0)
@@ -110,7 +110,7 @@
     else if ([devices count]==0)
         [a_debug setObject:@"[empty array]" forKey:@"[DCGUniMagDeviceManager getAvailableDevices]"];
     else
-        [a_debug setValue:[NSNumber numberWithLong:[devices count]] forKey:@"[DCGUniMagDeviceManager getAvailableDevices]"];
+        [a_debug setValue:[NSNumber numberWithLong:[devices count]] forKey:@"[DCGUniMagDeviceManager getAvailableDevices]"];*/
 
     devices = [DCGUADynamoDeviceManager getAvailableDevices];
     if(devices==nil)
