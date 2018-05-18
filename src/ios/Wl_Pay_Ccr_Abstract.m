@@ -14,18 +14,20 @@
 +(Wl_Pay_Ccr_Abstract*)create:(long)id_pay_processor forController:(Wl_Pay_Ccr*)o_controller
 {
     Wl_Pay_Ccr_Abstract* o_processor = nil;
-    switch (id_pay_processor)
-    {
-        case WL_PROCESSOR_DIRECT_CONNECT:
-            o_processor = [Wl_Pay_Ccr_DirectConnect create:o_controller];
-            break;
-        // Do not forget to back NMI!
-        //case WL_PROCESSOR_NMI:
-        //    o_processor = [[Wl_Pay_Ccr_Nmi alloc] init];
-        //    break;
-        default:
-            break;
-    }
+    o_processor = [Wl_Pay_Ccr_DirectConnect create:o_controller];
+    // Do not forget to back NMI!
+//    switch (id_pay_processor)
+//    {
+//        case WL_PROCESSOR_DIRECT_CONNECT:
+//            o_processor = [Wl_Pay_Ccr_DirectConnect create:o_controller];
+//            break;
+//        // Do not forget to back NMI!
+//        //case WL_PROCESSOR_NMI:
+//        //    o_processor = [[Wl_Pay_Ccr_Nmi alloc] init];
+//        //    break;
+//        default:
+//            break;
+//    }
 
     if(o_processor!=nil)
         o_processor->o_controller = o_controller;
