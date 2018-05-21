@@ -174,7 +174,10 @@
     else
     {
         NSMutableDictionary* a_card = [[NSMutableDictionary alloc] init];
-        [a_card setObject:[o_card_last CardholderName] forKey:@"CardholderName"];
+        if([o_card_last CardholderName]==nil)
+            [a_card setObject:@"[nil]" forKey:@"CardholderName"];
+        else
+            [a_card setObject:[o_card_last CardholderName] forKey:@"CardholderName"];
         [a_card setObject:[o_card_last DataBlock] forKey:@"DataBlock"];
         [a_card setObject:[NSNumber numberWithInteger:[o_card_last DataType]] forKey:@"DataType"];
         [a_card setObject:[o_card_last ExpDate] forKey:@"ExpDate"];
@@ -233,7 +236,10 @@
             [a_card setObject:a_encrypt forKey:@"a_encrypt"];
             [a_card setObject:[cardData PAN] forKey:@"s_number_mask"];
             [a_card setObject:[cardData ExpDate] forKey:@"s_expire"];
-            [a_card setObject:[NSString stringWithFormat:@"ios.nmi.%@",NSStringFromClass([deviceManager class])] forKey:@"s_device"];
+            [a_card setObject:[NSString stringWithFormat:@"ios.dc.%@",NSStringFromClass([deviceManager class])] forKey:@"s_device"];
+            NSString *s_holder = [cardData CardholderName];
+            if(s_holder!=nil)
+                [a_card setObject:[s_holder stringByReplacingOccurrencesOfString:@"/" withString:@" "] forKey:@"s_holder"];
 
             [o_controller fireSwipe:a_card];
         }
