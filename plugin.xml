@@ -97,16 +97,14 @@
     <source-file src="src/ios/Wl_Pay_Ccr.m" />
     <header-file src="src/ios/Wl_Pay_Ccr_Abstract.h" />
     <source-file src="src/ios/Wl_Pay_Ccr_Abstract.m" />
-    <!-- Do not forget to back NMI! -->
-    <!--<header-file src="src/ios/Wl_Pay_Ccr_Nmi.h" />-->
-    <!--<source-file src="src/ios/Wl_Pay_Ccr_Nmi.m" />-->
+    <header-file src="src/ios/Wl_Pay_Ccr_Nmi.h" />
+    <source-file src="src/ios/Wl_Pay_Ccr_Nmi.m" />
     <header-file src="src/ios/Wl_Pay_Ccr_DirectConnect.h" />
     <source-file src="src/ios/Wl_Pay_Ccr_DirectConnect.m" />
     <source-file src="src/ios/Wl_ProcessorSid.h" />
     <source-file src="src/ios/Wl_UserException.h" />
     <source-file src="src/ios/Wl_UserException.m" />
-    <!-- Do not forget to back NMI! -->
-    <!--<header-file src="src/ios/nmi/PGMobileSDK" />-->
+    <header-file src="src/ios/nmi/PGMobileSDK" />
 
     <framework src="AudioToolbox.framework" />
     <framework src="AVFoundation.framework" />
@@ -115,16 +113,14 @@
     <framework src="Security.framework" />
     <framework src="CoreBluetooth.framework" />
     <framework src="libstdc++.6.0.9.dylib" />
-    <!-- Do not forget to back NMI! -->
-    <!--<source-file src="src/ios/nmi/PGMobileSDK.a" framework="true" />-->
+    <source-file src="src/ios/nmi/PGMobileSDK.a" framework="true" />
 
     <header-file src="src/ios/dc/include" />
     <!-- This library must not be included because is already included for MNI. -->
     <!--<source-file src="src/ios/dc/lib/IDTECH_UniMag.a" framework="true" />-->
     <source-file src="src/ios/dc/lib/libBTMagSDK.a" framework="true" />
     <source-file src="src/ios/dc/lib/libDCMobileSDK.a" framework="true" />
-    <!-- Do not forget to back NMI! -->
-    <!--<source-file src="src/ios/dc/lib/libDCMobileSDK-IDT.a" framework="true" />-->
+    <source-file src="src/ios/dc/lib/libDCMobileSDK-IDT.a" framework="true" />
     <source-file src="src/ios/dc/lib/libDCMobileSDK-Magtek.a" framework="true" />
     <!-- Miura is rejected by Apple -->
     <!--<source-file src="src/ios/dc/lib/libDCMobileSDK-Miura.a" framework="true" />-->
