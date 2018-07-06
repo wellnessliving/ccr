@@ -36,6 +36,13 @@
 /**
  * Payment processor: Direct Connect.
  *
+ * Device: <tt>Maktek</tt> iDynamo.
+ */
+#define WL_DEVICE_DC_MAGTEK_LIGHTNING 12
+
+/**
+ * Payment processor: Direct Connect.
+ *
  * Device: <tt>IDTech/Miura</tt>.
  */
 #define WL_DEVICE_DC_MIURA 8

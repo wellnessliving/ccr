@@ -42,10 +42,18 @@
         case WL_DEVICE_DC_MAGTEK_AUDIO:
             devices = [DCGUADynamoDeviceManager getAvailableDevices];
             if(devices==nil)
-                @throw [Wl_UserException exceptionWithName:@"magtek-null" reason:@"Can not initialize Magtek Device Manager ([DCGUADynamoDeviceManager getAvailableDevices] returns null)." userInfo:nil];
+                @throw [Wl_UserException exceptionWithName:@"magtek-audio-null" reason:@"Can not initialize Magtek Device Manager ([DCGUADynamoDeviceManager getAvailableDevices] returns null)." userInfo:nil];
             if([devices count]==0)
-                @throw [Wl_UserException exceptionWithName:@"magtek-empty" reason:@"Can not initialize Magtek Device Manager ([DCGUADynamoDeviceManager getAvailableDevices] returns an empty array)." userInfo:nil];
+                @throw [Wl_UserException exceptionWithName:@"magtek-audio-empty" reason:@"Can not initialize Magtek Device Manager ([DCGUADynamoDeviceManager getAvailableDevices] returns an empty array)." userInfo:nil];
             deviceManager = [[DCGUADynamoDeviceManager alloc] init:[devices objectAtIndex:0]];
+            break;
+        case WL_DEVICE_DC_MAGTEK_LIGHTNING:
+            devices = [DCGIDynamoDeviceManager getAvailableDevices];
+            if(devices==nil)
+                @throw [Wl_UserException exceptionWithName:@"magtek-lightning-null" reason:@"Can not initialize Magtek Device Manager ([DCGIDynamoDeviceManager getAvailableDevices] returns null)." userInfo:nil];
+            if([devices count]==0)
+                @throw [Wl_UserException exceptionWithName:@"magtek-lightning-empty" reason:@"Can not initialize Magtek Device Manager ([DCGIDynamoDeviceManager getAvailableDevices] returns an empty array)." userInfo:nil];
+            deviceManager = [[DCGIDynamoDeviceManager alloc] init:[devices objectAtIndex:0]];
             break;
         /* Not implemented for iOS.
         case WL_DEVICE_DC_IDT_UNI_PAY:
@@ -119,6 +127,14 @@
         [a_debug setObject:@"[empty array]" forKey:@"[DCGUADynamoDeviceManager getAvailableDevices]"];
     else
         [a_debug setValue:[NSNumber numberWithLong:[devices count]] forKey:@"[DCGUADynamoDeviceManager getAvailableDevices]"];
+
+    devices = [DCGIDynamoDeviceManager getAvailableDevices];
+    if(devices==nil)
+        [a_debug setObject:@"[null]" forKey:@"[DCGIDynamoDeviceManager getAvailableDevices]"];
+    else if ([devices count]==0)
+        [a_debug setObject:@"[empty array]" forKey:@"[DCGIDynamoDeviceManager getAvailableDevices]"];
+    else
+        [a_debug setValue:[NSNumber numberWithLong:[devices count]] forKey:@"[DCGIDynamoDeviceManager getAvailableDevices]"];
 
     /* Not implemented for iOS.
     devices = [DCGMiuraDeviceManager getAvailableDevices];
