@@ -3,6 +3,8 @@
 #import "Wl_Pay_Ccr_Nmi.h"
 #import "Wl_UserException.h"
 #import <Cordova/CDVPlugin.h>
+#import <MediaPlayer/MediaPlayer.h>
+#import <AVFoundation/AVAudioSession.h>
 
 @implementation Wl_Pay_Ccr
     - (void)_end
@@ -114,7 +116,7 @@
             }
 
             [a_result setValue:[Wl_Pay_Ccr_DirectConnect debugGlobal] forKey:@"dc"];
-            
+
             [self _success:command with:a_result];
         }
         @catch(id e)
@@ -144,7 +146,7 @@
 {
     if([a_log count]==0)
         return;
-    
+
     [self fire:@"log" forData:[[NSMutableDictionary alloc] init]];
 }
 
@@ -209,6 +211,9 @@
         [self _start];
         @try
         {
+            f_volume = [[AVAudioSession sharedInstance] outputVolume];
+            [[MPMusicPlayerController applicationMusicPlayer] setVolume:1];
+
             if(self->is_active)
             {
                 [self logInfo:@"[Wl_Pay_Ccr.startup] Plugin is marked as active. Deactivating before activation."];
@@ -281,20 +286,22 @@
         if(!is_active)
         {
             [self logErrorMessage:@"[Wl_Pay_Ccr.tearDown] It is not allowed to tear down plugin that is not initialized."];
-            
+
             NSMutableDictionary* a_result = [[NSMutableDictionary alloc] init];
             [a_result setObject:@"Not initialized." forKey:@"s_message"];
-            
+
             [self _error:command with:a_result];
             return;
         }
-        
+
         [self _tearDown];
-        
+
         NSMutableDictionary* a_result = [[NSMutableDictionary alloc] init];
         [a_result setObject:@"Complete." forKey:@"s_message"];
-        
+
         [self _success:command with:a_result];
+
+        [[MPMusicPlayerController applicationMusicPlayer] setVolume:f_volume];
     }
     @catch(id e)
     {

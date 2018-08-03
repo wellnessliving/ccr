@@ -9,6 +9,7 @@
 
     NSDictionary *a_config;
     NSMutableArray *a_log;
+    float f_volume;
     BOOL is_active;
     BOOL is_method;
     NSString *callbackId;
