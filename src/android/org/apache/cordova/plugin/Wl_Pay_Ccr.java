@@ -1,6 +1,8 @@
 package org.apache.cordova.plugin;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
@@ -220,6 +222,29 @@ public class Wl_Pay_Ccr extends CordovaPlugin
       callbackContext.error(a_result);
       return;
     }
+
+    AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+
+    int max = manager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
+    manager.setStreamVolume(AudioManager.STREAM_ALARM,max,AudioManager.FLAG_SHOW_UI);
+
+    int max = manager.getStreamMaxVolume(AudioManager.STREAM_DTMF);
+    manager.setStreamVolume(AudioManager.STREAM_DTMF,max,AudioManager.FLAG_SHOW_UI);
+
+    int max = manager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+    manager.setStreamVolume(AudioManager.STREAM_MUSIC,max,AudioManager.FLAG_SHOW_UI);
+
+    int max = manager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION);
+    manager.setStreamVolume(AudioManager.STREAM_NOTIFICATION,max,AudioManager.FLAG_SHOW_UI);
+
+    int max = manager.getStreamMaxVolume(AudioManager.STREAM_RING);
+    manager.setStreamVolume(AudioManager.STREAM_RING,max,AudioManager.FLAG_SHOW_UI);
+
+    int max = manager.getStreamMaxVolume(AudioManager.STREAM_SYSTEM);
+    manager.setStreamVolume(AudioManager.STREAM_SYSTEM,max,AudioManager.FLAG_SHOW_UI);
+
+    int max = manager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL);
+    manager.setStreamVolume(AudioManager.STREAM_VOICE_CALL,max,AudioManager.FLAG_SHOW_UI);
 
     this.is_active=true;
     this.o_context_event=callbackContext;
