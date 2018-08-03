@@ -223,7 +223,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
       return;
     }
 
-    AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+    AudioManager audioManager = (AudioManager)getSystemService("audio");
 
     /*int max = manager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
     manager.setStreamVolume(AudioManager.STREAM_ALARM,max,AudioManager.FLAG_SHOW_UI);
