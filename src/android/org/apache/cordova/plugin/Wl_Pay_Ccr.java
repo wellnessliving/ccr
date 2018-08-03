@@ -223,7 +223,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
       return;
     }
 
-    AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+    /*AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 
     int max = manager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
     manager.setStreamVolume(AudioManager.STREAM_ALARM,max,AudioManager.FLAG_SHOW_UI);
@@ -244,7 +244,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
     manager.setStreamVolume(AudioManager.STREAM_SYSTEM,max,AudioManager.FLAG_SHOW_UI);
 
     int max = manager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL);
-    manager.setStreamVolume(AudioManager.STREAM_VOICE_CALL,max,AudioManager.FLAG_SHOW_UI);
+    manager.setStreamVolume(AudioManager.STREAM_VOICE_CALL,max,AudioManager.FLAG_SHOW_UI);*/
 
     this.is_active=true;
     this.o_context_event=callbackContext;
