@@ -29,6 +29,11 @@ public class Wl_Pay_Ccr extends CordovaPlugin
   private JSONArray a_log=new JSONArray();
 
   /**
+   * Current volume in application.
+   */
+  private int i_volume = 0;
+
+  /**
    * Whether plugin was initialized successfully.
    */
   private boolean is_active=false;
@@ -225,6 +230,7 @@ public class Wl_Pay_Ccr extends CordovaPlugin
 
     AudioManager manager = (AudioManager)this.cordova.getActivity().getSystemService(Context.AUDIO_SERVICE);
 
+    this.i_volume = manager.getStreamVolume(AudioManager.STREAM_MUSIC);
     manager.setStreamVolume(AudioManager.STREAM_MUSIC,100,AudioManager.FLAG_SHOW_UI);
 
     this.is_active=true;
@@ -282,6 +288,9 @@ public class Wl_Pay_Ccr extends CordovaPlugin
       callbackContext.error(a_result);
       return;
     }
+
+    AudioManager manager = (AudioManager)this.cordova.getActivity().getSystemService(Context.AUDIO_SERVICE);
+    manager.setStreamVolume(AudioManager.STREAM_MUSIC,this.i_volume,AudioManager.FLAG_SHOW_UI);
 
     this.tearDown();
 
