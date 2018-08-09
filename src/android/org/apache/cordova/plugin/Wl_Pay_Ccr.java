@@ -1,8 +1,6 @@
 package org.apache.cordova.plugin;
 
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.media.AudioManager;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
@@ -27,11 +25,6 @@ public class Wl_Pay_Ccr extends CordovaPlugin
    * Whether plugin was initialized successfully.
    */
   private JSONArray a_log=new JSONArray();
-
-  /**
-   * Current volume in application.
-   */
-  private int i_volume = 0;
 
   /**
    * Whether plugin was initialized successfully.
@@ -228,11 +221,6 @@ public class Wl_Pay_Ccr extends CordovaPlugin
       return;
     }
 
-    AudioManager manager = (AudioManager)this.cordova.getActivity().getSystemService(Context.AUDIO_SERVICE);
-
-    this.i_volume = manager.getStreamVolume(AudioManager.STREAM_MUSIC);
-    manager.setStreamVolume(AudioManager.STREAM_MUSIC,100,AudioManager.FLAG_SHOW_UI);
-
     this.is_active=true;
     this.o_context_event=callbackContext;
     this.o_processor=o_processor;
@@ -288,9 +276,6 @@ public class Wl_Pay_Ccr extends CordovaPlugin
       callbackContext.error(a_result);
       return;
     }
-
-    AudioManager manager = (AudioManager)this.cordova.getActivity().getSystemService(Context.AUDIO_SERVICE);
-    manager.setStreamVolume(AudioManager.STREAM_MUSIC,this.i_volume,AudioManager.FLAG_SHOW_UI);
 
     this.tearDown();
 
