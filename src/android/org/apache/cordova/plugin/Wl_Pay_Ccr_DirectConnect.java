@@ -331,7 +331,7 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
     {
       this.logInfo("[Wl_Pay_Ccr_DirectConnect.onConnected]");
       AudioManager manager = (AudioManager)this.cordova.getActivity().getSystemService(Context.AUDIO_SERVICE);
-      manager.setStreamVolume(AudioManager.STREAM_MUSIC,100,AudioManager.FLAG_SHOW_UI);
+      //manager.setStreamVolume(AudioManager.STREAM_MUSIC,100,AudioManager.FLAG_SHOW_UI);
       if(this.id_device!=Wl_DeviceSid.VIRTUAL)
         this.deviceManager.acceptCard("Swipe Card");
     }
