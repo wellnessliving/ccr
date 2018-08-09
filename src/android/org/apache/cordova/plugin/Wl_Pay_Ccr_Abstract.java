@@ -65,7 +65,7 @@ abstract public class Wl_Pay_Ccr_Abstract
 
   protected AudioManager getAudioManager()
   {
-    return (AudioManager)this.o_controller.getActivity().getSystemService(Context.AUDIO_SERVICE);
+    return (AudioManager)this.o_controller.cordova.getActivity().getSystemService(Context.AUDIO_SERVICE);
   }
 
   /**
