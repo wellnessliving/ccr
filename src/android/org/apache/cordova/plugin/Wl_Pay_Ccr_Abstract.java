@@ -1,6 +1,7 @@
 package org.apache.cordova.plugin;
 
 import android.content.Context;
+import android.media.AudioManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,6 +61,11 @@ abstract public class Wl_Pay_Ccr_Abstract
   Context getApplicationContext()
   {
     return this.o_controller.cordova.getActivity().getApplicationContext();
+  }
+
+  protected AudioManager getAudioManager()
+  {
+    return (AudioManager)this.o_controller.getActivity().getSystemService(Context.AUDIO_SERVICE);
   }
 
   /**
