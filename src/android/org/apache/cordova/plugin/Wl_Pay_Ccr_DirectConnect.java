@@ -441,17 +441,25 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
   {
     this.logInfo("[Wl_Pay_Ccr_DirectConnect.startup]");
 
-    this.receiver = new AudioReceiver();
-    this.receiver.connect = () -> {
-      AudioManager manager = this.getAudioManager();
+    Wl_Pay_Ccr_DirectConnect o_this = this;
 
-      this.volume = manager.getStreamVolume(AudioManager.STREAM_MUSIC);
-      int max = manager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-      manager.setStreamVolume(AudioManager.STREAM_MUSIC,max,AudioManager.FLAG_SHOW_UI);
-      this.deviceManager.connect(this);
+    this.receiver = new AudioReceiver();
+    this.receiver.connect = new Runnable() {
+      @Override
+      public void run() {
+          AudioManager manager = o_this.getAudioManager();
+
+          o_this.volume = manager.getStreamVolume(AudioManager.STREAM_MUSIC);
+          int max = manager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+          manager.setStreamVolume(AudioManager.STREAM_MUSIC,max,AudioManager.FLAG_SHOW_UI);
+          o_this.deviceManager.connect(o_this);
+      }
     };
-    this.receiver.disconnect = () -> {
-      this.deviceManager.disconnect();
+    this.receiver.disconnect = new Runnable() {
+      @Override
+      public void run() {
+          o_this.deviceManager.disconnect();
+      }
     };
 
     IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);

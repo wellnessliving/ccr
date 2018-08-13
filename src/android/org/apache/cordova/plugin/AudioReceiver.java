@@ -8,7 +8,15 @@ import android.content.Intent;
  * Class to handle audio jack.
  */
 public class AudioReceiver extends BroadcastReceiver {
+
+    /**
+     * Code to be executed when audio jack is connected.
+     */
     public Runnable connect;
+
+    /**
+     * Code to be executed when audio jack is disconnected.
+     */
     public Runnable disconnect;
 
     /**
