@@ -45,6 +45,9 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
 
   private CardData o_card_last=null;
 
+  /**
+   * Receiver of audio jack connection/disconnection.
+   */
   private AudioReceiver receiver;
 
   /**
@@ -441,7 +444,7 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
   {
     this.logInfo("[Wl_Pay_Ccr_DirectConnect.startup]");
 
-    Wl_Pay_Ccr_DirectConnect o_this = this;
+    final Wl_Pay_Ccr_DirectConnect o_this = this;
 
     this.receiver = new AudioReceiver();
     this.receiver.connect = new Runnable() {
