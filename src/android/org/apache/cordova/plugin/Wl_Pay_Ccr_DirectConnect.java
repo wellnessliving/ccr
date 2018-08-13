@@ -1,7 +1,10 @@
 package org.apache.cordova.plugin;
 
-import android.Manifest;
 import android.content.Context;
+import android.Manifest;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.media.AudioManager;
 
 import com.directconnect.mobilesdk.device.AugustaDeviceManager;
 import com.directconnect.mobilesdk.device.BTMagDeviceManager;
@@ -41,6 +44,8 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
   private int id_device;
 
   private CardData o_card_last=null;
+
+  private AudioReceiver receiver;
 
   /**
    * Creates a new Direct Connect interface object.
@@ -435,7 +440,22 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
   public void startup() throws JSONException
   {
     this.logInfo("[Wl_Pay_Ccr_DirectConnect.startup]");
-    this.deviceManager.connect(this);
+
+    this.receiver = new AudioReceiver();
+    this.receiver.connect = () -> {
+      AudioManager manager = this.getAudioManager();
+
+      this.volume = manager.getStreamVolume(AudioManager.STREAM_MUSIC);
+      int max = manager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+      manager.setStreamVolume(AudioManager.STREAM_MUSIC,max,AudioManager.FLAG_SHOW_UI);
+      this.deviceManager.connect(this);
+    };
+    this.receiver.disconnect = () -> {
+      this.deviceManager.disconnect();
+    };
+
+    IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+    this.getApplicationContext().registerReceiver(this.receiver,filter);
   }
 
   @Override
@@ -447,6 +467,15 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
       this.deviceManager=null;
     }
     this.devices=null;
+
+    if(this.receiver!=null)
+    {
+      this.getApplicationContext().unregisterReceiver(receiver);
+      this.receiver = null;
+
+      AudioManager manager = this.getAudioManager();
+      manager.setStreamVolume(AudioManager.STREAM_MUSIC,this.volume,AudioManager.FLAG_SHOW_UI);
+    }
   }
 
   @Override

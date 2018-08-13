@@ -14,6 +14,11 @@ abstract public class Wl_Pay_Ccr_Abstract
   private Wl_Pay_Ccr o_controller=null;
 
   /**
+   * Current volume for media (exactly the media steam is used for audio connection of swiper).
+   */
+  int volume;
+
+  /**
    * Returns plugin controller object.
    */
   Wl_Pay_Ccr controller()
@@ -63,7 +68,12 @@ abstract public class Wl_Pay_Ccr_Abstract
     return this.o_controller.cordova.getActivity().getApplicationContext();
   }
 
-  protected AudioManager getAudioManager()
+  /**
+   * Gets object of audio manager from current activity.
+   *
+   * @return AudioManager Audio manager object.
+   */
+  AudioManager getAudioManager()
   {
     return (AudioManager)this.o_controller.cordova.getActivity().getSystemService(Context.AUDIO_SERVICE);
   }
