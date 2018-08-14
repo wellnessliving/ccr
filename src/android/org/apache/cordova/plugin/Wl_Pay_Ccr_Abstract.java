@@ -14,6 +14,11 @@ abstract public class Wl_Pay_Ccr_Abstract
   private Wl_Pay_Ccr o_controller=null;
 
   /**
+   * Receiver of audio jack connection/disconnection.
+   */
+  AudioReceiver receiver;
+
+  /**
    * Current volume for media (exactly the media steam is used for audio connection of swiper).
    */
   int volume;

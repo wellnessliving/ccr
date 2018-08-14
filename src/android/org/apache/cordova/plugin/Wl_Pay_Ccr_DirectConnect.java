@@ -46,11 +46,6 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
   private CardData o_card_last=null;
 
   /**
-   * Receiver of audio jack connection/disconnection.
-   */
-  private AudioReceiver receiver;
-
-  /**
    * Creates a new Direct Connect interface object.
    *
    * @return Direct Connect interface object.

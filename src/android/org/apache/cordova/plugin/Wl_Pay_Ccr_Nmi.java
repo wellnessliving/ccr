@@ -1,6 +1,9 @@
 package org.apache.cordova.plugin;
 
 import android.Manifest;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.media.AudioManager;
 
 import com.SafeWebServices.PaymentGateway.PGEncrypt;
 import com.SafeWebServices.PaymentGateway.PGKeyedCard;
@@ -203,49 +206,66 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
   @Override
   public void startup() throws JSONException
   {
-    JSONObject a_config=this.controller().config().getJSONObject("a_processor");
-    this.s_key=a_config.getString("s_key");
-    PGSwipeDevice.SwipeDevice deviceType= Wl_DeviceSid.idNmi(a_config.getInt("id_device"));
+    JSONObject a_config = this.controller().config().getJSONObject("a_processor");
+    this.s_key = a_config.getString("s_key");
+    PGSwipeDevice.SwipeDevice deviceType = Wl_DeviceSid.idNmi(a_config.getInt("id_device"));
 
-    this.swipeController = new PGSwipeController(this,this.getApplicationContext(), deviceType);
+    this.swipeController = new PGSwipeController(this,this.getApplicationContext(),deviceType);
 
-    // Sets the time between requestSwipe and when swipes will no longer be accepted.
-    // Default and maximum are 20 seconds. The minimum is 3 seconds.
-    // This still applies even if alwaysAcceptSwipe is true, but the swipe request will be
-    // automatically renewed in that case.
-    //
-    // The swipeTimeout only matters if you have enabled always accept swipes.
-    //
-    // this.swipeController.getDevice().setSwipeTimeout(30);
+    final Wl_Pay_Ccr_Nmi o_this = this;
 
-    // The Shuttle does not accept swipes from the user unless a swipe has been requested. If
-    // alwaysAcceptSwipe is true, the SDK will immediately request a swipe and renew the request any
-    // time the old swipe request times out or ends. You will still receive periodic
-    // didBecomeUnreadyForSwipe: messages, but the reason will be
-    // SwipeReasonUnreadyForSwipeRefreshing to indicate that you should be receiving a
-    // didBecomeReadyForSwipe: message immediately after without any interaction.
-    //
-    // The mobile device's battery may deplete faster if the swipe reader is always awaiting a
-    // swipe. If battery life is a concern, consider setting this to false and using requestSwipe
-    // when a swipe is expected, or only setting alwaysAcceptSwipe to true when a swipe is expected.
-    //
-    // If alwaysAcceptSwipe is true, you should not use requestSwipe or cancelSwipeRequest.
-    // By default, alwaysAcceptSwipe is true.
-    this.swipeController.getDevice().setAlwaysAcceptSwipe(false);
+    this.receiver = new AudioReceiver();
+    this.receiver.connect = new Runnable() {
+      @Override
+      public void run() {
+        AudioManager manager = o_this.getAudioManager();
 
-    // If this is true, the SDK will attempt to power-up the reader when attachment is detected.
-    // There are 3 things to be aware of:
-    // 1. If the user attaches headphones to the mobile device, it will be treated as a swipe reader
-    //    and an attempt to power it up will be made.
-    // 2. Before the attempt to activate the reader, if
-    //    messageOptions.activateReaderWithoutPromptingUser
-    //    is set to false (it is false by default), the user will receive a prompt asking to confirm
-    //    activation. If they decline, no activation will be attempted.
-    // 3. If you call powerDown to deactivate the device, leaving activateReaderOnAttach set to true
-    //    will cause the device to immediately power back up.
-    this.swipeController.getDevice().setActivateReaderOnConnect(true);
+        o_this.volume = manager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        int max = manager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        manager.setStreamVolume(AudioManager.STREAM_MUSIC,max,AudioManager.FLAG_SHOW_UI);
 
-    this.swipeController.getDevice().requestSwipe();
+        // Sets the time between requestSwipe and when swipes will no longer be accepted.
+        // Default and maximum are 20 seconds. The minimum is 3 seconds.
+        // This still applies even if alwaysAcceptSwipe is true, but the swipe request will be
+        // automatically renewed in that case.
+        //
+        // The swipeTimeout only matters if you have enabled always accept swipes.
+        //
+        // o_this.swipeController.getDevice().setSwipeTimeout(30);
+
+        // The Shuttle does not accept swipes from the user unless a swipe has been requested. If
+        // alwaysAcceptSwipe is true, the SDK will immediately request a swipe and renew the request any
+        // time the old swipe request times out or ends. You will still receive periodic
+        // didBecomeUnreadyForSwipe: messages, but the reason will be
+        // SwipeReasonUnreadyForSwipeRefreshing to indicate that you should be receiving a
+        // didBecomeReadyForSwipe: message immediately after without any interaction.
+        //
+        // The mobile device's battery may deplete faster if the swipe reader is always awaiting a
+        // swipe. If battery life is a concern, consider setting this to false and using requestSwipe
+        // when a swipe is expected, or only setting alwaysAcceptSwipe to true when a swipe is expected.
+        //
+        // If alwaysAcceptSwipe is true, you should not use requestSwipe or cancelSwipeRequest.
+        // By default, alwaysAcceptSwipe is true.
+        o_this.swipeController.getDevice().setAlwaysAcceptSwipe(false);
+
+        // If this is true, the SDK will attempt to power-up the reader when attachment is detected.
+        // There are 3 things to be aware of:
+        // 1. If the user attaches headphones to the mobile device, it will be treated as a swipe reader
+        //    and an attempt to power it up will be made.
+        // 2. Before the attempt to activate the reader, if
+        //    messageOptions.activateReaderWithoutPromptingUser
+        //    is set to false (it is false by default), the user will receive a prompt asking to confirm
+        //    activation. If they decline, no activation will be attempted.
+        // 3. If you call powerDown to deactivate the device, leaving activateReaderOnAttach set to true
+        //    will cause the device to immediately power back up.
+        o_this.swipeController.getDevice().setActivateReaderOnConnect(true);
+
+        o_this.swipeController.getDevice().requestSwipe();
+      }
+    };
+
+    IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+    this.getApplicationContext().registerReceiver(this.receiver,filter);
   }
 
   @Override
@@ -258,6 +278,12 @@ public class Wl_Pay_Ccr_Nmi extends Wl_Pay_Ccr_Abstract implements SwipeListener
     }
     this.s_key=null;
     this.o_card=null;
+
+    if(this.receiver!=null)
+    {
+      this.getApplicationContext().unregisterReceiver(receiver);
+      this.receiver = null;
+    }
   }
 
   @Override
