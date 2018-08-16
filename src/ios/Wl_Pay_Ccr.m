@@ -7,6 +7,21 @@
 #import <AVFoundation/AVAudioSession.h>
 
 @implementation Wl_Pay_Ccr
+
+- (void)audioHardwareRouteChanged:(NSNotification *)notification {
+    NSInteger routeChangeReason = [notification.userInfo[AVAudioSessionRouteChangeReasonKey] integerValue];
+    switch(routeChangeReason)
+    {
+        case AVAudioSessionRouteChangeReasonNewDeviceAvailable:
+            f_volume = [[AVAudioSession sharedInstance] outputVolume];
+            [[MPMusicPlayerController applicationMusicPlayer] setVolume:1];
+            break;
+        case AVAudioSessionRouteChangeReasonOldDeviceUnavailable:
+            [[MPMusicPlayerController applicationMusicPlayer] setVolume:f_volume];
+            break;
+    }
+}
+
     - (void)_end
     {
       is_method=NO;
@@ -211,9 +226,6 @@
         [self _start];
         @try
         {
-            f_volume = [[AVAudioSession sharedInstance] outputVolume];
-            [[MPMusicPlayerController applicationMusicPlayer] setVolume:1];
-
             if(self->is_active)
             {
                 [self logInfo:@"[Wl_Pay_Ccr.startup] Plugin is marked as active. Deactivating before activation."];
@@ -257,6 +269,21 @@
 
             @try
             {
+                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioHardwareRouteChanged:) name:AVAudioSessionRouteChangeNotification object:nil];
+
+                AVAudioSessionRouteDescription* currentRoute = [[AVAudioSession sharedInstance] currentRoute];
+                if([currentRoute outputs] != nil)
+                {
+                    for(AVAudioSessionPortDescription* description in [currentRoute outputs])
+                    {
+                        if([AVAudioSessionPortHeadphones isEqualToString:[description portType]])
+                        {
+                            f_volume = [[AVAudioSession sharedInstance] outputVolume];
+                            [[MPMusicPlayerController applicationMusicPlayer] setVolume:1];
+                        }
+                    }
+                }
+
                 [o_processor startup];
             }
             @catch (id e)
@@ -301,7 +328,7 @@
 
         [self _success:command with:a_result];
 
-        [[MPMusicPlayerController applicationMusicPlayer] setVolume:f_volume];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionRouteChangeNotification object:nil];
     }
     @catch(id e)
     {
