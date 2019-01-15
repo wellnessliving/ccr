@@ -41,7 +41,7 @@
       </feature>
     </config-file>
 
-    <config-file target="app/src/main/AndroidManifest.xml" parent="/*">
+    <config-file target="AndroidManifest.xml" parent="/*">
       <!--
       The following list should correspond union of all permissions defined by all implementations if
       org.apache.cordova.plugin.Wl_Pay_Ccr_Abstract.permissionList()
