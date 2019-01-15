@@ -70,12 +70,12 @@
     </config-file>
 
     <framework src="src/android/android.gradle" custom="true" type="gradleReference"/>
-    <resource-file src="src/android/nmi/payment-gateway.aar" target="app/libs/nmi.aar"/>
-    <resource-file src="src/android/dc/DCMobileSDK.aar" target="app/libs/dc-sdk.aar"/>
-    <resource-file src="src/android/dc/DCMobileSDK-IDT.aar" target="app/libs/dc-idt.aar"/>
-    <resource-file src="src/android/dc/DCMobileSDK-Magtek.aar" target="app/libs/dc-magtek.aar"/>
-    <resource-file src="src/android/dc/DCMobileSDK-Miura.aar" target="app/libs/dc-miura.aar"/>
-    <resource-file src="src/android/dc/Lib-Miura-SDK.aar" target="app/libs/dc-miura-lib.aar"/>
+    <resource-file src="src/android/nmi/payment-gateway.aar" target="libs/nmi.aar"/>
+    <resource-file src="src/android/dc/DCMobileSDK.aar" target="libs/dc-sdk.aar"/>
+    <resource-file src="src/android/dc/DCMobileSDK-IDT.aar" target="libs/dc-idt.aar"/>
+    <resource-file src="src/android/dc/DCMobileSDK-Magtek.aar" target="libs/dc-magtek.aar"/>
+    <resource-file src="src/android/dc/DCMobileSDK-Miura.aar" target="libs/dc-miura.aar"/>
+    <resource-file src="src/android/dc/Lib-Miura-SDK.aar" target="libs/dc-miura-lib.aar"/>
 
     <source-file src="src/android/org/apache/cordova/plugin/AudioReceiver.java" target-dir="src/org/apache/cordova/plugin" />
     <source-file src="src/android/org/apache/cordova/plugin/Wl_DeviceSid.java" target-dir="src/org/apache/cordova/plugin" />
