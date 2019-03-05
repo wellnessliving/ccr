@@ -10,6 +10,8 @@
  */
 @interface PGSwipeIDynamo : PGSwipeDevice
 
+@property (nonatomic, retain) NSString *deviceProtocolString;
+
 -(id) initWithDelegate:(id<PGSwipeDelegate>)delegate;
 
 @end

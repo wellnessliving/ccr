@@ -3,7 +3,6 @@
 #import "PGSwipeDelegate.h"
 #import "PGSwipeIDynamo.h"
 #import "PGSwipeUnimag.h"
-#import "PGSwipeIps.h"
 #import "PGSwipeIpsEnterprise.h"
 #import "PGAudioJackConnectionDetector.h"
 #import "AudioJackReaderType.h"
@@ -39,11 +38,6 @@
  @brief The controller class for IDTECH Shuttle readers.
  */
 @property (nonatomic, retain, readonly) PGSwipeUniMag *uniMagReader;
-
-/**
- @brief The controller class for IPS readers
- */
-@property (nonatomic, retain, readonly) PGSwipeIps *ipsReader;
 
 /**
  @brief The controller class for IpsEnterprise readers

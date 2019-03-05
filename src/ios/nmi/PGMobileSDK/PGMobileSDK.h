@@ -18,7 +18,6 @@
 #import "PGSwipeDevice.h"
 #import "PGSwipeIDynamo.h"
 #import "PGSwipeIpsEnterprise.h"
-#import "PGSwipeIps.h"
 #import "PGSwipeUnimag.h"
 #import "PGSwipeUniMagMessageOptions.h"
 #import "SwipeActivationResult.h"

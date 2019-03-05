@@ -1,6 +1,5 @@
 
 #import <Foundation/Foundation.h>
-#import "PGIpsReader.h"
 #import "PGSwipeUnimag.h"
 #import "PGAudioJackConnectionDetector.h"
 #import "PGSwipeIpsEnterprise.h"
@@ -8,9 +7,8 @@
 /**
  @brief Detects what is attached to the audio jack.
  */
-@interface PGAudioJackCardReaderTypeDetector : NSObject<IpsDelegate, PGSwipeDelegate, PGAudioJackConnectionDetectorDelegate, IpsCommunicationTestDelegate, IpsEnterpriseCommunicationTestDelegate>
+@interface PGAudioJackCardReaderTypeDetector : NSObject<PGSwipeDelegate, PGAudioJackConnectionDetectorDelegate, IpsEnterpriseCommunicationTestDelegate>
 
-@property (nonatomic, readonly) bool detectedIpsReader;
 @property (nonatomic, readonly) bool detectedUniMagReader;
 @property (nonatomic, readonly) bool detectedIpsEnterpriseReader;
 @property (nonatomic, retain) PGSwipeDevice *detectedSwipeDevice;
