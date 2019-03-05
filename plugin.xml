@@ -113,7 +113,7 @@
     <framework src="MediaPlayer.framework" />
     <framework src="Security.framework" />
     <framework src="CoreBluetooth.framework" />
-    <framework src="libstdc++.6.0.9.dylib" />
+    <framework src="libc++.tbd" />
     <source-file src="src/ios/nmi/PGMobileSDK-no-MT.a" framework="true" />
 
     <header-file src="src/ios/dc/include" />
