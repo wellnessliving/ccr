@@ -114,7 +114,7 @@
     <framework src="Security.framework" />
     <framework src="CoreBluetooth.framework" />
     <framework src="libc++.tbd" />
-    <source-file src="src/ios/nmi/PGMobileSDK.a" framework="true" />
+    <source-file src="src/ios/nmi/PGMobileSDK-no-MT.a" framework="true" />
 
     <header-file src="src/ios/dc/include" />
     <!-- This library must not be included because is already included for MNI. -->
