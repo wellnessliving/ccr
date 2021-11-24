@@ -94,6 +94,7 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
 //        deviceManager = new UniPayDeviceManager(devices[0], o_context);
 //        break;
       case Wl_DeviceSid.DC_MAGTEK_AUDIO:
+      case Wl_DeviceSid.DC_MAGTEK_BLUETOOTH:
         devices = MagtekDeviceManager.getAvailableDevices();
         //noinspection ConstantConditions
         if(devices==null)
@@ -104,6 +105,9 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
         {
           case Wl_DeviceSid.DC_MAGTEK_AUDIO:
             deviceManager = new MagtekDeviceManager(devices[0], o_context,"Audio");
+            break;
+          case Wl_DeviceSid.DC_MAGTEK_BLUETOOTH:
+            deviceManager = new MagtekDeviceManager(devices[0], o_context,"BLEEMV");
             break;
           default:
             throw new Wl_UserException("magtek-internal","Internal plugin error (Magtek connection type is not implemented).");

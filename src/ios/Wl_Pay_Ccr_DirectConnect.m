@@ -47,6 +47,14 @@
                 @throw [Wl_UserException exceptionWithName:@"magtek-audio-empty" reason:@"Can not initialize Magtek Device Manager ([DCGUADynamoDeviceManager getAvailableDevices] returns an empty array)." userInfo:nil];
             deviceManager = [[DCGUADynamoDeviceManager alloc] init:[devices objectAtIndex:0]];
             break;
+        case WL_DEVICE_DC_MAGTEK_BLUETOOTH:
+            devices = [DCGEDynamoDeviceManager getAvailableDevices];
+            if(devices==nil)
+                @throw [Wl_UserException exceptionWithName:@"magtek-audio-null" reason:@"Can not initialize Magtek Device Manager ([DCGEDynamoDeviceManager getAvailableDevices] returns null)." userInfo:nil];
+            if([devices count]==0)
+                @throw [Wl_UserException exceptionWithName:@"magtek-audio-empty" reason:@"Can not initialize Magtek Device Manager ([DCGEDynamoDeviceManager getAvailableDevices] returns an empty array)." userInfo:nil];
+            deviceManager = [[DCGEDynamoDeviceManager alloc] init:[devices objectAtIndex:0]];
+            break;
         case WL_DEVICE_DC_MAGTEK_LIGHTNING:
             devices = [DCGIDynamoDeviceManager getAvailableDevices];
             if(devices==nil)
