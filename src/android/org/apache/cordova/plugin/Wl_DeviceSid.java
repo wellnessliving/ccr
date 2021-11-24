@@ -43,6 +43,13 @@ class Wl_DeviceSid
   static final int DC_MAGTEK_AUDIO=11;
 
   /**
+   * Payment processor: Paragon (ex. Direct Connect).
+   *
+   * Device: <tt>Magtek</tt>, bluetooth connection. Supported device - <tt>eDynamo</tt>.
+   */
+  static final int DC_MAGTEK_BLUETOOTH = 13;
+
+  /**
    * Payment processor: Direct Connect.
    *
    * Device: <tt>IDTech/Miura</tt>.

@@ -34,6 +34,13 @@
 #define WL_DEVICE_DC_MAGTEK_AUDIO 11
 
 /**
+ * Payment processor: Paragon (ex. Direct Connect).
+ *
+ * Device: <tt>Magtek</tt>, bluetooth connection. Supported device - <tt>eDynamo</tt>.
+ */
+#define WL_DEVICE_DC_MAGTEK_BLUETOOTH 13
+
+/**
  * Payment processor: Direct Connect.
  *
  * Device: <tt>Maktek</tt> iDynamo.
