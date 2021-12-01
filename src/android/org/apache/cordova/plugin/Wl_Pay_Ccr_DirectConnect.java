@@ -443,29 +443,36 @@ public class Wl_Pay_Ccr_DirectConnect extends Wl_Pay_Ccr_Abstract implements Dev
   {
     this.logInfo("[Wl_Pay_Ccr_DirectConnect.startup]");
 
-    final Wl_Pay_Ccr_DirectConnect o_this = this;
+    if(this.id_device==Wl_DeviceSid.DC_MAGTEK_AUDIO)
+    {
+      final Wl_Pay_Ccr_DirectConnect o_this = this;
 
-    this.receiver = new AudioReceiver();
-    this.receiver.connect = new Runnable() {
-      @Override
-      public void run() {
+      this.receiver = new AudioReceiver();
+      this.receiver.connect = new Runnable() {
+        @Override
+        public void run() {
           AudioManager manager = o_this.getAudioManager();
 
           o_this.volume = manager.getStreamVolume(AudioManager.STREAM_MUSIC);
           int max = manager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
           manager.setStreamVolume(AudioManager.STREAM_MUSIC,max,AudioManager.FLAG_SHOW_UI);
           o_this.deviceManager.connect(o_this);
-      }
-    };
-    this.receiver.disconnect = new Runnable() {
-      @Override
-      public void run() {
+        }
+      };
+      this.receiver.disconnect = new Runnable() {
+        @Override
+        public void run() {
           o_this.deviceManager.disconnect();
-      }
-    };
+        }
+      };
 
-    IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
-    this.getApplicationContext().registerReceiver(this.receiver,filter);
+      IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+      this.getApplicationContext().registerReceiver(this.receiver, filter);
+    }
+    else
+    {
+      this.deviceManager.connect(this);
+    }
   }
 
   @Override
